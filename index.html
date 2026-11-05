@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="SSC CGL English question bank: grammar rules, vocabulary and comprehension, with every answer explained and every wrong option explained too.">
+<title>English Web</title>
+<style>
+:root{
+  --bg:#f6f4ef; --surface:#ffffff; --sunk:#ece9e1; --ink:#1d2330; --muted:#5d6472; --line:#d9d5c9;
+  --accent:#1f4fbf; --accent-soft:#e3ebfb; --ok:#1b7a47; --ok-soft:#e1f3e8; --bad:#b3261e; --bad-soft:#fbe3e0; --warn:#9a5b00; --warn-soft:#fbefd6;
+  --display:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --body:Georgia,"Iowan Old Style","Times New Roman",serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12151b; --surface:#1a1f28; --sunk:#222834; --ink:#e7eaf0; --muted:#9aa3b2; --line:#2e3644;
+  --accent:#8fb0ff; --accent-soft:#1e2a45; --ok:#6fd39b; --ok-soft:#14332a; --bad:#ff8d84; --bad-soft:#3b1a18; --warn:#ffc266; --warn-soft:#38290e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12151b; --surface:#1a1f28; --sunk:#222834; --ink:#e7eaf0; --muted:#9aa3b2; --line:#2e3644;
+  --accent:#8fb0ff; --accent-soft:#1e2a45; --ok:#6fd39b; --ok-soft:#14332a; --bad:#ff8d84; --bad-soft:#3b1a18; --warn:#ffc266; --warn-soft:#38290e; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--display);font-size:15px;line-height:1.45}
+.page{max-width:980px;margin:0 auto;padding:14px 16px 64px;display:flex;flex-direction:column;gap:14px}
+header.top{display:flex;flex-wrap:wrap;gap:6px 20px;align-items:flex-end;justify-content:space-between}
+.brand h1{margin:0;font-size:24px;font-weight:800;letter-spacing:-.015em}
+.brand p{margin:2px 0 0;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.stats{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;gap:4px 14px;flex-wrap:wrap}
+.stats b{color:var(--ink);font-weight:600}
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap;position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0}
+nav.tabs a{font-size:14px;font-weight:600;padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--muted);text-decoration:none}
+nav.tabs a[aria-current="page"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h2{margin:0;font-size:22px;font-weight:800;letter-spacing:-.01em;text-wrap:balance}
+h3{margin:0;font-size:16px;font-weight:700}
+h4{margin:0 0 4px;font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.lead{margin:0;font-family:var(--body);font-size:16px;line-height:1.55}
+.muted{color:var(--muted)}
+.mono{font-family:var(--mono);font-size:12px}
+.empty{padding:22px;text-align:center;color:var(--muted);font-family:var(--body);border:1px dashed var(--line);border-radius:10px}
+section.block{display:flex;flex-direction:column;gap:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:8px}
+.card.dim{opacity:.6}
+.card a.title{color:var(--ink);text-decoration:none;font-weight:700;font-size:16px}
+.card a.title:hover{text-decoration:underline}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);background:var(--sunk);color:var(--muted);text-decoration:none}
+a.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.Easy{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.chip.Medium{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.chip.Hard{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.bar{height:6px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+.rule{border-left:3px solid var(--accent);padding:6px 12px;background:var(--surface);border-radius:0 8px 8px 0;display:flex;flex-direction:column;gap:4px}
+.ex{font-family:var(--body);font-size:14px}
+.ex.ok::before{content:"✓ ";color:var(--ok);font-weight:700}
+.ex.bad::before{content:"✗ ";color:var(--bad);font-weight:700}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+details>summary{cursor:pointer;font-weight:600}
+details p,details ul{font-family:var(--body);margin:6px 0 0}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+select,input[type=search]{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+input[type=search]{flex:1 1 220px}
+button.btn{font:inherit;font-weight:600;padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+button.btn.primary{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+article.q{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.qtext{margin:0;font-family:var(--body);font-size:17px;line-height:1.5;white-space:pre-line}
+.qtext mark{background:var(--accent-soft);color:var(--ink);padding:0 3px;border-radius:3px;font-weight:600}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{display:flex;gap:10px;text-align:left;font:inherit;font-family:var(--body);font-size:16px;padding:9px 12px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;width:100%}
+.opt b{font-family:var(--mono);font-size:12px;color:var(--muted);padding-top:3px;text-transform:uppercase}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt.right{background:var(--ok-soft);border-color:var(--ok)}
+.opt.wrongpick{background:var(--bad-soft);border-color:var(--bad)}
+.opt[disabled]{cursor:default}
+.reveal{display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--line);padding-top:10px}
+.reveal p{margin:0;font-family:var(--body);font-size:15px}
+.reveal ul{margin:0;padding-left:20px;font-family:var(--body);font-size:14px;display:flex;flex-direction:column;gap:3px}
+.verdict{font-weight:800}
+.verdict.ok{color:var(--ok)}.verdict.no{color:var(--bad)}
+.lex{display:flex;flex-direction:column;gap:4px}
+.lex .w{font-size:17px;font-weight:700}
+.lex .m{font-family:var(--body)}
+.pagenav{font-size:13px}
+.pagenav a{color:var(--accent)}
+footer{font-family:var(--mono);font-size:11px;color:var(--muted)}
+@media (max-width:520px){.qtext{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <div class="brand"><h1>English Web</h1><p>SSC CGL English: rules, words and reading, every answer explained</p></div>
+    <div class="stats" id="stats"></div>
+  </header>
+  <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+  <main id="view" aria-live="polite"></main>
+  <footer id="foot"></footer>
+</div>
+<script>
+(function(){
+const D = window.__DATA__ || {};
+const $ = (s, e) => (e || document).querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const bold = s => esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+const mark = s => esc(s).replace(/\[\[(.+?)\]\]/g, "<mark>$1</mark>");
+const cache = {};
+async function J(p){
+  if (D[p]) return D[p];
+  if (cache[p]) return cache[p];
+  const r = await fetch(p); if (!r.ok) throw new Error(p + " " + r.status);
+  return cache[p] = await r.json();
+}
+let P = {}, K = {};
+try { P = JSON.parse(localStorage.getItem("ew-progress") || "{}"); K = JSON.parse(localStorage.getItem("ew-known") || "{}"); } catch (e) {}
+const save = () => { try { localStorage.setItem("ew-progress", JSON.stringify(P)); localStorage.setItem("ew-known", JSON.stringify(K)); } catch (e) {} };
+let core, rulesById = {};
+const LV = ["Easy", "Medium", "Hard"];
+const LET = "abcd";
+
+function qLabel(q){
+  if (q.paper) { const p = core.papers.find(x => x.id === q.paper); return p ? `${p.exam}, ${p.date}${p.shift ? ", shift " + p.shift : ""}, Q${q.qno}` : q.id; }
+  return q.id.startsWith("q2") ? "Daily" : "Practice";
+}
+
+function qcard(q, onAnswer){
+  const el = document.createElement("article"); el.className = "q";
+  const chips = `<div class="chips"><span class="chip ${q.level}">${q.level}</span><span class="chip">${esc(core.formats[q.fmt] || q.fmt)}</span><span class="chip">${esc(qLabel(q))}</span>${(q.tech || []).map(t => `<span class="chip">${esc(core.techniques[t] || t)}</span>`).join("")}</div>`;
+  el.innerHTML = chips + `<p class="qtext">${mark(q.text)}</p><div class="opts">${q.options.map((o, i) => `<button class="opt" data-i="${i}"><b>${LET[i]}</b><span>${esc(o)}</span></button>`).join("")}</div><div class="reveal" hidden></div>`;
+  el.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
+    const i = +b.dataset.i, ok = LET[i] === q.key;
+    el.querySelectorAll(".opt").forEach((x, j) => { x.disabled = true; if (LET[j] === q.key) x.classList.add("right"); else if (j === i) x.classList.add("wrongpick"); });
+    P[q.id] = ok ? 1 : 0; save();
+    const rv = $(".reveal", el); rv.hidden = false;
+    const notes = Object.entries(q.wrong || {}).sort().map(([k, v]) => `<li><b class="mono">${k.toUpperCase()}</b> ${esc(v.note)}${v.kind === "mistake" ? ' <span class="chip Medium">common mistake</span>' : ""}</li>`).join("");
+    const rules = (q.rules || []).map(r => rulesById[r]).filter(Boolean).map(r => `<div class="rule"><span>${esc(r.text)}</span>${r.ok ? `<span class="ex ok">${esc(r.ok)}</span>` : ""}${r.bad ? `<span class="ex bad">${esc(r.bad)}</span>` : ""}</div>`).join("");
+    rv.innerHTML = `<span class="verdict ${ok ? "ok" : "no"}">${ok ? "Correct" : "Not quite: the answer is " + q.key.toUpperCase()}</span><p>${esc(q.why)}</p>${q.trick ? `<p><b>Fastest way in:</b> ${esc(q.trick)}</p>` : ""}${rules}<h4>Why each wrong option fails</h4><ul>${notes}</ul>${q.keySource === "derived" ? '<p class="mono muted">Key worked out by us, not copied from an official answer key.</p>' : ""}`;
+    if (onAnswer) onAnswer(q, ok);
+  }));
+  return el;
+}
+
+async function allShards(){
+  const out = [];
+  for (const [t, m] of Object.entries(core.topics)) if (m.built) { const s = await J(`data/shards/${t}.json`); (s.rules || []).forEach(r => rulesById[r.id] = r); out.push(s); }
+  return out;
+}
+
+function stat(n, label){ return `<span><b>${n}</b> ${label}</span>`; }
+function setTabs(active){
+  const t = [["#/", "Syllabus"], ["#/daily", "Daily"], ["#/words", "Word bank"], ["#/practice", "Mixed practice"], ["#/sources", "Sources"]];
+  $("#tabs").innerHTML = t.map(([h, l]) => `<a href="${h}" ${h === active ? 'aria-current="page"' : ""}>${l}</a>`).join("");
+}
+
+// ---------------------------------------------------------------- views
+async function vSyllabus(v){
+  setTabs("#/");
+  const junc = Object.entries(core.nodes).filter(([, n]) => n.kind === "junction").sort((a, b) => a[1].order - b[1].order);
+  let h = "";
+  for (const [jid, j] of junc) {
+    const tops = Object.entries(core.nodes).filter(([, n]) => n.kind === "topic" && n.parent === jid).sort((a, b) => a[1].order - b[1].order);
+    h += `<section class="block"><div><h2>${esc(j.label)}</h2><p class="muted" style="margin:2px 0 0">${esc(j.summary)}</p></div><div class="grid">`;
+    for (const [tid, t] of tops) {
+      const m = core.topics[tid], total = (m.pyqs || 0) + (m.practice || 0);
+      const qtypes = Object.entries(core.nodes).filter(([, n]) => n.kind === "qtype" && n.parent === tid).sort((a, b) => a[1].order - b[1].order);
+      h += `<div class="card ${m.built ? "" : "dim"}"><a class="title" href="#/topic/${tid}">${esc(t.label)}</a><span class="muted" style="font-size:13px">${esc(t.summary)}</span>`;
+      if (m.built) {
+        h += `<div class="chips"><span class="chip">${m.pyqs} past</span><span class="chip">${m.practice} practice</span><span class="chip">${esc(m.tier)}</span></div>`;
+        h += `<div class="chips">${qtypes.map(([qid, q]) => `<a class="chip" href="#/topic/${tid}/${qid}">${esc(q.short)}</a>`).join("")}</div>`;
+        h += `<div class="bar" title="your progress"><i style="width:${(100 * answeredIn(tid) / Math.max(total, 1)).toFixed(0)}%"></i></div>`;
+      } else h += `<span class="mono muted">not built yet</span>`;
+      h += `</div>`;
+    }
+    h += `</div></section>`;
+  }
+  v.innerHTML = h;
+}
+function answeredIn(tid){ return core.bank.rows.filter(r => r[1] === tid && r[0] in P).length; }
+
+async function vTopic(v, tid, qfocus){
+  setTabs("#/");
+  const t = core.nodes[tid]; if (!t) { v.innerHTML = `<p class="empty">No such topic.</p>`; return; }
+  if (!core.topics[tid].built) { v.innerHTML = `<p class="pagenav"><a href="#/">← Syllabus</a></p><h2>${esc(t.label)}</h2><p class="empty">No questions yet. Send a paper or a rule sheet for this topic.</p>`; return; }
+  const s = await J(`data/shards/${tid}.json`);
+  (s.rules || []).forEach(r => rulesById[r.id] = r);
+  const qts = Object.entries(s.nodes).sort((a, b) => a[1].order - b[1].order);
+  const all = [...s.pyqs, ...s.practice].sort((a, b) => LV.indexOf(a.level) - LV.indexOf(b.level));
+  let h = `<p class="pagenav"><a href="#/">← Syllabus</a></p><div><h2>${esc(t.label)}</h2><p class="lead">${esc(t.summary)}</p><p class="mono muted">${s.pyqs.length} past · ${s.practice.length} practice · tier ${esc(s.tier)}</p></div>`;
+  if (s.rules.length) h += `<section class="block"><h3>Study this first</h3>${s.rules.map(r => `<div class="rule"><span>${esc(r.text)}</span>${r.ok ? `<span class="ex ok">${esc(r.ok)}</span>` : ""}${r.bad ? `<span class="ex bad">${esc(r.bad)}</span>` : ""}</div>`).join("")}</section>`;
+  h += `<section class="block"><h3>The question types</h3><div class="grid">${qts.map(([id, n]) => { const m = s.methods[id]; return `<div class="card" id="t-${id}"><b>${esc(n.label)}</b><span class="muted" style="font-size:13px">${esc(n.summary)}</span><p class="ex" style="margin:0"><b>Spot it:</b> ${esc(m.cue)}</p><p class="ex" style="margin:0"><b>Fast:</b> ${esc(m.fast)}</p><details><summary>Full method, elimination, traps</summary><p><b>Standard:</b> ${esc(m.standard)}</p><p><b>Eliminate:</b> ${esc(m.eliminate)}</p><ul>${m.traps.map(x => `<li>${esc(x)}</li>`).join("")}</ul></details></div>`; }).join("")}</div></section>`;
+  h += `<section class="block"><h3>Questions, easiest first</h3><div class="filters"><select id="fq"><option value="">All types</option>${qts.map(([id, n]) => `<option value="${id}" ${id === qfocus ? "selected" : ""}>${esc(n.short)}</option>`).join("")}</select><select id="fl"><option value="">All levels</option>${LV.map(l => `<option>${l}</option>`).join("")}</select><select id="fp"><option value="">All progress</option><option value="new">Not answered</option><option value="wrong">Got wrong</option></select></div><div id="qs" class="block"></div></section>`;
+  v.innerHTML = h;
+  const draw = () => {
+    const a = $("#fq").value, b = $("#fl").value, c = $("#fp").value;
+    const rows = all.filter(q => (!a || q.qtype === a) && (!b || q.level === b) && (!c || (c === "new" ? !(q.id in P) : P[q.id] === 0)));
+    const box = $("#qs"); box.innerHTML = rows.length ? "" : `<p class="empty">No question matches.</p>`;
+    rows.forEach(q => box.appendChild(qcard(q)));
+  };
+  ["fq", "fl", "fp"].forEach(i => $("#" + i).addEventListener("change", draw)); draw();
+  if (qfocus) { const e = $("#t-" + qfocus); if (e) e.scrollIntoView({block: "start"}); }
+}
+
+async function vPractice(v){
+  setTabs("#/practice");
+  const shards = await allShards();
+  const all = shards.flatMap(s => [...s.pyqs, ...s.practice.map(q => q)].map(q => ({...q, _t: s.topic})));
+  v.innerHTML = `<div><h2>Mixed practice</h2><p class="muted" style="margin:2px 0 0">Every question from every built topic.</p></div><div class="filters"><select id="ft"><option value="">All topics</option>${shards.map(s => `<option value="${s.topic}">${esc(core.nodes[s.topic].label)}</option>`).join("")}</select><select id="ff"><option value="">All formats</option>${Object.entries(core.formats).map(([k, l]) => `<option value="${k}">${esc(l)}</option>`).join("")}</select><select id="fl"><option value="">All levels</option>${LV.map(l => `<option>${l}</option>`).join("")}</select><select id="fs"><option value="">Past + practice</option><option value="pyq">Past only</option><option value="prac">Practice only</option></select><select id="fp"><option value="">All progress</option><option value="new">Not answered</option><option value="wrong">Got wrong</option></select><button class="btn primary" id="shuf">Shuffle</button></div><p class="mono muted" id="cnt"></p><div id="qs" class="block"></div>`;
+  let order = null;
+  const draw = () => {
+    const f = { t: $("#ft").value, f: $("#ff").value, l: $("#fl").value, s: $("#fs").value, p: $("#fp").value };
+    let rows = all.filter(q => (!f.t || q._t === f.t) && (!f.f || q.fmt === f.f) && (!f.l || q.level === f.l) && (!f.s || (f.s === "pyq" ? !!q.paper : !q.paper)) && (!f.p || (f.p === "new" ? !(q.id in P) : P[q.id] === 0)));
+    if (order) rows = rows.slice().sort((a, b) => order[a.id] - order[b.id]);
+    $("#cnt").textContent = `${rows.length} question${rows.length === 1 ? "" : "s"}${rows.length > 10 ? " · showing 10" : ""}`;
+    const box = $("#qs"); box.innerHTML = rows.length ? "" : `<p class="empty">No question matches these filters.</p>`;
+    rows.slice(0, 10).forEach(q => box.appendChild(qcard(q)));
+  };
+  ["ft", "ff", "fl", "fs", "fp"].forEach(i => $("#" + i).addEventListener("change", draw));
+  $("#shuf").addEventListener("click", () => { order = {}; all.forEach(q => order[q.id] = Math.random()); draw(); });
+  draw();
+}
+
+async function vWords(v){
+  setTabs("#/words");
+  const lex = await J("data/lexicon.json");
+  v.innerHTML = `<div><h2>Word bank</h2><p class="muted" style="margin:2px 0 0">Every word, idiom, one-word substitution and phrasal verb filed so far. Tick the ones you know.</p></div><div class="filters"><input type="search" id="ws" placeholder="Search a word or meaning" aria-label="Search"><select id="wk"><option value="">All kinds</option>${Object.entries(core.kinds).map(([k, l]) => `<option value="${k}">${esc(l)}</option>`).join("")}</select><select id="wp"><option value="">All</option><option value="new">Still learning</option><option value="known">Known</option></select></div><p class="mono muted" id="cnt"></p><div class="grid" id="ws2"></div>`;
+  const draw = () => {
+    const s = $("#ws").value.trim().toLowerCase(), k = $("#wk").value, p = $("#wp").value;
+    const rows = lex.filter(e => (!k || e.kind === k) && (!p || (p === "known") === !!K[e.id]) && (!s || (e.w + " " + e.meaning + " " + e.syn.join(" ")).toLowerCase().includes(s)));
+    $("#cnt").textContent = `${rows.length} of ${lex.length}`;
+    $("#ws2").innerHTML = rows.length ? rows.map(e => `<div class="card lex"><span class="w">${esc(e.w)} <span class="chip">${esc(core.kinds[e.kind])}${e.pos ? " · " + esc(e.pos) : ""}</span></span><span class="m">${esc(e.meaning)}</span>${e.syn.length ? `<span class="mono"><b>Syn</b> ${esc(e.syn.join(", "))}</span>` : ""}${e.ant.length ? `<span class="mono"><b>Ant</b> ${esc(e.ant.join(", "))}</span>` : ""}<span class="ex muted">“${esc(e.ex)}”</span><label class="mono"><input type="checkbox" data-id="${esc(e.id)}" ${K[e.id] ? "checked" : ""}> I know this</label></div>`).join("") : `<p class="empty">No words yet.</p>`;
+    $("#ws2").querySelectorAll("input[type=checkbox]").forEach(c => c.addEventListener("change", () => { if (c.checked) K[c.dataset.id] = 1; else delete K[c.dataset.id]; save(); }));
+  };
+  ["ws", "wk", "wp"].forEach(i => $("#" + i).addEventListener("input", draw)); draw();
+}
+
+async function vDaily(v, date){
+  setTabs("#/daily");
+  if (!date) {
+    v.innerHTML = `<div><h2>Daily</h2><p class="muted" style="margin:2px 0 0">One drop per editorial or article: the words and idioms, a short capsule, and a quiz built from it.</p></div>` +
+      (core.days.length ? `<div class="grid">${core.days.slice().reverse().map(d => `<div class="card"><a class="title" href="#/daily/${d.date}">${esc(d.date)}</a><span class="muted">${esc(d.publication || "")}${d.title ? ": " + esc(d.title) : ""}</span><div class="chips"><span class="chip">${d.words} words</span><span class="chip">${d.capsule} points</span><span class="chip">${d.questions} questions</span>${d.passage ? '<span class="chip">passage</span>' : ""}</div></div>`).join("")}</div>` : `<p class="empty">No daily drops yet. Send an editorial or a newspaper page and the first one is built from it.</p>`);
+    return;
+  }
+  const d = await J(`data/days/${date}.json`);
+  const lex = new Map(d.words.map(w => [w.id, w]));
+  let h = `<p class="pagenav"><a href="#/daily">← All days</a></p><div><h2>${esc(date)}</h2><p class="muted" style="margin:2px 0 0">${esc(d.paper.publication)}${d.paper.title ? ": " + esc(d.paper.title) : ""}</p></div>`;
+  h += `<section class="block"><h3>Capsule</h3>${d.capsule.map(c => `<details><summary>${bold(c.text)}</summary>${(c.more || []).length ? `<ul>${c.more.map(m => `<li>${bold(m)}</li>`).join("")}</ul>` : ""}${(c.words || []).map(w => lex.get(w)).filter(Boolean).map(w => `<p><b>${esc(w.w)}</b>: ${esc(w.meaning)} <span class="muted">“${esc(w.ex)}”</span></p>`).join("")}</details>`).join("")}</section>`;
+  if (d.passage) h += `<section class="block"><h3>${esc(d.passage.title)}</h3><p class="lead">${esc(d.passage.text)}</p><div id="pq" class="block"></div></section>`;
+  h += `<section class="block"><h3>Quiz</h3><div id="dq" class="block"></div></section>`;
+  v.innerHTML = h;
+  const fin = q => { const o = {...q, wrong: Object.fromEntries(Object.entries(q.wrong).map(([k, x]) => [k, typeof x === "string" ? {kind: "ruled-out", note: x} : x])), level: q.level || "Easy", tech: q.tech || []}; return o; };
+  (d.passage ? d.passage.questions : []).forEach(q => $("#pq").appendChild(qcard(fin(q))));
+  d.quiz.forEach(q => $("#dq").appendChild(qcard(fin(q))));
+}
+
+async function vSources(v){
+  setTabs("#/sources");
+  const link = l => l ? `<a href="${esc(l)}" rel="noopener" target="_blank">open</a>` : `<span class="muted">no link</span>`;
+  v.innerHTML = `<h2>Sources</h2><section class="block"><h3>Papers</h3>${core.papers.length ? `<div class="grid">${core.papers.map(p => `<div class="card"><b>${esc(p.exam)} · ${esc(p.date)}${p.shift ? " · shift " + p.shift : ""}</b><span class="muted">${esc(p.kind)}${p.publisher ? " · " + esc(p.publisher) : ""}</span><span class="mono">${p.n} questions, ${p.built} playable${p.derivedKeys ? `, ${p.derivedKeys} keys worked out by us` : ""}</span>${link(p.link)}</div>`).join("")}</div>` : `<p class="empty">No papers filed yet.</p>`}</section>
+  <section class="block"><h3>Daily sources</h3>${core.days.length ? `<div class="grid">${core.days.map(d => `<div class="card"><b>${esc(d.date)}</b><span class="muted">${esc(d.publication || "")}${d.pages ? " · p. " + esc(d.pages) : ""}</span>${link(d.link)}</div>`).join("")}</div>` : `<p class="empty">No daily drops yet.</p>`}</section>
+  <section class="block"><h3>Outside reading</h3>${core.refs.length ? `<ul>${core.refs.map(r => `<li><a href="${esc(r.url)}" rel="noopener" target="_blank">${esc(r.title)}</a> <span class="muted">${esc(r.note)}</span></li>`).join("")}</ul>` : `<p class="empty">None yet.</p>`}</section>
+  <details><summary>How difficulty and likelihood are worked out</summary><ul>${Object.values(core.rubric).map(x => `<li>${esc(x)}</li>`).join("")}</ul><p>${esc(core.likelihood)}</p></details>`;
+}
+
+// ---------------------------------------------------------------- router
+async function route(){
+  const v = $("#view"), h = location.hash || "#/";
+  try {
+    const [, a, b, c] = h.split("/");
+    if (!a) await vSyllabus(v);
+    else if (a === "topic") await vTopic(v, b, c);
+    else if (a === "daily") await vDaily(v, b);
+    else if (a === "words") await vWords(v);
+    else if (a === "practice") await vPractice(v);
+    else if (a === "sources") await vSources(v);
+    else await vSyllabus(v);
+    if (!c) window.scrollTo(0, 0);
+  } catch (e) { v.innerHTML = `<p class="empty">Could not load this page (${esc(e.message)}).</p>`; }
+}
+(async function(){
+  try {
+    core = await J("data/core.json");
+    const q = core.bank.rows.length;
+    $("#stats").innerHTML = stat(q, "questions") + stat(core.lexiconSize, "words") + stat(core.days.length, "daily drops") + stat(core.papers.length, "papers");
+    $("#foot").textContent = "Progress is saved in this browser only.";
+    window.addEventListener("hashchange", route); route();
+  } catch (e) { $("#view").innerHTML = `<p class="empty">Could not load the data (${esc(e.message)}).</p>`; }
+})();
+})();
+</script>
+</body>
+</html>

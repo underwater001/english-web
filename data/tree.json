@@ -1,0 +1,198 @@
+{
+ "vocabulary": {
+  "label": "Vocabulary",
+  "kind": "junction",
+  "parent": "hub",
+  "order": 1,
+  "summary": "Words, meanings and usage: the largest block of one-line questions in the English section.",
+  "links": [],
+  "hue": 40,
+  "short": "Vocab"
+ },
+ "grammar": {
+  "label": "Grammar",
+  "kind": "junction",
+  "parent": "hub",
+  "order": 2,
+  "summary": "Rules that spot-the-error, fill-in and sentence-improvement questions test.",
+  "links": [],
+  "hue": 250,
+  "short": "Grammar"
+ },
+ "comprehension": {
+  "label": "Comprehension",
+  "kind": "junction",
+  "parent": "hub",
+  "order": 3,
+  "summary": "Passages, cloze tests and sentence ordering.",
+  "links": [],
+  "hue": 150,
+  "short": "Reading"
+ },
+ "synonyms-antonyms": {
+  "label": "Synonyms & antonyms",
+  "kind": "topic",
+  "parent": "vocabulary",
+  "order": 1,
+  "summary": "Closest and opposite meanings of a word.",
+  "links": [
+   "idioms-phrases",
+   "one-word-substitution"
+  ]
+ },
+ "idioms-phrases": {
+  "label": "Idioms & phrases",
+  "kind": "topic",
+  "parent": "vocabulary",
+  "order": 2,
+  "summary": "What an idiom means, never what it literally says.",
+  "links": [
+   "phrasal-verbs"
+  ]
+ },
+ "one-word-substitution": {
+  "label": "One-word substitution",
+  "kind": "topic",
+  "parent": "vocabulary",
+  "order": 3,
+  "summary": "One word for a whole phrase.",
+  "links": [
+   "synonyms-antonyms"
+  ]
+ },
+ "spellings": {
+  "label": "Spellings",
+  "kind": "topic",
+  "parent": "vocabulary",
+  "order": 4,
+  "summary": "Correct and incorrect spellings of commonly misspelt words.",
+  "links": []
+ },
+ "phrasal-verbs": {
+  "label": "Phrasal verbs",
+  "kind": "topic",
+  "parent": "vocabulary",
+  "order": 5,
+  "summary": "Verb plus particle and what the pair means.",
+  "links": [
+   "idioms-phrases",
+   "prepositions"
+  ]
+ },
+ "subject-verb-agreement": {
+  "label": "Subject-verb agreement",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 1,
+  "summary": "The verb must agree with its true subject.",
+  "links": [
+   "tenses"
+  ]
+ },
+ "tenses": {
+  "label": "Tenses",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 2,
+  "summary": "Choosing and sequencing tenses.",
+  "links": [
+   "subject-verb-agreement",
+   "active-passive",
+   "direct-indirect"
+  ]
+ },
+ "articles": {
+  "label": "Articles",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 3,
+  "summary": "A, an, the and the cases that need none.",
+  "links": []
+ },
+ "prepositions": {
+  "label": "Prepositions",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 4,
+  "summary": "Fixed prepositions after verbs, adjectives and nouns.",
+  "links": [
+   "phrasal-verbs"
+  ]
+ },
+ "pronouns": {
+  "label": "Pronouns",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 5,
+  "summary": "Case, number and agreement of pronouns.",
+  "links": [
+   "subject-verb-agreement"
+  ]
+ },
+ "adjectives-adverbs": {
+  "label": "Adjectives & adverbs",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 6,
+  "summary": "Degrees of comparison and adjective-adverb confusion.",
+  "links": []
+ },
+ "conjunctions": {
+  "label": "Conjunctions",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 7,
+  "summary": "Linking words and the pairs that go together.",
+  "links": []
+ },
+ "active-passive": {
+  "label": "Active & passive voice",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 8,
+  "summary": "Turning a sentence between active and passive.",
+  "links": [
+   "tenses",
+   "direct-indirect"
+  ]
+ },
+ "direct-indirect": {
+  "label": "Direct & indirect speech",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 9,
+  "summary": "Reporting speech: tense, pronoun and time changes.",
+  "links": [
+   "tenses",
+   "active-passive"
+  ]
+ },
+ "reading-comprehension": {
+  "label": "Reading comprehension",
+  "kind": "topic",
+  "parent": "comprehension",
+  "order": 1,
+  "summary": "Answering from the passage, not from outside knowledge.",
+  "links": [
+   "cloze-test"
+  ]
+ },
+ "cloze-test": {
+  "label": "Cloze test",
+  "kind": "topic",
+  "parent": "comprehension",
+  "order": 2,
+  "summary": "Filling blanks in a passage using grammar and context.",
+  "links": [
+   "reading-comprehension"
+  ]
+ },
+ "para-jumbles": {
+  "label": "Sentence & para jumbles",
+  "kind": "topic",
+  "parent": "comprehension",
+  "order": 3,
+  "summary": "Ordering sentences into a coherent paragraph.",
+  "links": []
+ }
+}
