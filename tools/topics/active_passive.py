@@ -1,4 +1,5 @@
-"""Active & passive voice. Quiz tier: 6 past questions plus practice. The tense is carried over unchanged: be + past participle in the tense of the active verb."""
+"""Active & passive voice. Quiz tier: 6 past questions plus practice. The tense is carried over unchanged: be + past participle in the tense of the active verb.
+Imperative, 'have to', and the let/bid/help/make group added from Plinth to Paramount's Passive Voice chapter."""
 from bank import mistake, ruled_out, q
 
 TOPIC = "active-passive"
@@ -10,6 +11,12 @@ NODES = {
                      "summary": "The object becomes the subject; the verb becomes a form of be + past participle in the same tense; the old subject follows 'by'.", "links": []},
     "q-ap-active": {"short": "To active", "label": "Passive to active", "kind": "qtype", "parent": TOPIC, "order": 2,
                     "summary": "Undo the passive: the 'by' agent becomes the subject and the verb returns to its active form in the same tense.", "links": []},
+    "q-ap-imperative": {"short": "Commands", "label": "Passive of a command, request or piece of advice", "kind": "qtype", "parent": TOPIC, "order": 3,
+                          "summary": "A command with an object becomes 'Let + object + be + V3'; a command with no object becomes 'You are ordered/requested to + V1'; a piece of moral advice becomes 'Object + should + be + V3'.", "links": []},
+    "q-ap-haveto": {"short": "Have to / has to", "label": "Passive of 'have/has/had to'", "kind": "qtype", "parent": TOPIC, "order": 4,
+                      "summary": "'Subject + have/has/had + to + V1 + object' becomes 'Object + have/has/had + to + be + V3 + by + subject' — the 'to' stays, and only the verb after it turns into be + past participle.", "links": []},
+    "q-ap-causative": {"short": "Let, bid, help, make", "label": "Let/bid/help/make take 'to' only in the passive", "kind": "qtype", "parent": TOPIC, "order": 5,
+                         "summary": "Let, bid, help and make are followed by a bare infinitive in the active voice but by 'to + V1' once the sentence is turned passive.", "links": []},
 }
 
 RULES = [
@@ -23,6 +30,12 @@ RULES = [
      "ok": "It was being reported by several sources -> Several sources were reporting.", "bad": "Several sources reported (the continuous aspect is lost)."},
     {"id": "ap-r5", "node": "q-ap-active", "text": "Do not choose a new subject from another noun in the sentence. The reception desk is where the parcel is delivered, not the doer; the unnamed doer becomes 'someone'.",
      "ok": "The parcel is delivered to the reception desk -> Someone delivers the parcel to the reception desk.", "bad": "The reception desk delivers the parcel."},
+    {"id": "ap-r6", "node": "q-ap-imperative", "text": "A command naming its object becomes 'Let + object + be + V3' (Shut the door -> Let the door be shut). A command with no object becomes 'You are ordered/requested/forbidden + to + V1' (Go away -> You are ordered to go away). A sentence giving moral advice becomes 'Object + should + be + V3' (Help the poor -> The poor should be helped).",
+     "ok": "Shut the door. -> Let the door be shut.", "bad": "Shut the door. -> You are shut the door."},
+    {"id": "ap-r7", "node": "q-ap-haveto", "text": "'Have/has/had + to + V1' keeps 'to' unchanged in the passive: only the main verb after it turns into be + past participle. 'I have to finish this work' becomes 'This work has to be finished by me', not 'This work is finished by me' and not 'This work have to finished by me'.",
+     "ok": "You have to choose a dress. -> A dress has to be chosen by you.", "bad": "You have to choose a dress. -> A dress is chosen by you."},
+    {"id": "ap-r8", "node": "q-ap-causative", "text": "Let, bid, help and make take a bare infinitive (no 'to') in the active voice, but the same verb takes 'to + V1' once the sentence is made passive. 'He made me wash the clothes' becomes 'I was made to wash the clothes by him', not 'I was made wash the clothes'.",
+     "ok": "He made me wash the clothes. -> I was made to wash the clothes by him.", "bad": "He made me wash the clothes. -> I was made wash the clothes by him."},
 ]
 
 METHODS = {
@@ -38,6 +51,24 @@ METHODS = {
                     "eliminate": "Drop options that change the tense or choose a wrong subject.",
                     "traps": ["Using a simple past instead of the continuous.", "Choosing the destination noun as the new subject.", "Adding words such as 'allegedly'."],
                     "rules": ["ap-r4", "ap-r5"], "tech": ["eliminate-pair"]},
+    "q-ap-imperative": {"cue": "A sentence giving an order, a request or a piece of advice, with no stated subject (or 'you' understood).",
+                          "standard": "Decide which of the three patterns it is: a command with an object ('Let + object + be + V3'), a command with none ('You are ordered/requested to + V1'), or advice ('Object + should + be + V3').",
+                          "fast": "An object right after the verb -> 'Let' + that object + 'be' + V3. No object -> 'You are ordered/requested to' + the base verb.",
+                          "eliminate": "Drop options that put 'to' after 'Let', or that keep the command in its active imperative form.",
+                          "traps": ["'Let the door be shutted' — the past participle of an irregular verb is 'shut', not 'shutted'.", "Swapping 'should be' for 'must be' changes a piece of advice into an obligation."],
+                          "rules": ["ap-r6"], "tech": ["eliminate-pair"]},
+    "q-ap-haveto": {"cue": "'have to', 'has to' or 'had to' followed by a base verb and an object.",
+                     "standard": "Move the object to the front, keep 'have/has/had to' exactly as it is, and change only the verb after 'to' into 'be + past participle'.",
+                     "fast": "has to + V1 -> has to be + V3; the 'to' never disappears and never doubles.",
+                     "eliminate": "Drop any option that drops 'to', or that turns 'have to' itself into a passive form.",
+                     "traps": ["Treating 'have to' like an ordinary modal and writing 'can be' style passives that lose the obligation.", "Forgetting the 'be' and writing 'has to finished'."],
+                     "rules": ["ap-r7"], "tech": ["eliminate-pair"]},
+    "q-ap-causative": {"cue": "let, bid, help or make followed directly by a base verb with no 'to' in an active sentence that is being turned passive.",
+                         "standard": "Keep the causative verb's own tense, but insert 'to' before the base verb that follows it once the sentence becomes passive.",
+                         "fast": "made/bid/helped + V1 (active) -> was made/bidden/helped + to + V1 (passive).",
+                         "eliminate": "Drop any passive option that keeps the bare infinitive with no 'to'.",
+                         "traps": ["Copying the active sentence's bare infinitive straight into the passive, where 'to' is required."],
+                         "rules": ["ap-r8"], "tech": ["eliminate-pair"]},
 }
 
 REFS = []
@@ -165,5 +196,74 @@ _EXTRA = [
 ]
 
 
+_EXTRA2 = [
+    # imperative -> passive
+    q("q-ap-imperative", "transform", _P + "Close the window.",
+      ["Let the window be closed.", "Let the window be closing.", "You are closed the window.", "The window closes."], "a",
+      "A command naming its object becomes 'Let + object + be + V3': Let the window be closed.",
+      {"b": ruled_out("'Be closing' is not the past participle form the pattern needs."),
+       "c": ruled_out("This is not a recognised passive form."), "d": mistake("This drops the command sense entirely and states a plain fact.")},
+      rules=["ap-r6"], uid="ap-p12"),
+    q("q-ap-imperative", "transform", _P + "Leave the premises at once.",
+      ["You are ordered to leave the premises at once.", "Let you be left the premises at once.", "The premises are ordered to leave at once.", "You are ordered to left the premises at once."], "a",
+      "A command with no stated object becomes 'You are ordered/requested to + V1': You are ordered to leave the premises at once.",
+      {"b": ruled_out("'Let you be left' is not a recognised passive of a command with no object."),
+       "c": mistake("This makes the premises the one being ordered, which is not what the sentence means."),
+       "d": mistake("After 'to' the verb must be the bare base form 'leave', not the past form 'left'.")},
+      rules=["ap-r6"], uid="ap-p13"),
+    q("q-ap-imperative", "transform", _P + "Respect your elders.",
+      ["Your elders should be respected.", "Let your elders be respect.", "You are respected your elders.", "Elders respect you."], "a",
+      "A sentence giving moral advice becomes 'Object + should + be + V3': Your elders should be respected.",
+      {"b": ruled_out("After 'be' the verb needs its past participle form 'respected', not the base form 'respect'."),
+       "c": ruled_out("This is not a recognised passive form."), "d": mistake("This reverses who respects whom.")},
+      rules=["ap-r6"], uid="ap-p14"),
+    q("q-ap-imperative", "transform", _P + "Water the plants every morning.",
+      ["Let the plants be watered every morning.", "Let the plants be water every morning.", "The plants are ordering to water every morning.", "Water is let to the plants every morning."], "a",
+      "A command naming its object becomes 'Let + object + be + V3': Let the plants be watered every morning.",
+      {"b": ruled_out("After 'be' the verb needs the past participle 'watered', not the base form."),
+       "c": ruled_out("'Are ordering' misuses the passive and is not a correct form."), "d": ruled_out("This is not a recognised passive form.")},
+      rules=["ap-r6"], uid="ap-p15"),
+    # have/has/had to
+    q("q-ap-haveto", "transform", _P + "I have to submit this report by evening.",
+      ["This report has to be submitted by evening by me.", "This report is submitted by evening by me.", "This report has to submitted by evening by me.", "This report have to be submitted by evening by me."], "a",
+      "'Have to + V1' keeps 'to' and turns only the main verb passive: has to be submitted.",
+      {"b": mistake("This drops 'has to' entirely and loses the sense of obligation."),
+       "c": ruled_out("The 'be' is missing after 'has to'."), "d": mistake("'Have to' must agree with the new subject 'report', which is singular, so it should be 'has to'.")},
+      rules=["ap-r7"], uid="ap-p16"),
+    q("q-ap-haveto", "transform", _P + "She had to finish the project before the deadline.",
+      ["The project had to be finished before the deadline by her.", "The project had to finished before the deadline by her.", "The project was finished before the deadline by her.", "The project has to be finished before the deadline by her."], "a",
+      "'Had to + V1' keeps 'to' and turns only the main verb passive: had to be finished.",
+      {"b": ruled_out("The 'be' is missing after 'had to'."), "c": mistake("This drops 'had to' entirely and loses the sense of obligation."),
+       "d": mistake("'Has to' wrongly shifts the obligation into the present; the original is in the past, 'had to'.")},
+      rules=["ap-r7"], uid="ap-p17"),
+    q("q-ap-haveto", "transform", _P + "We have to inform the authorities about this matter.",
+      ["The authorities have to be informed about this matter by us.", "The authorities have to inform about this matter by us.", "The authorities are informed about this matter by us.", "The authorities has to be informed about this matter by us."], "a",
+      "'Have to + V1' keeps 'to' and turns only the main verb passive: have to be informed.",
+      {"b": ruled_out("The 'be' is missing after 'have to'."), "c": mistake("This drops 'have to' entirely and loses the sense of obligation."),
+       "d": mistake("'The authorities' is plural, so it must be 'have to', not 'has to'.")},
+      rules=["ap-r7"], uid="ap-p18"),
+    # let/bid/help/make + to in passive
+    q("q-ap-causative", "transform", _P + "The coach made the players run ten laps.",
+      ["The players were made to run ten laps by the coach.", "The players were made run ten laps by the coach.", "The players made the coach run ten laps.", "Ten laps were made by the players to run."], "a",
+      "'Make' takes a bare infinitive in the active ('made ... run') but 'to + V1' in the passive: were made to run.",
+      {"b": mistake("This keeps the bare infinitive 'run' with no 'to', which the passive of 'make' requires."),
+       "c": ruled_out("This swaps who is making whom do what."), "d": ruled_out("This is not a recognised passive form.")},
+      rules=["ap-r8"], uid="ap-p19"),
+    q("q-ap-causative", "transform", _P + "The officer bade the soldiers stand at ease.",
+      ["The soldiers were bidden to stand at ease by the officer.", "The soldiers were bidden stand at ease by the officer.", "The officer was bidden to stand at ease by the soldiers.", "Stand at ease was bidden to the soldiers."], "a",
+      "'Bid' takes a bare infinitive in the active ('bade ... stand') but 'to + V1' in the passive: were bidden to stand.",
+      {"b": mistake("This keeps the bare infinitive 'stand' with no 'to', which the passive of 'bid' requires."),
+       "c": ruled_out("This swaps who is bidding whom."), "d": ruled_out("This is not a recognised passive form.")},
+      rules=["ap-r8"], uid="ap-p20"),
+    q("q-ap-causative", "transform", _P + "She helped the child cross the busy road.",
+      ["The child was helped to cross the busy road by her.", "The child was helped cross the busy road by her.", "The busy road was helped by the child to cross.", "She was helped to cross the busy road by the child."], "a",
+      "'Help' takes a bare infinitive in the active ('helped ... cross') but 'to + V1' in the passive: was helped to cross.",
+      {"b": mistake("This keeps the bare infinitive 'cross' with no 'to', which the passive of 'help' requires."),
+       "c": ruled_out("This makes the road the one being helped, which is not the sentence's meaning."),
+       "d": ruled_out("This swaps who is helping whom.")},
+      rules=["ap-r8"], uid="ap-p21"),
+]
+
+
 def practice_items():
-    return _base() + _EXTRA
+    return _base() + _EXTRA + _EXTRA2

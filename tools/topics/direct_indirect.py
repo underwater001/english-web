@@ -1,4 +1,5 @@
-"""Direct & indirect speech. Quiz tier: 6 past questions plus practice. Back-shift and word changes are cited rules, not machine-checked."""
+"""Direct & indirect speech. Quiz tier: 6 past questions plus practice. Back-shift and word changes are cited rules, not machine-checked.
+Exclamatory/optative sentences and the no-back-shift exceptions added from Plinth to Paramount's Narration chapter."""
 from bank import mistake, ruled_out, q
 
 TOPIC = "direct-indirect"
@@ -12,6 +13,10 @@ NODES = {
                       "summary": "A yes/no question becomes if / whether with statement order; no 'did', no question mark.", "links": []},
     "q-di-command": {"short": "Commands", "label": "Commands and must", "kind": "qtype", "parent": TOPIC, "order": 3,
                      "summary": "Commands become 'told / ordered ... to'; 'must' stays 'must' in speech.", "links": []},
+    "q-di-exclaim": {"short": "Exclaim & wish", "label": "Exclamatory and optative sentences", "kind": "qtype", "parent": TOPIC, "order": 4,
+                       "summary": "'Said' becomes 'exclaimed with joy/sorrow/surprise' for an exclamation, or 'wished'/'prayed' for a 'May ...' wish; the sentence is rephrased as an ordinary 'that' clause, and 'may' becomes 'might'.", "links": []},
+    "q-di-nochange": {"short": "No back-shift", "label": "Forms that never shift", "kind": "qtype", "parent": TOPIC, "order": 5,
+                         "summary": "'Used to', 'would rather', 'had better', 'had rather' and 'need not' stay exactly as they are; so does a historical fact, a time clause already in the past, or two simultaneous past actions.", "links": []},
 }
 
 RULES = [
@@ -23,6 +28,10 @@ RULES = [
      "ok": "He asked, \"Did you submit it?\" -> He asked if I had submitted it.", "bad": "He asked did I submit it. / He asked whether had I submitted it."},
     {"id": "di-r4", "node": "q-di-command", "text": "'Must' does not change in reported speech, and a reported 'must' remains a statement. A direct command is an imperative; to undo a reported command, return it to the imperative form. Pick the option that keeps the force of the original.",
      "ok": "The librarian said that silence must be maintained -> \"Maintain silence,\" said the librarian (command force kept).", "bad": "\"Must you maintain silence?\" (turns it into a question)."},
+    {"id": "di-r5", "node": "q-di-exclaim", "text": "An exclamation (Alas!, Hurray!, Bravo!, 'What a ...!', 'How ...!') is reported by replacing 'said' with a verb naming the feeling — exclaimed with joy/sorrow/surprise/regret, or applauded — joined by 'that', with the exclamation reworded as an ordinary statement. A wish or prayer beginning 'May ...' is reported by replacing 'said' with 'wished' or 'prayed', joined by 'that', with 'may' changed to 'might'.",
+     "ok": "She said, \"Hurray! We have won.\" -> She exclaimed with joy that they had won.", "bad": "She said that hurray they had won (the exclamation word is carried into the that-clause)."},
+    {"id": "di-r6", "node": "q-di-nochange", "text": "Some forms never back-shift when reported: 'used to', 'would rather', 'had better', 'had rather' and 'need not' stay exactly as they are. Likewise unchanged: a historical fact, a time clause already in the past continuous or simple past, and two simultaneous past actions joined by 'and'.",
+     "ok": "He said, \"I used to go to school by bus.\" -> He said that he used to go to school by bus.", "bad": "He said that he had used to go to school by bus."},
 ]
 
 METHODS = {
@@ -44,6 +53,18 @@ METHODS = {
                      "eliminate": "Drop options that add 'you will' or end in a question mark.",
                      "traps": ["Must -> should changes the strength.", "A rule can be stated either as a statement or as an imperative; the exam expects one of them."],
                      "rules": ["di-r4"], "tech": ["eliminate-pair"]},
+    "q-di-exclaim": {"cue": "The quoted speech opens with Alas, Hurray, Bravo, Wow, Oh, 'What a ...!', 'How ...!', or 'May ...'.",
+                       "standard": "Match the feeling word to its reporting verb (joy/sorrow/surprise/regret), drop the interjection, add 'that', and reword the exclamation as a plain statement. For 'May ...', use 'wished'/'prayed' and change 'may' to 'might'.",
+                       "fast": "Hurray -> exclaimed with joy; Alas -> exclaimed with sorrow; May ... -> wished/prayed that ... might ...",
+                       "eliminate": "Drop any option that keeps 'said' unchanged, or that keeps the interjection word inside the that-clause.",
+                       "traps": ["Keeping 'said' and only adding 'that' misses the feeling-word change the exam checks for.", "'May' surviving unchanged into indirect speech instead of becoming 'might'."],
+                       "rules": ["di-r5"], "tech": ["eliminate-pair"]},
+    "q-di-nochange": {"cue": "The quoted speech contains 'used to', 'would rather', 'had better', 'need not', a historical fact, or two actions joined by 'and' that happened together in the past.",
+                        "standard": "Check the list of forms that never shift; if the verb is one of them, or the clause reports something still true or a known historical fact, carry it over exactly as it is.",
+                        "fast": "used to / would rather / had better / need not -> no change at all.",
+                        "eliminate": "Drop any option that back-shifts a form from this fixed list, or that changes the tense of a historical fact.",
+                        "traps": ["Applying the general back-shift rule on autopilot to a form the exam specifically exempts.", "Changing a historical fact's tense because the reporting verb is in the past."],
+                        "rules": ["di-r6"], "tech": ["eliminate-pair"]},
 }
 
 REFS = []
@@ -164,5 +185,67 @@ _EXTRA = [
 ]
 
 
+_EXTRA2 = [
+    # exclamatory / optative
+    q("q-di-exclaim", "transform", _TO_I + "She said, \"Alas! I have lost my purse.\"",
+      ["She exclaimed with sorrow that she had lost her purse.", "She said that alas she had lost her purse.", "She exclaimed that she has lost her purse.", "She said with sorrow, \"I have lost my purse.\""], "a",
+      "'Alas' signals sorrow, so 'said' becomes 'exclaimed with sorrow', and the exclamation becomes a plain that-clause: that she had lost her purse.",
+      {"b": ruled_out("The interjection 'alas' cannot survive inside the that-clause in indirect speech."),
+       "c": mistake("This keeps the feeling-word change but skips the back-shift, leaving 'has lost' instead of 'had lost'."),
+       "d": ruled_out("This stays in direct speech, with the quotation marks kept.")},
+      rules=["di-r5"], uid="di-p10"),
+    q("q-di-exclaim", "transform", _TO_I + "They said, \"Hurray! Our team has won the championship.\"",
+      ["They exclaimed with joy that their team had won the championship.", "They said hurray that their team had won the championship.", "They exclaimed with joy that our team has won the championship.", "They exclaimed with sorrow that their team had won the championship."], "a",
+      "'Hurray' signals joy, so 'said' becomes 'exclaimed with joy'; 'our' becomes 'their' and the tense shifts back to 'had won'.",
+      {"b": ruled_out("The interjection 'hurray' cannot be kept inside the that-clause."),
+       "c": mistake("This keeps 'our' unchanged, when the reported pronoun must become 'their'."),
+       "d": mistake("'Hurray' signals joy, not sorrow; the feeling-word must match the interjection.")},
+      rules=["di-r5"], uid="di-p11"),
+    q("q-di-exclaim", "transform", _TO_I + "He said, \"May you live a long and happy life!\"",
+      ["He wished that I might live a long and happy life.", "He said that I may live a long and happy life.", "He wished that I may live a long and happy life.", "He said with joy that I might live a long and happy life."], "a",
+      "A wish beginning 'May ...' is reported with 'wished'/'prayed' and 'may' changes to 'might': He wished that I might live a long and happy life.",
+      {"b": mistake("'Said' is kept instead of 'wished', and 'may' is left unchanged."),
+       "c": mistake("'Wished' is correctly used, but 'may' must still change to 'might'."),
+       "d": ruled_out("'Said with joy' is not the pattern this construction uses; the reporting verb itself becomes 'wished' or 'prayed'.")},
+      rules=["di-r5"], uid="di-p12"),
+    q("q-di-exclaim", "transform", _TO_I + "She said, \"What a beautiful painting this is!\"",
+      ["She exclaimed that it was a very beautiful painting.", "She exclaimed with joy, \"What a beautiful painting!\"", "She said that what a beautiful painting it was.", "She exclaimed that what a beautiful painting it was."], "a",
+      "The 'What a ...!' exclamation is reworded as a plain statement: that it was a very beautiful painting.",
+      {"b": ruled_out("This keeps the quotation marks and the exclamation mark, so it is still direct speech."),
+       "c": mistake("This keeps the 'what a' structure inside the that-clause instead of rewording it as a plain statement."),
+       "d": mistake("Changing 'said' to 'exclaimed' is right, but the 'what a' structure must still be reworded into an ordinary statement.")},
+      rules=["di-r5"], uid="di-p13"),
+    # forms that never back-shift
+    q("q-di-nochange", "transform", _TO_I + "He said, \"I would rather walk than wait for the bus.\"",
+      ["He said that he would rather walk than wait for the bus.", "He said that he would have rather walked than waited for the bus.", "He said that he had rather walked than waited for the bus.", "He said that he would rather have walked than wait for the bus."], "a",
+      "'Would rather' is on the fixed list of forms that never back-shift; it is carried over exactly as it stands.",
+      {"b": mistake("This wrongly pushes 'would rather walk ... wait' further back into a perfect form."),
+       "c": mistake("This wrongly back-shifts 'would rather' itself into 'had rather'."),
+       "d": mistake("This mixes a perfect form into only half of the construction, which breaks the fixed pattern.")},
+      rules=["di-r6"], uid="di-p14"),
+    q("q-di-nochange", "transform", _TO_I + "The guide said, \"The Taj Mahal was built by Shah Jahan.\"",
+      ["The guide said that the Taj Mahal was built by Shah Jahan.", "The guide said that the Taj Mahal had been built by Shah Jahan.", "The guide said that the Taj Mahal has been built by Shah Jahan.", "The guide said that the Taj Mahal is built by Shah Jahan."], "a",
+      "A historical fact keeps its original tense regardless of the reporting verb: was built stays was built.",
+      {"b": mistake("'Had been built' wrongly back-shifts a historical fact, which the rule exempts."),
+       "c": mistake("'Has been built' moves the fact into the present perfect, which is not the original tense."),
+       "d": mistake("'Is built' moves the fact into the present, losing the completed sense of the original.")},
+      rules=["di-r6"], uid="di-p15"),
+    q("q-di-nochange", "transform", _TO_I + "She said, \"You had better finish your homework before dinner.\"",
+      ["She said that I had better finish my homework before dinner.", "She said that I would better finish my homework before dinner.", "She said that I had better to finish my homework before dinner.", "She said that I should have better finished my homework before dinner."], "a",
+      "'Had better' is on the fixed list of forms that never back-shift; only the pronouns change, from 'you'/'your' to 'I'/'my'.",
+      {"b": ruled_out("'Would better' is not a standard form; the fixed expression is 'had better'."),
+       "c": ruled_out("'Had better' is always followed directly by the bare verb, never by 'to'."),
+       "d": ruled_out("This rewrites the whole modal into a different, more complex form that the exam does not expect.")},
+      rules=["di-r6"], uid="di-p16"),
+    q("q-di-nochange", "transform", _TO_I + "He said, \"While I was cooking, my sister was setting the table.\"",
+      ["He said that while he was cooking, his sister was setting the table.", "He said that while he had been cooking, his sister had been setting the table.", "He said that while he cooked, his sister set the table.", "He said that while he is cooking, his sister is setting the table."], "a",
+      "A time clause already in the past continuous for two simultaneous past actions keeps its tense; only the pronouns change.",
+      {"b": mistake("This wrongly pushes both past continuous verbs further back into the past perfect continuous."),
+       "c": mistake("This drops the continuous aspect, losing the sense that both actions were happening at the same time."),
+       "d": mistake("This wrongly moves the whole sentence into the present.")},
+      rules=["di-r6"], uid="di-p17"),
+]
+
+
 def practice_items():
-    return _base() + _EXTRA
+    return _base() + _EXTRA + _EXTRA2
