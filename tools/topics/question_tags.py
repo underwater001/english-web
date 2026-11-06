@@ -9,6 +9,10 @@ PREFIX = "qt"
 NODES = {
     "q-qt-tag": {"short": "The tag", "label": "Choose the question tag", "kind": "qtype", "parent": TOPIC, "order": 1,
                  "summary": "Match the auxiliary and the subject, and turn the polarity the other way.", "links": []},
+    "q-qt-collective": {"short": "Collective nouns", "label": "One unit (singular tag) or its members (plural tag)", "kind": "qtype", "parent": TOPIC, "order": 2,
+                          "summary": "A collective noun acting as one body takes a singular tag (it); the same noun describing its members acting separately takes a plural tag (they).", "links": []},
+    "q-qt-there": {"short": "There is/are", "label": "'There' as the subject", "kind": "qtype", "parent": TOPIC, "order": 3,
+                     "summary": "When 'there' is the grammatical subject (there is, there were), the tag repeats 'there', not a pronoun for the noun that follows.", "links": []},
 }
 
 RULES = [
@@ -20,6 +24,10 @@ RULES = [
      "ok": "He hardly speaks, does he? Nothing was lost, was it?", "bad": "He hardly speaks, doesn't he?"},
     {"id": "qt-r4", "node": "q-qt-tag", "text": "Three forms are fixed: 'Let us ...' takes 'shall we?', an imperative takes 'will you?', and 'I am ...' takes 'aren't I?'. 'Everyone', 'somebody' and 'nobody' are answered by 'they'.",
      "ok": "Let us begin, shall we? Open the door, will you? I am late, aren't I? Everyone came, didn't they?", "bad": "Let us begin, will we? I am late, amn't I?"},
+    {"id": "qt-r5", "node": "q-qt-collective", "text": "A collective noun (jury, committee, team, family, audience) names one body acting as a single unit by default, so it takes a singular verb, a singular possessive (its) and a singular tag (it). The same noun takes a plural verb and tag only when the sentence is clearly about its members acting or feeling separately.",
+     "ok": "The jury has reached its verdict, hasn't it?", "bad": "The jury have reached their verdict, haven't they? (unless the members' separate views are the point)."},
+    {"id": "qt-r6", "node": "q-qt-there", "text": "When a sentence opens with 'there' as its grammatical subject (there is, there are, there were), the tag repeats 'there' with the matching auxiliary; it is not built from the noun that follows 'there'.",
+     "ok": "There is no water left, is there?", "bad": "There is no water left, isn't it?"},
 ]
 
 METHODS = {
@@ -31,6 +39,18 @@ METHODS = {
                            "'Let us' takes 'shall we', not 'will we'.", "'I am' takes 'aren't I'.",
                            "An imperative takes 'will you' whatever its own verb is."],
                  "rules": ["qt-r1", "qt-r2", "qt-r3", "qt-r4"], "tech": ["eliminate-pair"]},
+    "q-qt-collective": {"cue": "A collective noun (jury, team, committee, family, audience) as the subject.",
+                          "standard": "Decide whether the sentence treats the group as one body or names its members acting separately; pick the singular or plural tag to match.",
+                          "fast": "By default: singular tag (it). Only a clear 'each member separately' sense switches it to 'they'.",
+                          "eliminate": "Drop the plural tag unless the sentence gives a specific reason to read the group as separate individuals.",
+                          "traps": ["Collective nouns look plural in meaning, so the eye reaches for 'they' by default, when 'it' is usually correct."],
+                          "rules": ["qt-r5"], "tech": ["eliminate-pair"]},
+    "q-qt-there": {"cue": "The sentence opens with 'There is', 'There are', 'There was' or 'There were'.",
+                     "standard": "Keep 'there' as the tag's subject and match only the auxiliary's polarity and number.",
+                     "fast": "There is/was ... -> isn't/wasn't there? There are/were ... -> aren't/weren't there?",
+                     "eliminate": "Drop any tag built from the noun after 'there' instead of from 'there' itself.",
+                     "traps": ["Reading the noun after 'there' (water, schools) as the real subject of the tag."],
+                     "rules": ["qt-r6"], "tech": ["eliminate-pair"]},
 }
 
 REFS = []
@@ -94,6 +114,33 @@ def practice_items():
              {"a": mistake("'He' agrees with the singular verb but 'everyone' is answered by 'they' in a tag."),
               "c": mistake("The polarity is not turned, and the pronoun is wrong."),
               "d": ruled_out("'Didn't' changes the tense from the present perfect to the past.")}, ["qt-r4", "qt-r1"], rare=True),
+        q("q-qt-collective", "fill", _F + "The jury has announced its verdict, ___", ["haven't they?", "hasn't it?", "hasn't he?", "haven't we?"], "b",
+          "The jury is treated as one body here (its verdict), so the tag is singular and uses 'it': hasn't it?",
+          {"a": mistake("'Haven't they' treats the jury as separate members, but the sentence's own 'its' already marks it as one body."),
+           "c": ruled_out("'He' does not fit a group noun like 'jury'."), "d": ruled_out("'We' does not fit a tag at all; the speaker is not part of the jury.")},
+          rules=["qt-r5"], uid="qt-p11", tech=["eliminate-pair"]),
+        q("q-qt-collective", "fill", _F + "The committee are divided in their opinion on the merger, ___", ["isn't it?", "aren't they?", "doesn't it?", "won't it?"], "b",
+          "'Divided in their opinion' shows the committee's members disagreeing separately, so the tag is plural: aren't they?",
+          {"a": mistake("'Isn't it' treats the committee as one unit, but 'divided in their opinion' is exactly the case where it is read as separate members."),
+           "c": ruled_out("'Doesn't' does not match the auxiliary 'are'."), "d": ruled_out("'Won't' puts the tag in the future, which the statement is not.")},
+          rules=["qt-r5"], uid="qt-p12", tech=["eliminate-pair"], rare=True),
+        q("q-qt-collective", "fill", _F + "My family has decided to move to Pune, ___", ["haven't they?", "hasn't it?", "hasn't she?", "doesn't it?"], "b",
+          "'Family' naming one household acting as a single unit (one decision) takes a singular tag: hasn't it?",
+          {"a": mistake("'Haven't they' reads 'family' as separate members, but the sentence describes one shared decision."),
+           "c": ruled_out("'She' does not fit a group noun like 'family'."), "d": ruled_out("'Doesn't' does not match the auxiliary 'has'.")},
+          rules=["qt-r5"], uid="qt-p13", tech=["eliminate-pair"]),
+        q("q-qt-there", "fill", _F + "There is no shortcut to success, ___", ["isn't it?", "is there?", "isn't there?", "are there?"], "b",
+          "'There' is the subject, so the tag repeats 'there'; 'no shortcut' already makes the statement negative in sense (like 'nothing' or 'nobody'), so the tag turns positive: is there?",
+          {"a": mistake("'Isn't it' is built on 'it' instead of the true subject 'there', and also keeps the statement's negative sense in the tag."),
+           "c": mistake("'There' is correctly used, but 'no' has already made the statement negative, so the tag must be positive, not negative."),
+           "d": ruled_out("'Are there' does not match the singular 'is'.")},
+          rules=["qt-r6", "qt-r3"], uid="qt-p14", tech=["eliminate-pair"]),
+        q("q-qt-there", "fill", _F + "There weren't enough chairs for everyone, ___", ["was there?", "were there?", "weren't there?", "wasn't it?"], "b",
+          "The statement is negative ('weren't'), so the tag turns positive, and it repeats 'there' with the matching plural auxiliary: were there?",
+          {"a": ruled_out("'Was there' does not match the plural auxiliary the statement uses ('weren't')."),
+           "c": mistake("This keeps the negative polarity instead of turning it positive."),
+           "d": ruled_out("'Wasn't it' is singular, keeps the negative, and is built on 'it' instead of 'there'.")},
+          rules=["qt-r6"], uid="qt-p15", tech=["eliminate-pair"]),
     ]
 
 
