@@ -1,0 +1,128 @@
+"""Gerund and infinitive: which verbs take -ing, which take to + verb, and the few that take either. Seed tier: Plinth to Paramount
+gives this a chapter of its own ('Verb: advance'), and SSC tests it as a fill-in, an improvement or a spot-the-error."""
+from bank import mistake, ruled_out, q
+
+TOPIC = "gerund-infinitive"
+TIER = "seed"
+PREFIX = "gi"
+
+NODES = {
+    "q-gi-verb": {"short": "After a verb", "label": "Which form the verb before it takes", "kind": "qtype", "parent": TOPIC, "order": 1,
+                  "summary": "Enjoy, avoid, mind take -ing; want, hope, decide take to + verb; a few take either.", "links": []},
+    "q-gi-prep": {"short": "After a preposition", "label": "After a preposition or a fixed phrase", "kind": "qtype", "parent": TOPIC, "order": 2,
+                  "summary": "Every preposition is followed by -ing, including the 'to' of look forward to and be used to.", "links": ["prepositions"]},
+    "q-gi-bare": {"short": "Bare infinitive", "label": "Verbs followed by the bare verb", "kind": "qtype", "parent": TOPIC, "order": 3,
+                  "summary": "Make, let, see, hear and had better take the verb with no 'to'.", "links": []},
+}
+
+RULES = [
+    {"id": "gi-r1", "node": "q-gi-verb", "text": "These take -ing: enjoy, avoid, mind, finish, stop, keep, suggest, recommend, consider, deny, admit, postpone, risk, practise, remember doing (= recall).",
+     "ok": "She avoided answering the question.", "bad": "She avoided to answer the question."},
+    {"id": "gi-r2", "node": "q-gi-verb", "text": "These take to + verb: want, hope, decide, agree, refuse, promise, manage, afford, intend, offer, fail, learn, remember to do (= not forget).",
+     "ok": "He refused to sign the form.", "bad": "He refused signing the form."},
+    {"id": "gi-r3", "node": "q-gi-verb", "text": "A few verbs take either form but change meaning: 'stop smoking' means give it up, 'stop to smoke' means pause in order to smoke; 'remember posting' is a memory, 'remember to post' is a duty.",
+     "ok": "He stopped smoking last year. He stopped to smoke outside.", "bad": "Treating the two as the same sentence."},
+    {"id": "gi-r4", "node": "q-gi-prep", "text": "A preposition is always followed by -ing, never by a bare or to-form. This holds for phrases whose last word is 'to': look forward to, be used to, be accustomed to, object to, with a view to.",
+     "ok": "I look forward to meeting you. She is used to working nights.", "bad": "I look forward to meet you. She is used to work nights."},
+    {"id": "gi-r5", "node": "q-gi-bare", "text": "Make, let, see, hear, feel, watch and the phrases had better, would rather, rather than take the bare verb with no 'to'. In the passive, 'make' regains it: he was made to pay.",
+     "ok": "They made him pay. You had better go now.", "bad": "They made him to pay. You had better to go now."},
+]
+
+METHODS = {
+    "q-gi-verb": {"cue": "A blank after a verb such as enjoy, avoid, decide or refuse.",
+                  "standard": "Name the verb before the blank and recall which list it belongs to. If it takes either form, the meaning decides.",
+                  "fast": "Verbs about stopping, continuing and liking take -ing; verbs about intending and agreeing take 'to'.",
+                  "eliminate": "Drop the bare form at once unless the verb is make, let, see or hear.",
+                  "traps": ["Avoid and suggest, which are often given 'to' by mistake.", "Stop and remember, where the two forms mean different things."],
+                  "rules": ["gi-r1", "gi-r2", "gi-r3"], "tech": ["back-substitute"]},
+    "q-gi-prep": {"cue": "A blank after a preposition, or after look forward to, used to, accustomed to, object to.",
+                  "standard": "Check whether the word before the blank is a preposition. If it is, the answer is the -ing form.",
+                  "fast": "A 'to' that belongs to a fixed phrase still takes -ing.",
+                  "eliminate": "Remove the to-form and the bare form; only -ing can follow a preposition.",
+                  "traps": ["'Look forward to meet' and 'used to work', which read naturally and are wrong.",
+                            "'Used to + bare verb' for a past habit is a different pattern: he used to walk."],
+                  "rules": ["gi-r4"], "tech": ["back-substitute"]},
+    "q-gi-bare": {"cue": "make, let, see, hear, had better or would rather before the blank.",
+                  "standard": "Use the bare verb. Add 'to' only when the sentence is passive with 'made'.",
+                  "fast": "No 'to' after make, let, see, hear, had better.",
+                  "eliminate": "Drop every option with 'to' unless the verb is in the passive.",
+                  "traps": ["'Made him to pay' and 'had better to go'.", "The passive 'was made to pay', which does take 'to'."],
+                  "rules": ["gi-r5"], "tech": ["eliminate-pair"]},
+}
+
+REFS = []
+WORDS = []
+_F = "Select the most appropriate option to fill in the blank.\n"
+_S = "Find the part of the sentence that contains an error:\n"
+_I = "Choose the most suitable option to replace the highlighted part of the sentence:\n"
+
+
+def practice_items():
+    return [
+        q("q-gi-verb", "fill", _F + "She avoided ___ the question twice.", ["to answer", "answering", "answer", "to answering"], "b",
+          "'Avoid' belongs to the group that takes the -ing form.",
+          {"a": mistake("'Avoid to answer' applies the 'to' pattern to a verb that takes -ing."),
+           "c": ruled_out("A bare verb cannot follow 'avoided'."),
+           "d": ruled_out("'To answering' puts a preposition and an -ing form together after a verb that needs neither.")},
+          rules=["gi-r1"], uid="gi-p01", tech=["back-substitute"]),
+        q("q-gi-verb", "fill", _F + "He refused ___ the receipt without a stamp.", ["signing", "to sign", "sign", "to signing"], "b",
+          "'Refuse' belongs to the group that takes to + verb.",
+          {"a": mistake("'Refused signing' applies the -ing pattern to a verb that takes 'to'."),
+           "c": ruled_out("A bare verb cannot follow 'refused'."),
+           "d": ruled_out("'To signing' is not a possible combination here.")},
+          rules=["gi-r2"], uid="gi-p02", tech=["back-substitute"]),
+        q("q-gi-verb", "fill", _F + "The committee suggested ___ the meeting to Friday.", ["to postpone", "postponing", "postpone", "that postpone"], "b",
+          "'Suggest' takes the -ing form, or a that-clause with the base verb; it never takes 'to'.",
+          {"a": mistake("'Suggested to postpone' is one of the commonest errors of this kind."),
+           "c": ruled_out("A bare verb cannot follow 'suggested' without 'that'."),
+           "d": ruled_out("'That postpone' has no subject in the clause.")},
+          rules=["gi-r1"], uid="gi-p03", tech=["back-substitute"]),
+        q("q-gi-verb", "improve", _I + "He stopped [[to smoke]] two years ago and his health improved.",
+          ["smoking", "to smoke", "to smoking", "smoke"], "a",
+          "'Stop smoking' means to give it up, which is what 'two years ago and his health improved' requires. 'Stop to smoke' would mean he paused in order to smoke.",
+          {"b": mistake("'Stopped to smoke' means he halted so that he could smoke, the opposite of giving it up."),
+           "c": ruled_out("'To smoking' is not a possible form after 'stopped'."),
+           "d": ruled_out("A bare verb cannot follow 'stopped'.")},
+          rules=["gi-r3"], uid="gi-p04", tech=["back-substitute"], rare=True),
+        q("q-gi-prep", "fill", _F + "I look forward to ___ from you soon.", ["hear", "hearing", "have heard", "be hearing"], "b",
+          "The 'to' of 'look forward to' is a preposition, so it takes the -ing form.",
+          {"a": mistake("'Look forward to hear' treats the 'to' as an infinitive marker; it is a preposition."),
+           "c": ruled_out("'To have heard' puts a perfect infinitive after a preposition."),
+           "d": ruled_out("'To be hearing' is not used in this fixed phrase.")},
+          rules=["gi-r4"], uid="gi-p05", tech=["back-substitute"]),
+        q("q-gi-prep", "fill", _F + "She is used to ___ in three languages every day.", ["work", "working", "have worked", "worked"], "b",
+          "'Be used to' means accustomed to, and its 'to' is a preposition, so the -ing form follows.",
+          {"a": mistake("'Used to work' with a bare verb means a past habit; the sentence here says she is accustomed to it."),
+           "c": ruled_out("A perfect infinitive cannot follow a preposition."),
+           "d": ruled_out("A past form cannot follow a preposition.")},
+          rules=["gi-r4"], uid="gi-p06", tech=["back-substitute"], rare=True),
+        q("q-gi-prep", "spot-error", _S + "The residents objected / to pay the maintenance / until the lift / was repaired.",
+          ["The residents objected", "to pay the maintenance", "until the lift", "was repaired"], "b",
+          "'Object to' takes the -ing form, so it should be 'to paying the maintenance'.",
+          {"a": ruled_out("'The residents objected' is a correct main clause."),
+           "c": ruled_out("'Until the lift' correctly begins a clause of time."),
+           "d": ruled_out("'Was repaired' is a correct passive verb for the lift.")},
+          rules=["gi-r4"], uid="gi-p07", tech=["read-whole"]),
+        q("q-gi-bare", "fill", _F + "The inspector made the driver ___ the papers at once.", ["to produce", "produce", "producing", "produced"], "b",
+          "'Make' takes the bare verb in the active voice.",
+          {"a": mistake("'Made him to produce' adds a 'to' that 'make' takes only in the passive."),
+           "c": ruled_out("An -ing form cannot follow 'made' in this pattern."),
+           "d": ruled_out("A past form cannot follow 'made' here.")},
+          rules=["gi-r5"], uid="gi-p08", tech=["eliminate-pair"]),
+        q("q-gi-bare", "fill", _F + "You had better ___ the doctor before the fever rises.", ["to see", "see", "seeing", "saw"], "b",
+          "'Had better' takes the bare verb.",
+          {"a": mistake("'Had better to see' adds a 'to' the phrase never takes."),
+           "c": ruled_out("An -ing form cannot follow 'had better'."),
+           "d": ruled_out("A past form cannot follow 'had better'.")},
+          rules=["gi-r5"], uid="gi-p09", tech=["eliminate-pair"]),
+        q("q-gi-bare", "improve", _I + "The clerk was [[made pay]] the difference out of his salary.",
+          ["made to pay", "made pay", "made paying", "make to pay"], "a",
+          "In the passive, 'make' takes 'to': he was made to pay.",
+          {"b": mistake("The bare verb is right in the active ('they made him pay') but the passive restores the 'to'."),
+           "c": ruled_out("An -ing form does not follow 'was made' in this sense."),
+           "d": ruled_out("'Make' must agree with the past 'was' and cannot stay in the base form.")},
+          rules=["gi-r5"], uid="gi-p10", tech=["eliminate-pair"], rare=True),
+    ]
+
+
+PYQS = []

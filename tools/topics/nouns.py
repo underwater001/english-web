@@ -1,0 +1,145 @@
+"""Nouns: countability, number, and the possessive. Seed tier: Plinth to Paramount gives the noun a chapter of its own, and SSC
+tests it inside spot-the-error and improvement questions rather than as a type with its own name."""
+from bank import mistake, ruled_out, q
+
+TOPIC = "nouns"
+TIER = "seed"
+PREFIX = "nn"
+
+NODES = {
+    "q-nn-count": {"short": "Uncountable", "label": "Nouns that take no 'a' and no plural", "kind": "qtype", "parent": TOPIC, "order": 1,
+                   "summary": "Information, advice, furniture, luggage, machinery, scenery and poetry have no plural in -s.", "links": ["articles"]},
+    "q-nn-number": {"short": "Number", "label": "Singular-looking plurals and plural-looking singulars", "kind": "qtype", "parent": TOPIC, "order": 2,
+                    "summary": "News, physics and mathematics are singular; scissors, trousers and premises are plural.", "links": ["subject-verb-agreement"]},
+    "q-nn-poss": {"short": "Possessive", "label": "The apostrophe and the of-form", "kind": "qtype", "parent": TOPIC, "order": 3,
+                  "summary": "People and time take 's; lifeless things usually take 'of'.", "links": []},
+}
+
+RULES = [
+    {"id": "nn-r1", "node": "q-nn-count", "text": "These have no plural and take no 'a': information, advice, furniture, luggage, baggage, machinery, scenery, poetry, stationery, work, bread, traffic. Count them with a phrase: a piece of advice, an item of furniture.",
+     "ok": "He gave me some useful information.", "bad": "He gave me some useful informations."},
+    {"id": "nn-r2", "node": "q-nn-number", "text": "Singular although they end in -s: news, physics, mathematics, economics, politics, measles, innings. Plural with no singular: scissors, trousers, spectacles, premises, proceeds, alms, tidings.",
+     "ok": "The news is good. These scissors are blunt.", "bad": "The news are good. This scissor is blunt."},
+    {"id": "nn-r3", "node": "q-nn-number", "text": "After a number, a noun of measure stays singular when it is used as an adjective: a five-year plan, a ten-rupee note, two dozen eggs. Standing alone it takes the plural: the plan runs for five years.",
+     "ok": "He bought a ten-rupee note and two dozen eggs.", "bad": "He bought a ten-rupees note and two dozens eggs."},
+    {"id": "nn-r4", "node": "q-nn-poss", "text": "Use 's for people, animals, time and personified things: the boy's bag, a day's work, India's exports. Use 'of' for lifeless things: the leg of the table, the roof of the house.",
+     "ok": "A day's work; the roof of the house.", "bad": "A day work; the house's roof."},
+    {"id": "nn-r5", "node": "q-nn-poss", "text": "A plural ending in -s takes only the apostrophe: the boys' hostel. A plural not ending in -s takes 's: the children's park. For two owners of one thing, mark the last name only: Ram and Shyam's shop.",
+     "ok": "The boys' hostel; the children's park.", "bad": "The boys's hostel; the childrens park."},
+]
+
+METHODS = {
+    "q-nn-count": {"cue": "advice, information, furniture, luggage or scenery with an -s or an 'a' in front of it.",
+                   "standard": "Ask whether the noun can be counted one by one. If it cannot, strip the -s and the 'a'.",
+                   "fast": "No 'an advice', no 'informations', no 'furnitures'.",
+                   "eliminate": "Cross out any option that pluralises one of the listed nouns.",
+                   "traps": ["'Many informations' and 'two advices', which are normal in Indian English.",
+                             "'A work' for a job: use 'a piece of work' or 'a job'."],
+                   "rules": ["nn-r1"], "tech": ["read-whole"]},
+    "q-nn-number": {"cue": "news, physics, mathematics, scissors, trousers or premises as the subject.",
+                    "standard": "Decide the noun's real number from the list, then match the verb to it.",
+                    "fast": "Ends in -s but names one subject or one thing: singular.",
+                    "eliminate": "Drop options that treat 'news' or 'mathematics' as plural.",
+                    "traps": ["'The news are', 'mathematics are'.", "'A scissor' and 'a trouser' for one object: say 'a pair of'.",
+                              "A measure noun pluralised before another noun: 'a five-years plan'."],
+                    "rules": ["nn-r2", "nn-r3"], "tech": ["subject-first"]},
+    "q-nn-poss": {"cue": "An apostrophe, or a choice between 's and an of-phrase.",
+                  "standard": "Ask whether the owner is living or a stretch of time. If it is, use 's; otherwise use 'of'.",
+                  "fast": "Living or time, use 's. Lifeless, use 'of'.",
+                  "eliminate": "Remove 's on a plural that already ends in -s, and 'of' on a person.",
+                  "traps": ["'The boys's hostel'.", "'The table's leg' for a lifeless thing.", "'A day work' with the apostrophe dropped."],
+                  "rules": ["nn-r4", "nn-r5"], "tech": ["read-whole"]},
+}
+
+REFS = []
+WORDS = []
+_F = "Select the most appropriate option to fill in the blank.\n"
+_S = "Find the part of the sentence that contains an error:\n"
+_I = "Choose the most suitable option to replace the highlighted part of the sentence:\n"
+
+
+def practice_items():
+    return [
+        q("q-nn-count", "spot-error", _S + "The officer gave us / several useful informations / about the scheme / before we applied.",
+          ["The officer gave us", "several useful informations", "about the scheme", "before we applied"], "b",
+          "'Information' is uncountable, so it has no plural: 'several useful pieces of information' or simply 'useful information'.",
+          {"a": ruled_out("'The officer gave us' is a correct main clause."),
+           "c": ruled_out("'About the scheme' is a correct prepositional phrase."),
+           "d": ruled_out("'Before we applied' is a correct clause of time.")},
+          rules=["nn-r1"], uid="nn-p01", tech=["read-whole"]),
+        q("q-nn-count", "fill", _F + "She asked the warden for ___ about the hostel rules.", ["an advice", "advices", "advice", "some advices"], "c",
+          "'Advice' is uncountable: it takes no 'a' and no plural.",
+          {"a": mistake("'An advice' is common in Indian English, but the noun cannot be counted; say 'a piece of advice'."),
+           "b": mistake("'Advices' pluralises an uncountable noun."),
+           "d": mistake("'Some' is fine but 'advices' is still a plural of an uncountable noun.")},
+          rules=["nn-r1"], uid="nn-p02", tech=["read-whole"]),
+        q("q-nn-count", "spot-error", _S + "They have shifted / all the furnitures / to the new office / on the third floor.",
+          ["They have shifted", "all the furnitures", "to the new office", "on the third floor"], "b",
+          "'Furniture' is uncountable, so it should be 'all the furniture'.",
+          {"a": ruled_out("'They have shifted' is a correct present perfect verb."),
+           "c": ruled_out("'To the new office' is a correct prepositional phrase."),
+           "d": ruled_out("'On the third floor' is a correct phrase of place.")},
+          rules=["nn-r1"], uid="nn-p03", tech=["read-whole"]),
+        q("q-nn-number", "fill", _F + "The news from the border ___ reassuring.", ["are", "is", "were", "have been"], "b",
+          "'News' ends in -s but is singular, so it takes a singular verb.",
+          {"a": mistake("'The news are' treats the -s as a plural ending; 'news' is singular."),
+           "c": mistake("'Were' is plural as well as past."),
+           "d": mistake("'Have been' is plural; the singular would be 'has been'.")},
+          rules=["nn-r2"], uid="nn-p04", tech=["subject-first"]),
+        q("q-nn-number", "fill", _F + "Mathematics ___ never been his strong subject.", ["have", "has", "are", "were"], "b",
+          "'Mathematics' is the name of one subject and takes a singular verb.",
+          {"a": mistake("'Have' treats the -s as a plural ending."),
+           "c": ruled_out("'Are' is plural and also the wrong tense for 'never been'."),
+           "d": ruled_out("'Were' is plural and past.")},
+          rules=["nn-r2"], uid="nn-p05", tech=["subject-first"]),
+        q("q-nn-number", "improve", _I + "He bought [[a new scissor]] from the stationery shop.",
+          ["a new pair of scissors", "a new scissor", "new scissor", "a new scissors"], "a",
+          "'Scissors' has no singular, so one object is 'a pair of scissors'.",
+          {"b": mistake("'A scissor' invents a singular for a noun that has none."),
+           "c": ruled_out("Dropping the article leaves the sentence ungrammatical."),
+           "d": mistake("'A new scissors' puts a singular article before a plural noun.")},
+          rules=["nn-r2"], uid="nn-p06", tech=["read-whole"]),
+        q("q-nn-number", "spot-error", _S + "The state announced / a five-years plan / for the repair / of village roads.",
+          ["The state announced", "a five-years plan", "for the repair", "of village roads"], "b",
+          "A measure used as an adjective before a noun stays singular: 'a five-year plan'.",
+          {"a": ruled_out("'The state announced' is a correct main clause."),
+           "c": ruled_out("'For the repair' is a correct prepositional phrase."),
+           "d": ruled_out("'Of village roads' correctly completes the phrase.")},
+          rules=["nn-r3"], uid="nn-p07", tech=["read-whole"]),
+        q("q-nn-poss", "improve", _I + "He finished [[a day work]] before noon.",
+          ["a day's work", "a day work", "the work of a day's", "a days work"], "a",
+          "Time takes the apostrophe and s: a day's work.",
+          {"b": mistake("The apostrophe has simply been dropped."),
+           "c": ruled_out("This mixes the of-form and the apostrophe together."),
+           "d": mistake("'A days work' puts the plural -s where the possessive apostrophe belongs.")},
+          rules=["nn-r4"], uid="nn-p08", tech=["read-whole"]),
+        q("q-nn-poss", "fill", _F + "The warden inspected the ___ hostel after the complaint.", ["boys's", "boys'", "boy's", "boys"], "b",
+          "A plural already ending in -s takes only the apostrophe: the boys' hostel.",
+          {"a": mistake("'Boys's' adds an s after a plural that already ends in one."),
+           "c": mistake("'Boy's' would mean a hostel belonging to one boy."),
+           "d": ruled_out("Without an apostrophe there is no possessive at all.")},
+          rules=["nn-r5"], uid="nn-p09", tech=["read-whole"]),
+        q("q-nn-poss", "improve", _I + "They repaired [[the house's roof]] before the monsoon.",
+          ["the roof of the house", "the house's roof", "the houses roof", "the roof of the house's"], "a",
+          "A lifeless thing normally takes the of-form rather than the apostrophe.",
+          {"b": mistake("The apostrophe is used for people, animals and time, not usually for a building."),
+           "c": ruled_out("'Houses roof' has neither an apostrophe nor an of-phrase."),
+           "d": ruled_out("This uses both forms at once.")},
+          rules=["nn-r4"], uid="nn-p10", tech=["read-whole"]),
+        q("q-nn-poss", "fill", _F + "The park was built with ___ safety in mind.", ["childrens", "children's", "childrens'", "child's"], "b",
+          "'Children' is a plural that does not end in -s, so it takes 's.",
+          {"a": ruled_out("'Childrens' has no apostrophe and is not a word."),
+           "c": mistake("'Childrens'' adds a plural -s to a noun that is already plural."),
+           "d": mistake("'Child's' would mean one child.")},
+          rules=["nn-r5"], uid="nn-p11", tech=["read-whole"]),
+        q("q-nn-count", "spot-error", _S + "The porter carried / all our luggages / up the stairs / without a word.",
+          ["The porter carried", "all our luggages", "up the stairs", "without a word"], "b",
+          "'Luggage' is uncountable, so it should be 'all our luggage'.",
+          {"a": ruled_out("'The porter carried' is a correct main clause."),
+           "c": ruled_out("'Up the stairs' is a correct phrase of direction."),
+           "d": ruled_out("'Without a word' is a correct prepositional phrase.")},
+          rules=["nn-r1"], uid="nn-p12", tech=["read-whole"]),
+    ]
+
+
+PYQS = []

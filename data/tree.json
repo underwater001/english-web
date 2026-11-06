@@ -228,5 +228,62 @@
    "conjunctions",
    "tenses"
   ]
+ },
+ "conditionals": {
+  "label": "Conditional sentences",
+  "short": "If-clauses",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 11,
+  "summary": "If-clauses of all four types, plus unless, wish and as if: which tense goes in which half.",
+  "links": [
+   "tenses"
+  ]
+ },
+ "question-tags": {
+  "label": "Question tags",
+  "short": "Tags",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 12,
+  "summary": "The short question added to a statement: the auxiliary, the pronoun and the reversed polarity.",
+  "links": [
+   "subject-verb-agreement"
+  ]
+ },
+ "gerund-infinitive": {
+  "label": "Gerund & infinitive",
+  "short": "-ing / to",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 13,
+  "summary": "Which verbs and prepositions take -ing, which take to + verb, and the few that take either with a change of sense.",
+  "links": [
+   "prepositions"
+  ]
+ },
+ "nouns": {
+  "label": "Nouns",
+  "short": "Nouns",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 14,
+  "summary": "Countable and uncountable, singular-looking plurals, possessives and nouns that take no article or no plural.",
+  "links": [
+   "articles",
+   "subject-verb-agreement"
+  ]
+ },
+ "confusables": {
+  "label": "Words often confused",
+  "short": "Confused",
+  "kind": "topic",
+  "parent": "vocabulary",
+  "order": 11,
+  "summary": "Pairs that are mixed up in the exam: affect/effect, principal/principle, lie/lay, beside/besides.",
+  "links": [
+   "homonyms",
+   "spellings"
+  ]
  }
 }

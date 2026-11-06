@@ -44,7 +44,8 @@ TECHNIQUES = {
 }
 
 # Word kinds in the lexicon
-KINDS = {"word": "Word", "idiom": "Idiom / phrase", "ows": "One-word substitution", "phrasal": "Phrasal verb", "spelling": "Spelling"}
+KINDS = {"word": "Word", "idiom": "Idiom / phrase", "ows": "One-word substitution", "phrasal": "Phrasal verb", "spelling": "Spelling",
+         "confused": "Often confused"}
 
 # lex=(kind, word_id) checks a question against the lexicon:
 #   syn / ant   the key is in the word's synonym / antonym list and no wrong option is
@@ -121,9 +122,9 @@ def check_word(e, where):
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]*", e["id"]): errs.append(f"{where}: id {e['id']!r} must be lowercase letters, digits and hyphens")
     if e["kind"] == "word" and len(e.get("syn", [])) < 2: errs.append(f"{where}: a word needs at least 2 synonyms")
     stem = norm(e["w"])
-    stem = stem[: max(4, len(stem) - 3)] if e["kind"] == "word" else stem
+    stem = stem[: max(4, len(stem) - 3)] if e["kind"] in ("word", "confused") else stem
     if e["kind"] == "spelling" and not e.get("misspell"): errs.append(f"{where}: a spelling entry needs at least one misspelling")
-    if e["kind"] in ("word", "idiom", "ows", "spelling") and stem.split(" ")[0] not in norm(e["ex"]):
+    if e["kind"] in ("word", "idiom", "ows", "spelling", "confused") and stem.split(" ")[0] not in norm(e["ex"]):
         errs.append(f"{where}: the example sentence must contain {e['w']!r}")
     for k in ("syn", "ant", "also", "misspell"):
         for x in e.get(k, []):
