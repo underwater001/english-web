@@ -20,6 +20,12 @@ NODES = {
                    "summary": "Long sentences put phrases between the subject and the verb, or make a whole clause the subject; find the real subject and check the verb.", "links": []},
     "q-sva-inverted": {"short": "Inverted order", "label": "Verb before its subject", "kind": "qtype", "parent": TOPIC, "order": 6,
                        "summary": "After 'so + adjective', 'here', 'there' and similar openers the verb comes first; it still agrees with the subject that follows.", "links": []},
+    "q-sva-oneidea": {"short": "One idea, not two", "label": "Two nouns joined by 'and' naming one thing", "kind": "qtype", "parent": TOPIC, "order": 7,
+                        "summary": "Two nouns or adjectives joined by 'and' take a singular verb when together they name one person, thing or idea, not two separate ones.", "links": []},
+    "q-sva-fixedplural": {"short": "Looks plural, isn't", "label": "Diseases, games, countries, subjects ending in -s", "kind": "qtype", "parent": TOPIC, "order": 8,
+                            "summary": "Some nouns that end in -s name one disease, game, country or field of study and take a singular verb: measles, billiards, the United States, Mathematics, Economics, Statistics.", "links": []},
+    "q-sva-unit": {"short": "One quantity", "label": "A number + a plural noun of amount as a single unit", "kind": "qtype", "parent": TOPIC, "order": 9,
+                     "summary": "A number of money, distance, weight, time or height, treated as a single amount rather than separate items, takes a singular verb.", "links": []},
 }
 
 RULES = [
@@ -39,6 +45,12 @@ RULES = [
      "ok": "The focus on small farms, though praiseworthy, ignores big ones.", "bad": "The focus on small farms, though praiseworthy, ignore big ones."},
     {"id": "sva-r11", "node": "q-sva-inverted", "text": "When the sentence opens with 'so + adjective' (or here, there, never ...), the verb comes before its subject and still agrees with the subject that follows it; also keep the tense the rest of the sentence needs.",
      "ok": "So fragile were the talks that one leak could end them.", "bad": "So fragile was the talks that one leak could end them."},
+    {"id": "sva-r12", "node": "q-sva-oneidea", "text": "Two nouns or adjectives joined by 'and' take a singular verb when together they name one person, thing or idea rather than two. One test: if an article (a/the) stands only before the first of the pair, the pair is one thing, so the verb is singular; if the article is repeated before each one, they are different things, so the verb is plural.",
+     "ok": "Slow and steady wins the race.", "bad": "Slow and steady win the race."},
+    {"id": "sva-r13", "node": "q-sva-fixedplural", "text": "Some nouns that end in -s and look plural in fact name one disease (measles, mumps, rickets, shingles), one game (billiards, draughts, darts), one country (the United States, the Netherlands) or one field of study (Mathematics, Physics, Economics, Statistics, Politics, Linguistics), and take a singular verb. A few of these (statistics, economics, politics) switch to a plural verb only when they mean actual data, calculations or political activities rather than the subject of study.",
+     "ok": "Mathematics is my favourite subject.", "bad": "Mathematics are my favourite subject."},
+    {"id": "sva-r14", "node": "q-sva-unit", "text": "A plural noun of money, distance, weight, time or height, coming after a number, takes a singular verb when the whole phrase is treated as one single amount rather than a count of separate items.",
+     "ok": "Ten kilometres is too far to walk every day.", "bad": "Ten kilometres are too far to walk every day."},
 ]
 
 METHODS = {
@@ -79,6 +91,24 @@ METHODS = {
                        "eliminate": "Remove the verbs with the wrong number first; if two remain, decide by tense.",
                        "traps": ["Agreeing with the adjective before the blank.", "When two options agree in number (are, were), the tense of the rest of the sentence decides."],
                        "rules": ["sva-r11"], "tech": ["subject-first"]},
+    "q-sva-oneidea": {"cue": "Two nouns or adjectives joined by 'and', describing what could be one thing or two (a dish, a quality, a person with several roles).",
+                        "standard": "Decide whether the pair names one thing or two separate ones. Check whether an article is repeated before each noun: repeated means two, not repeated means one.",
+                        "fast": "'The X and Y' (one article) -> singular if X and Y are one entity; 'The X and the Y' -> plural.",
+                        "eliminate": "Drop the plural option once the pair is confirmed to be one idea, and vice versa.",
+                        "traps": ["'And' usually signals a plural subject, so the eye reaches for a plural verb even when the pair is one thing.", "A famous saying ('slow and steady') is easy to mishear as two separate qualities."],
+                        "rules": ["sva-r12"], "tech": ["subject-first"]},
+    "q-sva-fixedplural": {"cue": "A noun ending in -s that names a disease, a game, a country or a field of study.",
+                            "standard": "Recognise the noun as one of the fixed list; ignore the final -s and use the singular verb, unless the sentence is clearly about data, sums, or political activity rather than the subject itself.",
+                            "fast": "Measles/mumps/billiards/the United States/Mathematics/Physics/Economics/Statistics + is/was/has, not are/were/have.",
+                            "eliminate": "Drop every plural-verb option unless the noun is being used for actual data or activities, not the subject.",
+                            "traps": ["The -s ending looks exactly like an ordinary plural noun.", "'Statistics shows a rise' (the subject) vs 'The statistics are inflated' (the actual figures) take different verbs."],
+                            "rules": ["sva-r13"], "tech": ["subject-first"]},
+    "q-sva-unit": {"cue": "A number followed by a plural noun of money, distance, weight, time or height.",
+                     "standard": "Check whether the sentence treats the amount as one single quantity (a distance, a sum, a stretch of time) rather than as that many separate items; if so, use the singular verb.",
+                     "fast": "Ten kilometres/thousand rupees/five years + is/was, when read as 'that much altogether'.",
+                     "eliminate": "Drop the plural-verb option once the phrase is read as one amount rather than many separate units.",
+                     "traps": ["The plural noun (kilometres, rupees, years) pulls the eye towards a plural verb even when the sentence means one total amount."],
+                     "rules": ["sva-r14"], "tech": ["subject-first"]},
 }
 
 REFS = []
@@ -145,6 +175,7 @@ def _base():
 
 S1, S2, S3 = "2025-09-12-S1", "2025-09-12-S2", "2025-09-12-S3"
 _SPOT = "Find the part of the sentence that contains an error:\n"
+_IMP = "Choose the most suitable option to replace the highlighted part of the sentence:\n"
 
 PYQS = [
     q("q-sva-spot", "spot-error", _SPOT + "That the report overlooked several underlying causes / behind the public unrest were surprising / given the volume of evidence / collected over the past few months.",
@@ -213,5 +244,68 @@ _EXTRA = [
 ]
 
 
+_EXTRA2 = [
+    q("q-sva-oneidea", "fill", "Select the most appropriate option to fill in the blank.\nSlow and steady ___ the race, as the old fable reminds us.",
+      ["win", "wins", "are winning", "have won"], "b",
+      "'Slow and steady' names one combined quality (a way of behaving), not two separate subjects, so the verb is singular: wins.",
+      {"a": mistake("Plural verb chosen because 'and' usually joins two subjects; here it joins two words describing one quality."),
+       "c": mistake("The continuous form is plural in number and does not fit this general truth, stated as a simple present."),
+       "d": mistake("'Have won' is plural and also changes the sense from a general truth to a completed action.")},
+      rules=["sva-r12"], uid="sv-p14", tech=["subject-first"]),
+    q("q-sva-oneidea", "spot-error", _SPOT + "Bread and butter / is / her only meal / every single morning.",
+      ["Bread and butter", "is", "her only meal", "every single morning."], "d",
+      "There is no error here. 'Bread and butter' names one dish, so the singular 'is' is correct, and the rest of the sentence is grammatical.",
+      {"a": ruled_out("A correct subject naming one combined dish."), "b": ruled_out("The singular verb correctly agrees with the one-dish subject."), "c": ruled_out("A correct noun phrase.")},
+      rules=["sva-r12"], uid="sv-p15"),
+    _fill("sv-p16", "q-sva-oneidea", "The Chairman and Managing Director ___ expected to address the shareholders today.", ["is", "are", "were", "have been"], "a",
+          "With no article before 'Managing Director', the two titles belong to one person, so the verb is singular.",
+          {"b": mistake("Plural verb chosen as though two different people were named; the missing second article shows this is one person holding both titles."),
+           "c": mistake("Plural and past; the sentence names one person and is about today."),
+           "d": mistake("'Have been' is plural, which fits two people, not the one person this sentence names.")}, "sva-r12", "sing"),
+    q("q-sva-oneidea", "improve", _IMP + "The teacher and the headmistress [[is attending]] the workshop together.",
+      ["are attending", "is attend", "was attending", "has attended"], "a",
+      "The article is repeated before each noun ('the teacher' and 'the headmistress'), so they are two different people and the verb must be plural: are attending.",
+      {"b": ruled_out("'Is attend' is not a grammatical verb form."), "c": mistake("'Was attending' is singular and past; two people are named and the sentence is in the present."), "d": mistake("'Has attended' is singular, which fits one person, not the two different people named here.")},
+      rules=["sva-r12"], uid="sv-p17"),
+    # fixed-plural nouns, singular in meaning
+    _fill("sv-p18", "q-sva-fixedplural", "Statistics ___ a compulsory subject for commerce students.", ["is", "are", "were", "have been"], "a",
+          "Here 'Statistics' names the subject of study, not a set of figures, so it takes a singular verb.",
+          {"b": mistake("Plural verb chosen because the word ends in -s; as the name of a subject, it is singular."),
+           "c": mistake("Plural and past; the subject is singular and the sentence is in the present."),
+           "d": mistake("'Have been' is plural, which does not fit the subject-of-study sense of 'Statistics'.")}, "sva-r13", "sing"),
+    q("q-sva-fixedplural", "spot-error", _SPOT + "The figures he quoted / in the annual report / are inflated / by almost twenty percent.",
+      ["The figures he quoted", "in the annual report", "are inflated", "by almost twenty percent."], "d",
+      "There is no error here. 'The figures' is an ordinary plural noun (not the subject 'Statistics'), so the plural 'are inflated' is correctly used, and the closing phrase is fine.",
+      {"a": ruled_out("A correct subject using the ordinary plural noun 'figures'."), "b": ruled_out("A correct prepositional phrase."), "c": ruled_out("The plural verb correctly agrees with the plural 'figures'.")},
+      rules=["sva-r13"], uid="sv-p19"),
+    _fill("sv-p20", "q-sva-fixedplural", "Mumps ___ common among school-going children in winter.", ["is", "are", "were", "have been"], "a",
+          "'Mumps' names one disease and takes a singular verb, however plural it looks.",
+          {"b": mistake("Plural verb chosen because 'Mumps' ends in -s; disease names like this stay singular."),
+           "c": mistake("Plural and past; the sentence describes a general, present fact."),
+           "d": mistake("'Have been' is plural, which this singular disease name does not take.")}, "sva-r13", "sing"),
+    q("q-sva-fixedplural", "improve", _IMP + "The West Indies [[are]] known for producing fast bowlers.",
+      ["is known", "are know", "were known", "have known"], "a",
+      "'The West Indies' is the name of one region/cricket team, so it takes a singular verb: is known.",
+      {"b": ruled_out("'Are know' is not a grammatical verb form."), "c": mistake("'Were known' is plural and past; the name is singular and this is a general present fact."), "d": mistake("'Have known' changes the sense to an action the West Indies performs, not a quality it is known for, and stays plural.")},
+      rules=["sva-r13"], uid="sv-p21"),
+    # numeral + plural noun as one quantity
+    _fill("sv-p22", "q-sva-unit", "Fifty thousand rupees ___ a reasonable price for that old scooter.", ["is", "are", "were", "have been"], "a",
+          "The sum is treated as one single amount, not fifty thousand separate rupees, so the verb is singular.",
+          {"b": mistake("Plural verb chosen because 'rupees' is a plural noun; here the whole sum is one amount."),
+           "c": mistake("Plural and past; the sentence is a general statement about the present."),
+           "d": mistake("'Have been' is plural, which does not fit a sum read as one amount.")}, "sva-r14", "sing"),
+    q("q-sva-unit", "spot-error", _SPOT + "Ten years / is a long time / to wait / for a single promotion.",
+      ["Ten years", "is a long time", "to wait", "for a single promotion."], "d",
+      "There is no error here. 'Ten years' is read as one stretch of time, so the singular 'is' is correctly used, and the rest of the sentence is grammatical.",
+      {"a": ruled_out("A correct subject naming one span of time."), "b": ruled_out("The singular verb correctly agrees with the one-span subject."), "c": ruled_out("A correct non-finite phrase.")},
+      rules=["sva-r14"], uid="sv-p23"),
+    _fill("sv-p24", "q-sva-unit", "Two kilograms of rice ___ enough to feed the whole family tonight.", ["is", "are", "were", "have been"], "a",
+          "The two kilograms are treated as one quantity of rice, not two separate items, so the verb is singular.",
+          {"b": mistake("Plural verb chosen because 'kilograms' is plural; here the whole weight is one quantity of rice."),
+           "c": mistake("Plural and past; the sentence is about tonight."),
+           "d": mistake("'Have been' is plural, which does not fit a single quantity read as one amount.")}, "sva-r14", "sing"),
+]
+
+
 def practice_items():
-    return _base() + _EXTRA
+    return _base() + _EXTRA + _EXTRA2

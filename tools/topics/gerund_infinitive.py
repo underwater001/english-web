@@ -13,6 +13,8 @@ NODES = {
                   "summary": "Every preposition is followed by -ing, including the 'to' of look forward to and be used to.", "links": ["prepositions"]},
     "q-gi-bare": {"short": "Bare infinitive", "label": "Verbs followed by the bare verb", "kind": "qtype", "parent": TOPIC, "order": 3,
                   "summary": "Make, let, see, hear and had better take the verb with no 'to'.", "links": []},
+    "q-gi-causative": {"short": "Have/get something done", "label": "Causative have / get + object + V3", "kind": "qtype", "parent": TOPIC, "order": 4,
+                         "summary": "To say someone else did the work for you, 'have' and 'get' take the object followed by the past participle (V3), not the bare verb: had his hair cut, got the roof repaired.", "links": []},
 }
 
 RULES = [
@@ -26,6 +28,8 @@ RULES = [
      "ok": "I look forward to meeting you. She is used to working nights.", "bad": "I look forward to meet you. She is used to work nights."},
     {"id": "gi-r5", "node": "q-gi-bare", "text": "Make, let, see, hear, feel, watch and the phrases had better, would rather, rather than take the bare verb with no 'to'. In the passive, 'make' regains it: he was made to pay.",
      "ok": "They made him pay. You had better go now.", "bad": "They made him to pay. You had better to go now."},
+    {"id": "gi-r6", "node": "q-gi-causative", "text": "To say that someone else did a job for you (rather than that you did it yourself), 'have' or 'get' takes the object followed by the past participle (V3), not the bare verb: had his hair cut, got the roof repaired. This differs from 'make', which names the doer and takes the bare verb (made him do the work).",
+     "ok": "She had her car washed yesterday.", "bad": "She had her car wash yesterday."},
 ]
 
 METHODS = {
@@ -48,6 +52,12 @@ METHODS = {
                   "eliminate": "Drop every option with 'to' unless the verb is in the passive.",
                   "traps": ["'Made him to pay' and 'had better to go'.", "The passive 'was made to pay', which does take 'to'."],
                   "rules": ["gi-r5"], "tech": ["eliminate-pair"]},
+    "q-gi-causative": {"cue": "have/has/had or get/gets/got, followed by a thing (not a person) and a blank, meaning a job arranged rather than done personally.",
+                         "standard": "Check whether the subject did the job personally or had it done by someone else. If someone else did it, use the past participle (V3) after the object.",
+                         "fast": "had/got + thing + V3, not V1: had the car washed, not had the car wash.",
+                         "eliminate": "Drop the bare-verb option once the sentence clearly means a job done by someone else, not by the subject.",
+                         "traps": ["Reading 'have/get' like 'make' and expecting the bare verb.", "The object (hair, car, roof) is a thing, which is itself a clue that the subject is not doing the work personally."],
+                         "rules": ["gi-r6"], "tech": ["back-substitute"]},
 }
 
 REFS = []
@@ -122,6 +132,29 @@ def practice_items():
            "c": ruled_out("An -ing form does not follow 'was made' in this sense."),
            "d": ruled_out("'Make' must agree with the past 'was' and cannot stay in the base form.")},
           rules=["gi-r5"], uid="gi-p10", tech=["eliminate-pair"], rare=True),
+        q("q-gi-causative", "fill", _F + "She ___ her hair cut short before the interview.", ["had", "has", "had got", "had get"], "a",
+          "Causative 'had' + object + V3 says a job (the haircut) was done by someone else for her.",
+          {"b": mistake("The present 'has' does not fit a sentence clearly set before a past event."),
+           "c": ruled_out("'Had got' doubles the causative verb; only one is needed."),
+           "d": ruled_out("'Had get' is not a grammatical form.")},
+          rules=["gi-r6"], uid="gi-p11", tech=["back-substitute"]),
+        q("q-gi-causative", "improve", _I + "We [[got repaired our roof]] before the monsoon arrived.",
+          ["got our roof repaired", "got repair our roof", "got our roof repair", "got our roof to repair"], "a",
+          "The causative pattern is object + V3: got our roof repaired, not 'repaired our roof' or 'our roof repair'.",
+          {"b": ruled_out("'Got repair' is not a grammatical verb form here."), "c": mistake("The object must be followed by the past participle 'repaired', not the bare verb 'repair'."),
+           "d": ruled_out("'To repair' is not the pattern causative 'get' uses with an object.")},
+          rules=["gi-r6"], uid="gi-p12", tech=["back-substitute"]),
+        q("q-gi-causative", "spot-error", _S + "The manager wants to / get the accounts audit / before the financial year / closes next month.",
+          ["The manager wants to", "get the accounts audit", "before the financial year", "closes next month."], "b",
+          "Causative 'get' + object takes the past participle: 'get the accounts audited', not 'audit'.",
+          {"a": ruled_out("'The manager wants to' correctly begins the infinitive phrase."),
+           "c": ruled_out("A correct clause of time."), "d": ruled_out("A correct closing verb phrase.")},
+          rules=["gi-r6"], uid="gi-p13", tech=["back-substitute"]),
+        q("q-gi-causative", "fill", _F + "He is getting his old motorcycle ___ at the local garage.", ["repair", "repaired", "to repair", "repairing"], "b",
+          "Causative 'get' + object takes the past participle: getting his motorcycle repaired.",
+          {"a": mistake("The bare verb 'repair' follows 'make', not the causative 'get'."), "c": ruled_out("'To repair' is not the pattern this causative construction uses."),
+           "d": ruled_out("The -ing form describes an ongoing action by the subject, not a job arranged for someone else.")},
+          rules=["gi-r6"], uid="gi-p14", tech=["back-substitute"], rare=True),
     ]
 
 

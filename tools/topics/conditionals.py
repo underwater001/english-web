@@ -13,6 +13,8 @@ NODES = {
                   "summary": "These take the past form for the present and 'were' for every subject.", "links": []},
     "q-cd-unless": {"short": "Unless", "label": "Unless, in case, provided", "kind": "qtype", "parent": TOPIC, "order": 3,
                     "summary": "'Unless' already means 'if not', so a second negative is wrong.", "links": []},
+    "q-cd-connector": {"short": "No will after the connector", "label": "As soon as, before, after, until, when, provided", "kind": "qtype", "parent": TOPIC, "order": 4,
+                         "summary": "Not just 'if' — as soon as, before, after, until, when, provided and lest all refuse 'will/shall' in their own clause; the future sits only in the other half.", "links": []},
 }
 
 RULES = [
@@ -26,6 +28,8 @@ RULES = [
      "ok": "I wish I were taller. He talks as if he were the owner.", "bad": "I wish I am taller. He talks as if he is the owner."},
     {"id": "cd-r5", "node": "q-cd-unless", "text": "'Unless' means 'if not', so the clause after it stays positive. 'Lest' is followed by should, and 'in case' and 'provided' take the present.",
      "ok": "You will fail unless you work. Take an umbrella in case it rains.", "bad": "You will fail unless you do not work."},
+    {"id": "cd-r6", "node": "q-cd-connector", "text": "A clause introduced by as soon as, before, after, until, when, provided or lest never takes will/shall for a future idea; it stays in the simple present (or the present perfect, for something that must finish first). The future tense belongs only in the sentence's other half.",
+     "ok": "She will come to meet you as soon as you reach Delhi.", "bad": "She will come to meet you as soon as you will reach Delhi."},
 ]
 
 METHODS = {
@@ -48,6 +52,12 @@ METHODS = {
                     "eliminate": "Remove options that double the negative.",
                     "traps": ["A negative verb after 'unless'.", "'Lest ... not', which repeats the negative already in 'lest'."],
                     "rules": ["cd-r5"], "tech": ["read-whole"]},
+    "q-cd-connector": {"cue": "as soon as / before / after / until / when / provided, with 'will' or 'shall' appearing in the same clause.",
+                         "standard": "Find the connector's own clause and check it for will/shall; if present, change the verb to the simple present (or present perfect for a completed-first idea).",
+                         "fast": "as soon as / before / after / until / when / provided + will = always wrong; drop the 'will'.",
+                         "eliminate": "Rule out any option that keeps 'will' or 'shall' inside the connector's own clause.",
+                         "traps": ["The sentence clearly describes the future, so 'will' feels needed everywhere, but only one half of the sentence is allowed to carry it."],
+                         "rules": ["cd-r6"], "tech": ["read-whole"]},
 }
 
 REFS = []
@@ -120,6 +130,30 @@ def practice_items():
            "c": ruled_out("The past 'boiled' does not state a general truth."),
            "d": ruled_out("'Would boil' belongs to an imaginary condition.")},
           rules=["cd-r1"], uid="cd-p10", tech=["eliminate-pair"]),
+        q("q-cd-connector", "fill", _F + "She will come to meet you as soon as the train ___ at the station.", ["will arrive", "arrives", "arrived", "would arrive"], "b",
+          "'As soon as' never takes will/shall in its own clause; the future belongs only in the other half.",
+          {"a": mistake("'As soon as the train will arrive' puts 'will' inside the connector's clause, which is never allowed."),
+           "c": ruled_out("The past 'arrived' does not fit a sentence about the future."),
+           "d": ruled_out("'Would arrive' belongs to an imaginary condition, not this plain future plan.")},
+          rules=["cd-r6"], uid="cd-p11", tech=["read-whole"]),
+        q("q-cd-connector", "spot-error", _S + "Before the police will come / to take his statement, / the injured man / had already died.",
+          ["Before the police will come", "to take his statement,", "the injured man", "had already died."], "a",
+          "'Before' never takes will/shall for a future idea; it should be 'Before the police come' or 'came'.",
+          {"b": ruled_out("A correct non-finite phrase."), "c": ruled_out("A correct subject for the main clause."),
+           "d": ruled_out("The past perfect is correctly used for the earlier of two past actions once the first part is fixed.")},
+          rules=["cd-r6"], uid="cd-p12", tech=["read-whole"]),
+        q("q-cd-connector", "fill", _F + "I shall support him so long as he ___ honest in his dealings.", ["will remain", "remains", "remained", "would remain"], "b",
+          "'So long as' behaves like 'as soon as' and refuses will/shall in its own clause; it stays in the simple present.",
+          {"a": mistake("'So long as he will remain' puts 'will' inside the connector's clause, which the rule never allows."),
+           "c": ruled_out("The past 'remained' does not fit a sentence about ongoing support in the present and future."),
+           "d": ruled_out("'Would remain' belongs to an imaginary condition, not this plain statement.")},
+          rules=["cd-r6"], uid="cd-p13", tech=["read-whole"]),
+        q("q-cd-connector", "improve", "Choose the most suitable option to replace the highlighted part of the sentence:\nThere will be a rush at the counter when the sale [[will begin]].",
+          ["begins", "will begin", "began", "would begin"], "a",
+          "'When' refuses will/shall in its own clause for a future idea; it stays in the simple present: begins.",
+          {"b": ruled_out("This repeats the original error unchanged."), "c": ruled_out("The past 'began' does not fit a sentence about the future."),
+           "d": ruled_out("'Would begin' belongs to an imaginary condition, not this plain future statement.")},
+          rules=["cd-r6"], uid="cd-p14", tech=["read-whole"]),
     ]
 
 
