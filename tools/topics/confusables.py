@@ -106,6 +106,47 @@ _SETS = [
                ("infer", "infer", "to work something out from what is said or seen", "From the figures we infer a fall in demand.", "From the empty shelves we may ___ that supply has stopped.")]),
     ("beside", [("beside", "beside", "at the side of", "He sat beside the driver.", "The dog slept ___ the gate all night."),
                 ("besides", "besides", "in addition to", "Besides the fee there is a deposit.", "___ the tuition fee, there is a deposit of two thousand rupees.")]),
+    ("expect", [("expect", "expect", "to think something is likely to happen", "I expect the result by Friday.", "She did not ___ the exam to be postponed."),
+                ("suspect", "suspect", "to believe something is true, often something bad, without full proof", "He suspected a trick.", "The guard began to ___ that the parcel was fake.")]),
+    ("allude", [("allude", "allude", "to refer to something indirectly, without naming it", "He alluded to an earlier scandal.", "In his speech the minister ___d to an old controversy without naming anyone."),
+                ("elude", "elude", "to escape or avoid someone or something skilfully", "The thief eluded the police for a week.", "The suspect managed to ___ capture for three days.")]),
+    ("alternate", [("alternate", "alternate", "happening in turns, one after the other", "He works on alternate days.", "The clerk is on duty on ___ Saturdays."),
+                   ("alternative", "alternative", "a different option one could choose instead", "There is no alternative to hard work.", "If the train is cancelled, we will need an ___ plan.")]),
+    ("access", [("access", "access", "a way of reaching or entering a place or a system", "She has access to the file.", "Only the manager has ___ to the strong room."),
+                ("excess", "excess", "an amount that is more than is needed or allowed", "He was fined for the excess baggage.", "Passengers must pay extra for any ___ baggage over 15 kg.")]),
+    ("averse", [("averse", "averse", "unwilling or opposed to doing something", "He is averse to taking risks.", "She has always been ___ to borrowing money."),
+                ("adverse", "adverse", "unfavourable, or having a harmful effect", "The adverse weather delayed the flight.", "The new tax had an ___ effect on small traders.")]),
+    ("amend", [("amend", "amend", "to make small changes to a document or law in order to improve it", "Parliament amended the Act.", "The committee decided to ___ the outdated bylaw."),
+               ("emend", "emend", "to correct the errors in a piece of writing", "The editor emended the manuscript.", "The proofreader was asked to ___ the printer's mistakes before the second edition.")]),
+    ("ensure", [("ensure", "ensure", "to make certain that something happens", "Please ensure the gate is locked.", "It is the guard's job to ___ that no one enters after ten."),
+                ("insure", "insure", "to pay a company so it covers a loss if something bad happens", "He insured his car against theft.", "She decided to ___ the shop against fire and flood."),
+                ("assure", "assure", "to tell someone confidently that something is true, so as to remove their doubt", "He assured her of his full support.", "The doctor tried to ___ the family that the operation had gone well.")]),
+    ("especially", [("especially", "especially", "above all, particularly", "He loves fruit, especially mangoes.", "The city gets crowded, ___ during the festival season."),
+                    ("specially", "specially", "for one particular purpose, specifically", "The cake was specially made for her birthday.", "This hall was ___ built for the annual function and nothing else.")]),
+    ("excite", [("excite", "excite", "to cause strong, usually pleasant, feelings in someone", "The news excited the whole class.", "The announcement of a holiday ___d the students at once."),
+                ("incite", "incite", "to stir up anger or violence in people", "The speech incited the crowd to riot.", "The pamphlet was accused of trying to ___ unrest among the factory workers.")]),
+    ("human", [("human", "human", "relating to people in general", "Human error caused the delay.", "Investigators traced the accident to ___ error, not a machine fault."),
+               ("humane", "humane", "kind and showing compassion, especially towards suffering", "They sought a humane solution.", "The new rules call for more ___ treatment of undertrial prisoners.")]),
+    ("invent", [("invent", "invent", "to create something that did not exist before", "He invented a new machine.", "The young engineer ___ed a cheap water filter for villages."),
+                ("discover", "discover", "to find something that already existed but was unknown until now", "She discovered a new species.", "The team ___ed a sealed chamber hidden inside the old temple.")]),
+    ("illegal", [("illegal", "illegal", "against the law", "Smuggling is illegal.", "Parking a vehicle here without a permit is ___."),
+                 ("illicit-cf", "illicit", "not approved of by society, often carried on secretly", "They had an illicit affair.", "The raid uncovered an ___ trade in forged certificates.")]),
+    ("envelop", [("envelop-v", "envelop", "to cover or surround something completely (a verb)", "Fog enveloped the valley by evening.", "Thick black smoke began to ___ the entire warehouse."),
+                 ("envelope-n", "envelope", "a flat paper covering used to post a letter (a noun)", "He sealed the envelope and posted it.", "She slipped the admit card into a brown ___.")]),
+    ("gate", [("gate", "gate", "a hinged barrier set in a wall or fence at an entrance", "Close the gate behind you.", "The watchman locked the main ___ sharply at nine."),
+              ("gait", "gait", "a person's particular manner or style of walking", "He walks with an unusual gait.", "Years of training gave the dancer a remarkably graceful ___.")]),
+    ("hear", [("hear", "hear", "to become aware of a sound through the ears", "I can hear the rain outside.", "Did you ___ the announcement that was just made?"),
+              ("listen", "listen", "to pay deliberate, close attention to a sound", "Listen to the teacher carefully.", "You must ___ to the full instructions before you start the test.")]),
+    ("flair", [("flair", "flair", "a natural talent or stylish ability for doing something", "She has a flair for languages.", "The young chef showed a genuine ___ for presentation."),
+               ("flare", "flare", "a sudden burst of light, flame, or temper", "Tempers began to flare at the meeting.", "A sudden ___ of anger spoiled what had been a calm discussion.")]),
+    ("deny", [("deny", "deny", "to say firmly that something is not true", "He will deny the allegation at once.", "The minister ___ied any personal involvement in the scam."),
+              ("refute", "refute", "to prove, usually with evidence, that a claim or theory is wrong", "She refuted his claims with hard data.", "The scientist ___d the old theory by presenting fresh evidence.")]),
+    ("defy", [("defy", "defy", "to openly resist or refuse to obey a rule or order", "He dared to defy the curfew order.", "The workers ___ied the ban and continued their strike."),
+              ("deify", "deify", "to treat or worship someone as if they were a god", "Fans deify the actor.", "In some villages, the memory of the old king is still ___ied.")]),
+    ("disinterested", [("disinterested", "disinterested", "impartial, having no personal stake in the outcome", "A disinterested judge is essential for fairness.", "We need a genuinely ___ observer to referee the final match."),
+                        ("uninterested", "uninterested", "not interested in something, bored by it", "He was uninterested in the lecture.", "The children looked completely ___ throughout the long speech.")]),
+    ("contagious", [("contagious", "contagious", "a disease that spreads mainly by direct physical touch", "Chickenpox is contagious.", "The doctor said the rash was ___ and advised the child be kept home."),
+                    ("infectious", "infectious", "a disease that spreads more widely, through air, water or germs in general", "Malaria is an infectious disease.", "Cholera is an ___ disease spread mainly through contaminated water.")]),
 ]
 
 WORDS = [word(i, w, "confused", m[0].upper() + m[1:], ex=e) for g, ws in _SETS for i, w, m, e, cue in ws]
@@ -115,10 +156,12 @@ _CUE = {i: cue for g, ws in _SETS for i, w, m, e, cue in ws}
 _SET_OF = {i: g for g, ws in _SETS for i, w, m, e, cue in ws}
 _BY_WORD = {w: i for g, ws in _SETS for i, w, m, e, cue in ws}
 _GROUPS = [g for g, ws in _SETS]
-_RARE = {"canvass", "waive", "luxuriant", "credulous", "childlike", "farther", "counsel", "complement", "respectful"}
-_RULE = {"advice": "cf-r1", "practice": "cf-r1", "effect": "cf-r1",
+_RARE = {"canvass", "waive", "luxuriant", "credulous", "childlike", "farther", "counsel", "complement", "respectful",
+         "emend", "allude", "elude", "deify", "disinterested", "gait", "contagious", "infectious"}
+_RULE = {"advice": "cf-r1", "practice": "cf-r1", "effect": "cf-r1", "envelop": "cf-r1",
          "principal": "cf-r2", "stationary": "cf-r2", "complement": "cf-r2", "desert": "cf-r2", "altar": "cf-r2", "canvas": "cf-r2",
-         "cite": "cf-r2", "weather": "cf-r2", "accept": "cf-r2", "later": "cf-r2", "lose": "cf-r2", "council": "cf-r2", "wave": "cf-r2"}
+         "cite": "cf-r2", "weather": "cf-r2", "accept": "cf-r2", "later": "cf-r2", "lose": "cf-r2", "council": "cf-r2", "wave": "cf-r2",
+         "access": "cf-r2", "gate": "cf-r2", "flair": "cf-r2", "defy": "cf-r2"}
 _F = "Select the most appropriate option to fill in the blank.\n"
 _S = "Find the part of the sentence that contains an error:\n"
 
