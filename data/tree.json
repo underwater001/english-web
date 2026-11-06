@@ -37,7 +37,8 @@
   "summary": "Closest and opposite meanings of a word.",
   "links": [
    "idioms-phrases",
-   "one-word-substitution"
+   "one-word-substitution",
+   "contextual-vocabulary"
   ]
  },
  "idioms-phrases": {
@@ -72,7 +73,7 @@
   "label": "Phrasal verbs",
   "kind": "topic",
   "parent": "vocabulary",
-  "order": 5,
+  "order": 7,
   "summary": "Verb plus particle and what the pair means.",
   "links": [
    "idioms-phrases",
@@ -90,11 +91,11 @@
   ]
  },
  "tenses": {
-  "label": "Tenses",
+  "label": "Tenses & verb forms",
   "kind": "topic",
   "parent": "grammar",
   "order": 2,
-  "summary": "Choosing and sequencing tenses.",
+  "summary": "Choosing tenses and the right verb form: after modals, in clauses, with subjunctive 'demand that'.",
   "links": [
    "subject-verb-agreement",
    "active-passive",
@@ -143,13 +144,15 @@
   "parent": "grammar",
   "order": 7,
   "summary": "Linking words and the pairs that go together.",
-  "links": []
+  "links": [
+   "sentence-structure"
+  ]
  },
  "active-passive": {
   "label": "Active & passive voice",
   "kind": "topic",
   "parent": "grammar",
-  "order": 8,
+  "order": 9,
   "summary": "Turning a sentence between active and passive.",
   "links": [
    "tenses",
@@ -160,7 +163,7 @@
   "label": "Direct & indirect speech",
   "kind": "topic",
   "parent": "grammar",
-  "order": 9,
+  "order": 10,
   "summary": "Reporting speech: tense, pronoun and time changes.",
   "links": [
    "tenses",
@@ -194,5 +197,36 @@
   "order": 3,
   "summary": "Ordering sentences into a coherent paragraph.",
   "links": []
+ },
+ "homonyms": {
+  "label": "Homonyms",
+  "kind": "topic",
+  "parent": "vocabulary",
+  "order": 5,
+  "summary": "Same word, different meaning: pick the sentence where the word changes sense.",
+  "links": [
+   "contextual-vocabulary"
+  ]
+ },
+ "contextual-vocabulary": {
+  "label": "Vocabulary in context",
+  "kind": "topic",
+  "parent": "vocabulary",
+  "order": 6,
+  "summary": "Pick the word that fits the sentence: tone, collocation and the sense of the blank.",
+  "links": [
+   "synonyms-antonyms"
+  ]
+ },
+ "sentence-structure": {
+  "label": "Sentence structure",
+  "kind": "topic",
+  "parent": "grammar",
+  "order": 8,
+  "summary": "Parallelism, word order in embedded questions and balanced constructions.",
+  "links": [
+   "conjunctions",
+   "tenses"
+  ]
  }
 }

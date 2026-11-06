@@ -29,7 +29,7 @@ The page loads `core.json` first and fetches a topic's shard only when it is ope
 
 ## Adding a past paper
 
-1. **File it.** `data/papers/<id>.json` with `exam`, `kind` (official | memory | similar-paper | chapter-bank), `publisher`, `date`, `shift`, `link`, `section`, and one row per question: `qno`, `topic`, `fmt`, `key`, `answer` (the keyed option's text), `keySource` (`official` or `derived`). `fmt` is a key of `FORMATS` in `tools/bank.py`. A grammar question is filed under the rule it tests.
+1. **File it.** `data/papers/<id>.json` with `exam`, `kind` (official | memory | similar-paper | chapter-bank), `publisher`, `date`, `shift`, `link`, `section`, and one row per question: `qno`, `topic`, `fmt`, `key`, `answer` (the keyed option's text), `keySource` (`official` when the SSC or the paper's own answer key states it, `source` when the key is printed in a coaching paper, `derived` when we worked it out; the page notes `source` and `derived` keys). `fmt` is a key of `FORMATS` in `tools/bank.py`. A grammar question is filed under the rule it tests. A question whose key can be argued carries `caution="..."` (a sentence on why), which the page shows with the answer.
 2. **Give every question a page.** In `tools/topics/<topic>.py` add `q(..., paper="<id>", qno=<n>)`. The build fails with "N filed question(s) ... have no quiz yet" until you do. Set `TIER = "quiz"`.
 3. Store passages and questions as condensed restatements. Never store the PDF.
 

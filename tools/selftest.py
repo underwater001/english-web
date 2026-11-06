@@ -60,14 +60,18 @@ def main():
 
     sa, sva = "tools/topics/synonyms_antonyms.py", "tools/topics/subject_verb_agreement.py"
     case("baseline builds", lambda r: run(r, "build_topic.py", "--all", "--force"), None)
-    case("key not in the lexicon's synonym list", lambda r: (sub(r, sa, 'syn=["charitable", "kindly", "generous", "humane"]', 'syn=["kindly", "generous", "humane"]'), run(r, "build_topic.py", "--all", "--force"))[1], "is not in the lexicon's syn list")
-    case("a wrong option is also a synonym", lambda r: (sub(r, sa, '"Reluctant"', '"Kindly"'), run(r, "build_topic.py", "--all", "--force"))[1], "is also a syn of benevolent")
-    case("antonym question keyed to a synonym", lambda r: (sub(r, sa, 'ant=["plentiful", "abundant", "ample"]', 'ant=["abundant", "ample"]'), run(r, "build_topic.py", "--all", "--force"))[1], "not in the lexicon's ant list")
+    case("key not in the lexicon's synonym list", lambda r: (sub(r, sa, '["charitable", "kindly", "generous", "humane"], ["malicious"', '["kindly", "generous", "humane"], ["malicious"'), run(r, "build_topic.py", "--all", "--force"))[1], "is not in the lexicon's syn list")
+    case("a wrong option is also a synonym", lambda r: (sub(r, sa, '["Malicious", "Charitable", "Reluctant", "Stingy"]', '["Malicious", "Charitable", "Kindly", "Stingy"]'), run(r, "build_topic.py", "--all", "--force"))[1], "is also a syn of benevolent")
+    case("antonym question keyed to a synonym", lambda r: (sub(r, sa, '["plentiful", "abundant", "ample"]', '["abundant", "ample"]'), run(r, "build_topic.py", "--all", "--force"))[1], "not in the lexicon's ant list")
     case("two options with the same number", lambda r: (sub(r, sva, '["was", "were", "are", "have been"], "a"', '["was", "has", "are", "have been"], "a"'), run(r, "build_topic.py", "--all", "--force"))[1], "own check failed")
     case("duplicate options", lambda r: (sub(r, sva, '["was", "were", "are", "have been"], "a"', '["was", "was", "are", "have been"], "a"'), run(r, "build_topic.py", "--all", "--force"))[1], "not four distinct")
     case("a wrong option with no note", lambda r: (sub(r, "tools/topics/idioms_phrases.py", '"d": ruled_out("That is the meaning of \'once in a blue moon\'; it has nothing to do with secrets.")', ""), run(r, "build_topic.py", "--all", "--force"))[1], "wrong-option notes must be exactly")
     case("idiom key is not its meaning", lambda r: (sub(r, "tools/topics/idioms_phrases.py", '[_M["burn-the-midnight-oil"], _M["spill-the-beans"], "To drop food while cooking", _M["once-in-a-blue-moon"]], "b"', '[_M["burn-the-midnight-oil"], _M["spill-the-beans"], "To drop food while cooking", _M["once-in-a-blue-moon"]], "a"'), run(r, "build_topic.py", "--all", "--force"))[1], "is not the lexicon meaning")
     case("one-word key is the wrong word", lambda r: (sub(r, "tools/topics/one_word_substitution.py", '["Omnipotent", "Omniscient", "Omnipresent", "Philanthropist"], "b"', '["Omnipotent", "Omniscient", "Omnipresent", "Philanthropist"], "a"'), run(r, "build_topic.py", "--all", "--force"))[1], "is not omniscient")
+
+    sp = "tools/topics/spellings.py"
+    case("spelling option that is not a declared misspelling", lambda r: (sub(r, sp, '"Ventriculoatriall", "Ventriculoateriel"]', '"Ventriculoatriall", "Ventriculoatreal"]'), run(r, "build_topic.py", "--all", "--force"))[1], "is not a declared misspelling")
+    case("misspelt-word question with an unstored 'correct' option", lambda r: (sub(r, sp, '("vicereine", "vicereine",', '("vicereine", "vicereen",'), run(r, "build_topic.py", "--all", "--force"))[1], "is not stored as a correct spelling")
 
     def stale(r):
         run(r, "build_topic.py", "--all", "--force")
@@ -82,11 +86,14 @@ def main():
     case("filed paper question with no quiz", filed_no_quiz, "have no quiz yet")
 
     def pyq_key_mismatch(r):
+        # the T-1 paper file says question 1 of a spare topic is keyed 'a'; give the module a past question keyed 'b' for it
         json.dump(PAPER, open(os.path.join(r, "data/papers/T-1.json"), "w"))
-        sub(r, sva, "PYQS = []", '''PYQS = [q("q-sva-each", "fill", "Select the most appropriate option to fill in the blank.\\nEach of the boys ___ here.", ["was", "were", "are", "have been"], "b",
-                 "Each is singular, so the verb is singular and the right option is was.",
-                 {"a": mistake("Singular verb; this note is here only for the selftest."), "c": mistake("Plural present verb; selftest."), "d": mistake("Plural verb; selftest.")},
-                 rules=["sva-r1"], paper="T-1", qno=1)]''')
+        sub(r, sva, "PYQS = [\n", '''PYQS = [
+    q("q-sva-each", "fill", "Select the most appropriate option to fill in the blank.\\nEach of the boys ___ here.", ["was", "were", "are", "have been"], "b",
+      "Each is singular, so the verb is singular and the right option is was.",
+      {"a": mistake("Singular verb; this note is here only for the selftest."), "c": mistake("Plural present verb; selftest."), "d": mistake("Plural verb; selftest.")},
+      rules=["sva-r1"], paper="T-1", qno=1),
+''')
         return run(r, "build_topic.py", "--all", "--force")
     case("past question key differs from the paper file", pyq_key_mismatch, "but the paper file says")
 

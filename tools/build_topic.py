@@ -16,7 +16,7 @@ Checks, in order. Any failure stops the build before anything is written.
      a rule / lexicon fact / evidence line behind the answer, the right shape for its format, and, for
      vocabulary, the answer is checked against the lexicon (the key is in the word's list, no wrong option is).
   3. Past questions: the paper and question number exist in data/papers with the same topic, format, key and answer text.
-  4. Nodes, rules, methods and technique tags reference things that exist.
+  4. Nodes, rules, methods, passages and technique tags reference things that exist.
   5. Tier coverage.
 
 Tiers (TIER in the module)
@@ -134,7 +134,13 @@ def build(topic, write=True):
         errs += bank.check_word(e, f"word {e.get('id')}")
         if e.get("id") in wmap: errs.append(f"word {e['id']} appears twice")
         wmap[e.get("id")] = e
-    ctx = {"words": wmap, "rules": rule_ids, "qtypes": qtypes}
+    passages = getattr(m, "PASSAGES", {})
+    for pid, pg in passages.items():
+        for f in ("title", "text", "src"):
+            if not pg.get(f): errs.append(f"passage {pid}: missing {f}")
+        n = len(bank.re.findall(r"\w+", pg.get("text", "")))
+        if n > 400: errs.append(f"passage {pid}: {n} words; store a condensed restatement of at most 400 words")
+    ctx = {"words": wmap, "rules": rule_ids, "qtypes": qtypes, "passages": passages}
 
     # ---- past questions: against the paper files ---------------------------------------------------
     papers = {}
@@ -184,7 +190,7 @@ def build(topic, write=True):
 
     shard = {"topic": topic, "tier": tier, "src_hash": source_hash(topic),
              "nodes": nodes, "rules": rules, "methods": methods, "refs": refs,
-             "words": [w["id"] for w in words], "pyqs": pyqs, "practice": practice}
+             "words": [w["id"] for w in words], "passages": passages, "pyqs": pyqs, "practice": practice}
     if write:
         os.makedirs(os.path.join(DATA, "shards"), exist_ok=True)
         path = os.path.join(DATA, "shards", topic + ".json")

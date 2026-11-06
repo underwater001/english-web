@@ -78,6 +78,8 @@ article.q{background:var(--surface);border:1px solid var(--line);border-radius:1
 .reveal{display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--line);padding-top:10px}
 .reveal p{margin:0;font-family:var(--body);font-size:15px}
 .reveal ul{margin:0;padding-left:20px;font-family:var(--body);font-size:14px;display:flex;flex-direction:column;gap:3px}
+.caution{background:var(--warn-soft);color:var(--ink);border-left:3px solid var(--warn);padding:7px 11px;border-radius:0 8px 8px 0}
+details.passage{background:var(--sunk)}
 .verdict{font-weight:800}
 .verdict.ok{color:var(--ok)}.verdict.no{color:var(--bad)}
 .lex{display:flex;flex-direction:column;gap:4px}
@@ -116,7 +118,7 @@ async function J(p){
 let P = {}, K = {};
 try { P = JSON.parse(localStorage.getItem("ew-progress") || "{}"); K = JSON.parse(localStorage.getItem("ew-known") || "{}"); } catch (e) {}
 const save = () => { try { localStorage.setItem("ew-progress", JSON.stringify(P)); localStorage.setItem("ew-known", JSON.stringify(K)); } catch (e) {} };
-let core, rulesById = {};
+let core, rulesById = {}, passagesById = {};
 const LV = ["Easy", "Medium", "Hard"];
 const LET = "abcd";
 
@@ -128,7 +130,8 @@ function qLabel(q){
 function qcard(q, onAnswer){
   const el = document.createElement("article"); el.className = "q";
   const chips = `<div class="chips"><span class="chip ${q.level}">${q.level}</span><span class="chip">${esc(core.formats[q.fmt] || q.fmt)}</span><span class="chip">${esc(qLabel(q))}</span>${(q.tech || []).map(t => `<span class="chip">${esc(core.techniques[t] || t)}</span>`).join("")}</div>`;
-  el.innerHTML = chips + `<p class="qtext">${mark(q.text)}</p><div class="opts">${q.options.map((o, i) => `<button class="opt" data-i="${i}"><b>${LET[i]}</b><span>${esc(o)}</span></button>`).join("")}</div><div class="reveal" hidden></div>`;
+  const pg = q.passage ? passagesById[q.passage] : null;
+  el.innerHTML = chips + (pg ? `<details class="passage"><summary>Passage: ${esc(pg.title)}</summary><p class="lead">${esc(pg.text)}</p><p class="mono muted">${esc(pg.src)}</p></details>` : "") + `<p class="qtext">${mark(q.text)}</p><div class="opts">${q.options.map((o, i) => `<button class="opt" data-i="${i}"><b>${LET[i]}</b><span>${esc(o)}</span></button>`).join("")}</div><div class="reveal" hidden></div>`;
   el.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
     const i = +b.dataset.i, ok = LET[i] === q.key;
     el.querySelectorAll(".opt").forEach((x, j) => { x.disabled = true; if (LET[j] === q.key) x.classList.add("right"); else if (j === i) x.classList.add("wrongpick"); });
@@ -136,7 +139,7 @@ function qcard(q, onAnswer){
     const rv = $(".reveal", el); rv.hidden = false;
     const notes = Object.entries(q.wrong || {}).sort().map(([k, v]) => `<li><b class="mono">${k.toUpperCase()}</b> ${esc(v.note)}${v.kind === "mistake" ? ' <span class="chip Medium">common mistake</span>' : ""}</li>`).join("");
     const rules = (q.rules || []).map(r => rulesById[r]).filter(Boolean).map(r => `<div class="rule"><span>${esc(r.text)}</span>${r.ok ? `<span class="ex ok">${esc(r.ok)}</span>` : ""}${r.bad ? `<span class="ex bad">${esc(r.bad)}</span>` : ""}</div>`).join("");
-    rv.innerHTML = `<span class="verdict ${ok ? "ok" : "no"}">${ok ? "Correct" : "Not quite: the answer is " + q.key.toUpperCase()}</span><p>${esc(q.why)}</p>${q.trick ? `<p><b>Fastest way in:</b> ${esc(q.trick)}</p>` : ""}${rules}<h4>Why each wrong option fails</h4><ul>${notes}</ul>${q.keySource === "derived" ? '<p class="mono muted">Key worked out by us, not copied from an official answer key.</p>' : ""}`;
+    rv.innerHTML = `<span class="verdict ${ok ? "ok" : "no"}">${ok ? "Correct" : "Not quite: the answer is " + q.key.toUpperCase()}</span><p>${esc(q.why)}</p>${q.trick ? `<p><b>Fastest way in:</b> ${esc(q.trick)}</p>` : ""}${rules}<h4>Why each wrong option fails</h4><ul>${notes}</ul>${q.caution ? `<p class="caution"><b>Caution:</b> ${esc(q.caution)}</p>` : ""}${q.keySource === "derived" ? '<p class="mono muted">Key worked out by us, not copied from an answer key.</p>' : q.keySource === "source" ? '<p class="mono muted">Key as printed in the source paper (a coaching "similar paper", not the official SSC key). We checked it against the rule.</p>' : ""}`;
     if (onAnswer) onAnswer(q, ok);
   }));
   return el;
@@ -144,7 +147,7 @@ function qcard(q, onAnswer){
 
 async function allShards(){
   const out = [];
-  for (const [t, m] of Object.entries(core.topics)) if (m.built) { const s = await J(`data/shards/${t}.json`); (s.rules || []).forEach(r => rulesById[r.id] = r); out.push(s); }
+  for (const [t, m] of Object.entries(core.topics)) if (m.built) { const s = await J(`data/shards/${t}.json`); (s.rules || []).forEach(r => rulesById[r.id] = r); Object.assign(passagesById, s.passages || {}); out.push(s); }
   return out;
 }
 
@@ -167,7 +170,8 @@ async function vSyllabus(v){
       const qtypes = Object.entries(core.nodes).filter(([, n]) => n.kind === "qtype" && n.parent === tid).sort((a, b) => a[1].order - b[1].order);
       h += `<div class="card ${m.built ? "" : "dim"}"><a class="title" href="#/topic/${tid}">${esc(t.label)}</a><span class="muted" style="font-size:13px">${esc(t.summary)}</span>`;
       if (m.built) {
-        h += `<div class="chips"><span class="chip">${m.pyqs} past</span><span class="chip">${m.practice} practice</span><span class="chip">${esc(m.tier)}</span></div>`;
+        const st = (core.stats.all || {topics: {}}).topics[tid];
+        h += `<div class="chips"><span class="chip">${m.pyqs} past</span><span class="chip">${m.practice} practice</span><span class="chip">${esc(m.tier)}</span>${st ? `<span class="chip" title="share of analysed papers containing this topic">asked in ${st.shifts} of ${core.stats.all.papers} papers · ${esc(st.lik)}</span>` : ""}</div>`;
         h += `<div class="chips">${qtypes.map(([qid, q]) => `<a class="chip" href="#/topic/${tid}/${qid}">${esc(q.short)}</a>`).join("")}</div>`;
         h += `<div class="bar" title="your progress"><i style="width:${(100 * answeredIn(tid) / Math.max(total, 1)).toFixed(0)}%"></i></div>`;
       } else h += `<span class="mono muted">not built yet</span>`;
@@ -184,7 +188,7 @@ async function vTopic(v, tid, qfocus){
   const t = core.nodes[tid]; if (!t) { v.innerHTML = `<p class="empty">No such topic.</p>`; return; }
   if (!core.topics[tid].built) { v.innerHTML = `<p class="pagenav"><a href="#/">← Syllabus</a></p><h2>${esc(t.label)}</h2><p class="empty">No questions yet. Send a paper or a rule sheet for this topic.</p>`; return; }
   const s = await J(`data/shards/${tid}.json`);
-  (s.rules || []).forEach(r => rulesById[r.id] = r);
+  (s.rules || []).forEach(r => rulesById[r.id] = r); Object.assign(passagesById, s.passages || {});
   const qts = Object.entries(s.nodes).sort((a, b) => a[1].order - b[1].order);
   const all = [...s.pyqs, ...s.practice].sort((a, b) => LV.indexOf(a.level) - LV.indexOf(b.level));
   let h = `<p class="pagenav"><a href="#/">← Syllabus</a></p><div><h2>${esc(t.label)}</h2><p class="lead">${esc(t.summary)}</p><p class="mono muted">${s.pyqs.length} past · ${s.practice.length} practice · tier ${esc(s.tier)}</p></div>`;

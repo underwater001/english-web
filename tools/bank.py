@@ -23,6 +23,7 @@ FORMATS = {
     "cloze": "Cloze test",
     "rearrange": "Sentence / para jumble",
     "rc": "Reading comprehension",
+    "homonym": "Homonym in a sentence",
 }
 
 # Quick-solving ideas a question can be filtered by
@@ -43,9 +44,16 @@ TECHNIQUES = {
 }
 
 # Word kinds in the lexicon
-KINDS = {"word": "Word", "idiom": "Idiom / phrase", "ows": "One-word substitution", "phrasal": "Phrasal verb"}
+KINDS = {"word": "Word", "idiom": "Idiom / phrase", "ows": "One-word substitution", "phrasal": "Phrasal verb", "spelling": "Spelling"}
 
-LEX_KINDS = ("syn", "ant", "meaning", "ows", "spell")
+# lex=(kind, word_id) checks a question against the lexicon:
+#   syn / ant   the key is in the word's synonym / antonym list and no wrong option is
+#   meaning     the key is the stored meaning (or an accepted paraphrase) of the idiom or word
+#   ows         the question holds the stored phrase and the key is the stored word
+#   fits        the blank is filled by the stored word and no wrong option is that word
+#   spell       choose the right spelling: key is the stored spelling, every wrong option is a declared misspelling
+#   misspelt    choose the misspelt word: key is a declared misspelling, every other option is a stored correct spelling
+LEX_KINDS = ("syn", "ant", "meaning", "ows", "fits", "spell", "misspelt")
 
 
 # ----------------------------------------------------------------------------------------------
@@ -74,7 +82,8 @@ def likelihood(shifts, total):
 
 def norm(s):
     """Loose comparison form for option text: lower case, no trailing full stop, one space between words."""
-    return re.sub(r"\s+", " ", str(s).strip().lower().rstrip(". "))
+    s = str(s).replace("\u201c", '"').replace("\u201d", '"').replace("\u2018", "'").replace("\u2019", "'")   # curly and straight quotes compare equal
+    return re.sub(r"\s+", " ", s.strip().lower().rstrip(". "))
 
 
 # ----------------------------------------------------------------------------------------------
@@ -98,9 +107,9 @@ def ruled_out(note):
 #   phrasal w is the phrasal verb; meaning is what it means
 #   ex      your own example sentence, which must contain the word
 # ----------------------------------------------------------------------------------------------
-def word(wid, w, kind, meaning, *, syn=(), ant=(), ex="", pos="", also=(), note=""):
+def word(wid, w, kind, meaning, *, syn=(), ant=(), ex="", pos="", also=(), note="", misspell=()):
     return {"id": wid, "w": w, "kind": kind, "pos": pos, "meaning": meaning, "syn": list(syn), "ant": list(ant),
-            "ex": ex, "also": list(also), "note": note}
+            "ex": ex, "also": list(also), "note": note, "misspell": list(misspell)}
 
 
 def check_word(e, where):
@@ -113,9 +122,10 @@ def check_word(e, where):
     if e["kind"] == "word" and len(e.get("syn", [])) < 2: errs.append(f"{where}: a word needs at least 2 synonyms")
     stem = norm(e["w"])
     stem = stem[: max(4, len(stem) - 3)] if e["kind"] == "word" else stem
-    if e["kind"] in ("word", "idiom", "ows") and stem.split(" ")[0] not in norm(e["ex"]):
+    if e["kind"] == "spelling" and not e.get("misspell"): errs.append(f"{where}: a spelling entry needs at least one misspelling")
+    if e["kind"] in ("word", "idiom", "ows", "spelling") and stem.split(" ")[0] not in norm(e["ex"]):
         errs.append(f"{where}: the example sentence must contain {e['w']!r}")
-    for k in ("syn", "ant", "also"):
+    for k in ("syn", "ant", "also", "misspell"):
         for x in e.get(k, []):
             if not isinstance(x, str) or not x.strip(): errs.append(f"{where}: blank entry in {k}")
     both = {norm(x) for x in e.get("syn", [])} & {norm(x) for x in e.get("ant", [])}
@@ -135,13 +145,15 @@ def check_word(e, where):
 #   lex     (kind, word_id): a mechanical check against the lexicon (see check_question)
 #   rare    a hard word is the point (adds a difficulty point)
 #   check   optional function(q) -> True for any extra mechanical check you can write
+#   passage id of a passage in the module's PASSAGES (reading comprehension); evidence must be a line of that passage
+#   caution a warning shown with the answer when the item is weak or the key can be argued (say why, in one or two sentences)
 # ----------------------------------------------------------------------------------------------
 def q(qtype, fmt, text, options, key, why, wrong, *, rules=(), lex=None, trick="", tech=(), rare=False,
-      paper=None, qno=None, uid=None, evidence="", check=None):
+      paper=None, qno=None, uid=None, evidence="", check=None, passage=None, caution=""):
     return {"id": f"{paper}-Q{qno}" if paper else uid, "paper": paper, "qno": qno, "qtype": qtype, "fmt": fmt, "text": text,
             "options": list(options), "key": key, "why": why, "wrong": wrong, "rules": list(rules),
             "lex": list(lex) if lex else None, "trick": trick, "tech": list(tech), "rare": rare,
-            "evidence": evidence, "_check": check}
+            "evidence": evidence, "passage": passage, "caution": caution, "_check": check}
 
 
 def wrong_notes(raw):
@@ -182,6 +194,13 @@ def check_question(x, ctx, where):
     if len(x["why"].strip()) < 20: errs.append(f"{where}: 'why' is too short")
     bad = [t for t in x.get("tech", []) if t not in TECHNIQUES]
     if bad: errs.append(f"{where}: unknown technique tags {bad}")
+    pid = x.get("passage")
+    if pid:
+        p = (ctx.get("passages") or {}).get(pid)
+        if not p: errs.append(f"{where}: passage {pid!r} is not defined in PASSAGES")
+        else: x["_passage"] = p["text"]
+    if x["fmt"] == "rc" and not x.get("evidence"): errs.append(f"{where}: a reading-comprehension question needs an evidence line from the passage")
+    if x["fmt"] == "rc" and x.get("_passage") is None: errs.append(f"{where}: a reading-comprehension question needs a passage")
     # grounding: a rule, a lexicon fact, or a line of evidence
     rules = x.get("rules", [])
     if ctx.get("rules") is not None:
@@ -223,10 +242,20 @@ def check_question(x, ctx, where):
                 if norm(e["meaning"]) not in norm(text): errs.append(f"{where}: the question must contain the phrase {e['meaning']!r}")
                 if keyopt != norm(e["w"]): errs.append(f"{where}: key {opts[ki]!r} is not {e['w']}")
                 if norm(e["w"]) in others: errs.append(f"{where}: the right word appears as a wrong option too")
+            elif kind == "fits":
+                if keyopt != norm(e["w"]): errs.append(f"{where}: key {opts[ki]!r} is not the stored word {e['w']!r}")
+                if norm(e["w"]) in others: errs.append(f"{where}: the right word appears as a wrong option too")
             elif kind == "spell":
-                if keyopt != norm(e["w"]) and fmt != "spelling": errs.append(f"{where}: spelling key")
-                if fmt == "spelling" and "incorrect" not in norm(text) and keyopt != norm(e["w"]): errs.append(f"{where}: key {opts[ki]!r} is not the correct spelling {e['w']!r}")
-                if fmt == "spelling" and "incorrect" not in norm(text) and norm(e["w"]) in others: errs.append(f"{where}: the right spelling appears as a wrong option too")
+                mis = {norm(m) for m in e.get("misspell", [])}
+                if keyopt != norm(e["w"]): errs.append(f"{where}: key {opts[ki]!r} is not the stored spelling {e['w']!r}")
+                for o in others:
+                    if o not in mis: errs.append(f"{where}: wrong option {o!r} is not a declared misspelling of {e['w']}")
+            elif kind == "misspelt":
+                mis = {norm(m) for m in e.get("misspell", [])}
+                good = {norm(w2["w"]) for w2 in ctx["words"].values() if w2["kind"] in ("spelling", "word", "ows", "idiom")}
+                if keyopt not in mis: errs.append(f"{where}: key {opts[ki]!r} is not a declared misspelling of {e['w']}")
+                for o in others:
+                    if o not in good: errs.append(f"{where}: option {o!r} is not stored as a correct spelling in the lexicon")
     if x.get("evidence") and x.get("_passage") is not None and norm(x["evidence"]) not in norm(x["_passage"]):
         errs.append(f"{where}: the evidence line is not in the passage")
     fn = x.get("_check")

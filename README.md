@@ -47,7 +47,7 @@ Checked by the build, every time:
 - a past question must agree with its paper file on the key and the answer text,
 - every daily word is in the capsule *and* tested.
 
-**Not checked by a machine:** whether a grammar rule is applied correctly in a sentence. Those answers rest on the rule shown on the topic page. Where we worked out a past paper's key ourselves instead of copying an official one, the question says so.
+**Not checked by a machine:** whether a grammar rule is applied correctly in a sentence. Those answers rest on the rule shown on the topic page. Each past question says where its key came from: the official SSC key, the key printed in the coaching paper you supplied ("source"; not the official key), or one we worked out ourselves. Where a key can be argued (for example *barely* and *scarcely* both fit), the answer card carries a **Caution** that says why.
 
 ## For the repo owner
 
