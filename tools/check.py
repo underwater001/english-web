@@ -12,7 +12,7 @@ import os, subprocess, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 py = sys.executable
 steps = [("topics (words, questions, notes, papers, tiers)", [py, os.path.join(HERE, "build_topic.py"), "--all"]),
-         ("assemble the site data (papers, days, lexicon, gap gates)", [py, os.path.join(HERE, "build.py")])]
+         ("assemble the site data (papers, days, lexicon, gap gates)", [py, os.path.join(HERE, "build.py"), "--coverage"])]
 if "--selftest" in sys.argv: steps.append(("selftest: every check can fail", [py, os.path.join(HERE, "selftest.py")]))
 if "--browser" in sys.argv: steps.append(("browser test", [py, os.path.join(HERE, "render_test.py")]))
 for name, cmd in steps:

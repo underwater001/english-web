@@ -75,7 +75,7 @@ PYQS = [
 ]
 
 
-def practice_items():
+def _base():
     return [
         q("q-ss-parallel", "improve", _IMP + "She enjoys [[to swim, cycling and to read]] in her free time.",
           ["swimming, cycling and reading", "to swim, cycling and read", "swim, to cycle and reading", "swimming, to cycle and to read"], "a",
@@ -103,3 +103,38 @@ def practice_items():
           {"b": mistake("Statement order is right, but the 'does' is left over from the direct question."), "c": ruled_out("Inverted order."), "d": ruled_out("Extra 'that' before the question word.")},
           rules=["ss-r4"], uid="ss-p05"),
     ]
+
+_EXTRA = [
+    q("q-ss-parallel", "spot-error", _SPOT + "The new policy promises / to simplify the forms, to shorten the queues / and reducing the number of visits / a claimant must make.",
+      ["The new policy promises", "to simplify the forms, to shorten the queues", "and reducing the number of visits", "a claimant must make"], "c",
+      "The list is built of to-infinitives, so the third item must be 'and to reduce', not 'and reducing'.",
+      {"a": ruled_out("'The new policy promises' correctly introduces the list."),
+       "b": ruled_out("These two items are both to-infinitives and set the pattern the third must follow."),
+       "d": ruled_out("'A claimant must make' is a relative clause describing the visits and is correct.")},
+      rules=["ss-r1"], uid="ss-p06", tech=["eliminate-pair"]),
+    q("q-ss-order", "spot-error", _SPOT + "The clerk could not explain / why was the file missing / although he had signed / the register that morning.",
+      ["The clerk could not explain", "why was the file missing", "although he had signed", "the register that morning"], "b",
+      "Inside a sentence a question word takes statement order, so it must be 'why the file was missing'.",
+      {"a": ruled_out("'The clerk could not explain' is the main clause and is correct."),
+       "c": ruled_out("'Although he had signed' is a correct contrast clause in the past perfect."),
+       "d": ruled_out("'The register that morning' is the object with a phrase of time.")},
+      rules=["ss-r4"], uid="ss-p07", tech=["read-whole"]),
+    q("q-ss-parallel", "improve", _IMP + "The report praises the scheme [[for its reach and because it is cheap]].",
+      ["for its reach and its low cost", "for its reach and because of cheap", "for reaching and because it is cheap", "for its reach and it is cheap"], "a",
+      "'For its reach' is a noun phrase, so the second item joined by 'and' must be a noun phrase too: 'its low cost'.",
+      {"b": ruled_out("'Because of cheap' puts an adjective after a preposition, which is not possible."),
+       "c": mistake("This makes the first item an -ing form but leaves the second as a clause, so the two still do not match."),
+       "d": mistake("'And it is cheap' is still a clause beside a noun phrase.")},
+      rules=["ss-r1", "ss-r2"], uid="ss-p08", tech=["eliminate-pair"]),
+    q("q-ss-order", "improve", _IMP + "Nobody could tell us [[when will the results be declared]].",
+      ["when the results would be declared", "when will be the results declared", "when the results will be declared at", "that when the results be declared"], "a",
+      "The clause takes statement order, and after the past 'could tell' the future 'will' shifts to 'would'.",
+      {"b": ruled_out("This keeps the question order with the auxiliary in front."),
+       "c": mistake("Statement order is right, but 'will' is not back-shifted after 'could tell' and the trailing 'at' is not needed."),
+       "d": ruled_out("The extra 'that' is not used before a question word, and 'be declared' has no auxiliary.")},
+      rules=["ss-r4"], uid="ss-p09", tech=["read-whole"], rare=True),
+]
+
+
+def practice_items():
+    return _base() + _EXTRA

@@ -57,7 +57,7 @@ PYQS = [
 ]
 
 
-def practice_items():
+def _base():
     return [
         q("q-tn-modal", "spot-error", _SPOT + "The firm said that / it can, if the weather permits, / completes the work / before the festival.",
           ["The firm said that", "it can, if the weather permits,", "completes the work", "before the festival."], "c",
@@ -80,3 +80,31 @@ def practice_items():
           {"a": mistake("The -s form agrees with 'every player' in the ordinary way, but this verb needs the base form."), "c": mistake("A past form is used here, but 'insist that' takes the base verb."),
            "d": ruled_out("An -ing form cannot be the finite verb of the clause.")}, rules=["tn-r2"], uid="tn-p04", rare=True),
     ]
+
+_EXTRA = [
+    q("q-tn-modal", "spot-error", _SPOT + "The principal announced that / the students should, before the examination begins, / submits their forms / to the clerk.",
+      ["The principal announced that", "the students should, before the examination begins,", "submits their forms", "to the clerk"], "c",
+      "'Should' needs the bare verb, so 'submits' must be 'submit'. The clause 'before the examination begins' separates the modal from its verb.",
+      {"a": ruled_out("A reporting clause in the past; there is no error in it."),
+       "b": ruled_out("'The students should' correctly begins the modal pair."),
+       "d": ruled_out("'To the clerk' is a prepositional phrase with no verb.")},
+      rules=["tn-r1"], uid="tn-p05", tech=["read-whole"]),
+    q("q-tn-modal", "spot-error", _SPOT + "Everybody knows that / a careful driver will never, / whatever the hurry, / crosses a red light.",
+      ["Everybody knows that", "a careful driver will never,", "whatever the hurry,", "crosses a red light"], "d",
+      "'Will' takes the bare verb, so 'crosses' must be 'cross'; the phrase 'whatever the hurry' hides the pair.",
+      {"a": ruled_out("'Everybody knows that' is correct, with a singular verb for 'everybody'."),
+       "b": ruled_out("'A careful driver will never' correctly begins the modal pair."),
+       "c": ruled_out("'Whatever the hurry' is a phrase with no finite verb.")},
+      rules=["tn-r1"], uid="tn-p06", tech=["read-whole"]),
+    q("q-tn-subjunctive", "improve", _IMP + "The manager [[suggested him to revise the estimate]].",
+      ["suggested that he revise the estimate", "suggested him revising the estimate", "suggested that he revises the estimate", "suggested to him revise the estimate"], "a",
+      "'Suggest' cannot take 'him to'; it takes a that-clause with the base verb: suggested that he revise.",
+      {"b": ruled_out("'Suggested him revising' is not a pattern 'suggest' allows."),
+       "c": mistake("The that-clause is right, but after 'suggest that' the verb stays in the base form, so 'revises' is wrong."),
+       "d": ruled_out("'Suggested to him revise' leaves the clause without 'that' and the verb without a subject.")},
+      rules=["tn-r2"], uid="tn-p07", tech=["eliminate-pair"]),
+]
+
+
+def practice_items():
+    return _base() + _EXTRA

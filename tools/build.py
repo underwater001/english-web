@@ -11,11 +11,15 @@ Inputs   data/tree.json            junctions and topics (hand-kept; a new topic 
 Outputs  data/core.json            small, loaded at start
          data/lexicon.json         every word, idiom, one-word substitution and phrasal verb
 
+    python3 tools/build.py --coverage # also fail if any format's practice stock is below the exam blueprint
+
 Gap gates (the build fails on any of them)
   - a filed paper question with no quiz, or a quiz with no filed question
   - a daily word that no quiz question tests, or that no capsule point carries
+  - with --coverage: a format the papers ask for that has fewer practice questions than five papers' worth
+    (printed as a warning otherwise, so the site still builds while the drills are being written)
 """
-import json, os, re, subprocess, sys
+import json, math, os, re, subprocess, sys
 from collections import Counter, defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -52,6 +56,51 @@ def stat_block(rows, n_papers):
         return {k: {"n": v["n"], "shifts": len(v["papers"]), "lik": bank.likelihood(len(v["papers"]), n_papers),
                     "perShift": round(v["n"] / n_papers, 2), "kinds": dict(v["kinds"])} for k, v in sorted(d.items())}
     return {"papers": n_papers, "questions": len(rows), "topics": fin(topics), "formats": fin(fmts)}
+
+
+# ---- the exam blueprint: what the filed papers actually ask, and whether we have the drill stock for it ----
+FLOOR_FACTOR = 5          # keep at least five papers' worth of practice for every format the exam asks
+FLOOR_MIN = 4
+MARKS = {"right": 2, "wrong": -0.5}
+MINUTES = 13              # the English section's share of the 60-minute Tier-I paper
+
+
+def apportion(weights, total):
+    """Largest-remainder split of `total` questions across formats in proportion to their per-shift weight."""
+    if not weights: return {}
+    base = {k: int(v) for k, v in weights.items()}
+    left = total - sum(base.values())
+    for k, _ in sorted(weights.items(), key=lambda kv: (-(kv[1] - int(kv[1])), kv[0]))[:max(left, 0)]:
+        base[k] += 1
+    return {k: v for k, v in sorted(base.items(), key=lambda kv: -kv[1]) if v}
+
+
+def blueprint_block(shift_rows, shards):
+    """Per-format exam weight from the filed papers, the drill stock we hold against it, and the gaps."""
+    n_papers = len({r["paper"] for r in shift_rows})
+    if not n_papers: return None, []
+    asked = Counter(r["fmt"] for r in shift_rows)
+    prac, pyq = Counter(), Counter()
+    for s in shards.values():
+        for q in s["practice"]: prac[q["fmt"]] += 1
+        for q in s["pyqs"]: pyq[q["fmt"]] += 1
+    weights = {f: n / n_papers for f, n in asked.items()}
+    per_paper = round(len(shift_rows) / n_papers)
+    rows, errs = [], []
+    for f, w in sorted(weights.items(), key=lambda kv: (-kv[1], kv[0])):
+        floor = max(FLOOR_MIN, math.ceil(w * FLOOR_FACTOR))
+        short = max(0, floor - prac[f])
+        rows.append({"fmt": f, "label": bank.FORMATS[f], "perShift": round(w, 2), "asked": asked[f],
+                     "floor": floor, "practice": prac[f], "pyqs": pyq[f], "short": short})
+        if short:
+            errs.append(f"{f} ({bank.FORMATS[f]}) is asked {w:.2f} times a paper but has only {prac[f]} practice "
+                        f"question(s); write {short} more in the topics that use this format (floor is {FLOOR_FACTOR} papers' worth).")
+    bp = {"papers": n_papers, "perPaper": per_paper, "minutes": MINUTES, "marks": MARKS,
+          "floorFactor": FLOOR_FACTOR, "formats": rows, "mock": apportion(weights, per_paper),
+          "note": (f"Shares measured on {n_papers} filed paper(s). Official, memory-based and coaching papers differ, so read them with "
+                   "that number. A format needs at least " + str(FLOOR_FACTOR) + " papers' worth of practice questions before the bank can "
+                   "feed it without repeating.")}
+    return bp, errs
 
 
 def check_day(date, d, lexicon_static, errs):
@@ -199,6 +248,13 @@ def main():
         n_papers = len({r["paper"] for r in rs})
         if n_papers: stats[name] = stat_block(rs, n_papers)
 
+    blueprint, cov = blueprint_block(shift_rows, shards)
+    if cov:
+        head = "drill stock is below the exam blueprint:"
+        if "--coverage" in sys.argv:
+            print("BUILD FAILED: " + head); [print(" -", e) for e in cov]; sys.exit(1)
+        print("warning: " + head); [print(" -", e) for e in cov]
+
     cols = ["id", "topic", "qtype", "fmt", "level", "src"]
     bank_rows = []
     for t, s in shards.items():
@@ -214,6 +270,7 @@ def main():
     refs = [{"topic": t, **r} for t, s in shards.items() for r in s.get("refs", [])]
     core = {"nodes": nodes, "papers": papers, "days": days, "stats": stats, "topics": topics_meta, "bank": {"cols": cols, "rows": bank_rows},
             "formats": bank.FORMATS, "techniques": bank.TECHNIQUES, "kinds": bank.KINDS, "refs": refs, "lexiconSize": len(lexicon),
+            "blueprint": blueprint,
             "rubric": {"rules": "1 rule = 1 point, 2 = 2, 3 or more = 3", "trap": "+1 if a wrong option is the result of a named common mistake",
                        "rare": "+1 if a hard or rarely seen word is the point", "levels": "up to 2 Easy, 3 Medium, 4 or more Hard"},
             "likelihood": "High if the topic appeared in at least 2/3 of the analysed papers, Medium if at least 1/3, Low otherwise. Always read it with the number of papers."}

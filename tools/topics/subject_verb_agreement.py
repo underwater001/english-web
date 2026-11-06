@@ -98,7 +98,7 @@ def _fill(uid, qtype, text, options, key, why, wrong, rule, want, **kw):
              rules=[rule], uid=uid, tech=["subject-first"], check=_one_with_number(want), **kw)
 
 
-def practice_items():
+def _base():
     return [
         _fill("sv-p01", "q-sva-each", "Each of the students ___ given a certificate.", ["was", "were", "are", "have been"], "a",
               "'Each' is the subject and is singular; 'of the students' does not change that.",
@@ -177,3 +177,41 @@ PYQS = [
       rules=["sva-r11"], paper=S3, qno=96, tech=["subject-first"],
       caution="'Are' agrees with 'talks' too, and a present-tense reading is grammatical. The printed key (were) rests on matching the past 'could'. Treat it as the answer expected in the exam, not as the only possible grammar."),
 ]
+
+_EXTRA = [
+    q("q-sva-spot", "spot-error", _SPOT + "The list of candidates who cleared the interview / were pinned on the notice board / outside the office / on Monday morning.",
+      ["The list of candidates who cleared the interview", "were pinned on the notice board", "outside the office", "on Monday morning"], "b",
+      "The subject is the singular 'list'; 'of candidates' is only a prepositional phrase, so the verb must be 'was pinned'.",
+      {"a": ruled_out("'The list of candidates who cleared the interview' is the subject with its relative clause, and 'cleared' agrees with the plural 'candidates'."),
+       "c": ruled_out("'Outside the office' is a prepositional phrase with no verb in it."),
+       "d": ruled_out("'On Monday morning' is a phrase of time and cannot hold an agreement error.")},
+      rules=["sva-r10"], uid="sv-p09", tech=["subject-first"]),
+    q("q-sva-spot", "spot-error", _SPOT + "Neither of the two proposals / that the committee examined last week / seem workable / in the present budget.",
+      ["Neither of the two proposals", "that the committee examined last week", "seem workable", "in the present budget"], "c",
+      "'Neither' is the subject and is singular, so the verb must be 'seems'; the plural 'proposals' after 'of' does not change it.",
+      {"a": ruled_out("'Neither of the two proposals' is correctly built as a singular subject."),
+       "b": mistake("'The committee examined' looks like a mismatch next to a singular noun, but 'examined' is the same in both numbers, so there is no error here."),
+       "d": ruled_out("'In the present budget' is a prepositional phrase with no verb.")},
+      rules=["sva-r1", "sva-r10"], uid="sv-p10", tech=["subject-first"]),
+    q("q-sva-spot", "spot-error", _SPOT + "What the inspectors found in the two godowns / was reported to the head office, / but the quantities they recorded / was never checked again.",
+      ["What the inspectors found in the two godowns", "was reported to the head office,", "but the quantities they recorded", "was never checked again"], "d",
+      "The subject of the last part is the plural 'quantities', so it needs 'were never checked'. The earlier singular 'was reported' is correct because its subject is the clause 'What the inspectors found'.",
+      {"a": ruled_out("A 'What ...' clause is a correctly formed subject."),
+       "b": mistake("'Was reported' looks wrong beside 'godowns', but its subject is the whole 'What ...' clause, which is singular."),
+       "c": ruled_out("'But the quantities they recorded' is the subject of the last part and is correctly built.")},
+      rules=["sva-r8", "sva-r10"], uid="sv-p11", tech=["subject-first"], rare=True),
+    _fill("sv-p12", "q-sva-inverted", "Here ___ the documents you asked for.", ["is", "are", "was", "has been"], "b",
+          "After 'here' the verb comes before its subject; the subject is the plural 'documents', so the verb is 'are'.",
+          {"a": mistake("Singular verb chosen because it stands next to 'here'; the subject is the plural 'documents' that follows."),
+           "c": mistake("Singular and past; the subject is plural and the sentence is about the present moment."),
+           "d": mistake("'Has been' is singular; the plural subject needs 'are'.")}, "sva-r11", "plur"),
+    _fill("sv-p13", "q-sva-inverted", "So heavy ___ the rain that the match was called off.", ["were", "was", "are", "have been"], "b",
+          "The subject after the blank is the uncountable 'rain', which is singular, and the sentence is in the past.",
+          {"a": mistake("Plural verb chosen by looking at 'heavy' rather than at the singular subject 'rain'."),
+           "c": mistake("Plural and present; the subject is singular and 'was called off' sets the sentence in the past."),
+           "d": mistake("'Have been' is plural; the singular 'rain' needs 'was'.")}, "sva-r11", "sing"),
+]
+
+
+def practice_items():
+    return _base() + _EXTRA

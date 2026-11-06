@@ -88,13 +88,36 @@ details.passage{background:var(--sunk)}
 .pagenav{font-size:13px}
 .pagenav a{color:var(--accent)}
 footer{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(144px,1fr));gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 13px;display:flex;flex-direction:column;gap:1px}
+.tile b{font-size:25px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.tile span{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.tile small{font-family:var(--body);font-size:13px;color:var(--muted)}
+.tile.hot b{color:var(--bad)}
+table.t{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+table.t th,table.t td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line)}
+table.t th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+table.t td.n,table.t th.n{text-align:right;font-family:var(--mono)}
+table.t tr:last-child td{border-bottom:0}
+table.t td a{color:var(--accent)}
+.wrap{overflow-x:auto}
+.sticky{position:sticky;top:48px;z-index:4;background:var(--bg);padding:7px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.timer{font-family:var(--mono);font-size:19px;font-weight:700;padding:3px 10px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
+.timer.low{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.opt.picked{background:var(--accent-soft);border-color:var(--accent)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.qnum{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.big{font-size:34px;font-weight:800;letter-spacing:-.02em}
+textarea{font:inherit;font-family:var(--mono);font-size:11px;width:100%;min-height:80px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);padding:8px}
+.chip.hot{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.chip.due{background:var(--accent-soft);color:var(--accent);border-color:transparent}
 @media (max-width:520px){.qtext{font-size:16px}}
 </style>
 </head>
 <body>
 <div class="page">
   <header class="top">
-    <div class="brand"><h1>English Web</h1><p>SSC CGL English: rules, words and reading, every answer explained</p></div>
+    <div class="brand"><h1>English Web</h1><p>SSC CGL English: learn the rule, drill it, keep it</p></div>
     <div class="stats" id="stats"></div>
   </header>
   <nav class="tabs" id="tabs" aria-label="Sections"></nav>
@@ -115,51 +138,209 @@ async function J(p){
   const r = await fetch(p); if (!r.ok) throw new Error(p + " " + r.status);
   return cache[p] = await r.json();
 }
-let P = {}, K = {};
-try { P = JSON.parse(localStorage.getItem("ew-progress") || "{}"); K = JSON.parse(localStorage.getItem("ew-known") || "{}"); } catch (e) {}
-const save = () => { try { localStorage.setItem("ew-progress", JSON.stringify(P)); localStorage.setItem("ew-known", JSON.stringify(K)); } catch (e) {} };
-let core, rulesById = {}, passagesById = {};
 const LV = ["Easy", "Medium", "Hard"];
 const LET = "abcd";
+let core, ROWS = [], rulesById = {}, passagesById = {}, shardCache = null;
 
+// ---------------------------------------------------------------- what you remember
+// One box per question (Leitner). A right answer moves it up a box and pushes the next showing further away;
+// a wrong answer sends it back to box 0 and into the mistake book until it is solid again.
+const DAYMS = 864e5;
+const BOX = [0, 1, 3, 7, 16, 35];
+const SOLID = 3;
+const today = () => { const d = new Date(); return Math.floor((d.getTime() - d.getTimezoneOffset() * 6e4) / DAYMS); };
+let ST = {v: 3, items: {}, known: {}, mocks: [], days: []};
+(function restore(){
+  try {
+    const raw = localStorage.getItem("ew-state");
+    if (raw) { const o = JSON.parse(raw) || {}; ST = {v: 3, items: o.items || {}, known: o.known || {}, mocks: o.mocks || [], days: o.days || []}; return; }
+    const P = JSON.parse(localStorage.getItem("ew-progress") || "{}"), K = JSON.parse(localStorage.getItem("ew-known") || "{}"), d = today();
+    for (const [id, v] of Object.entries(P)) ST.items[id] = {b: v ? 1 : 0, c: v ? 1 : 0, n: 1, w: v ? 0 : 1, last: d, due: d + (v ? 1 : 0), ok: !!v};
+    ST.known = K || {};
+    if (Object.keys(ST.items).length) save();
+  } catch (e) {}
+})();
+function save(){ try { localStorage.setItem("ew-state", JSON.stringify(ST)); } catch (e) {} }
+function record(id, ok){
+  const d = today(), x = ST.items[id] || {b: 0, c: 0, n: 0, w: 0};
+  x.n++; if (ok) { x.c = (x.c || 0) + 1; x.b = Math.min(5, (x.b || 0) + 1); } else { x.w = (x.w || 0) + 1; x.b = 0; }
+  x.ok = ok; x.last = d; x.due = d + BOX[x.b]; ST.items[id] = x;
+  if (!ST.days.includes(d)) ST.days.push(d);
+  save();
+}
+const isDue = id => { const x = ST.items[id]; return !!x && x.due <= today(); };
+const isMistake = id => { const x = ST.items[id]; return !!x && (x.w || 0) > 0 && x.b < SOLID; };
+const isSolid = id => { const x = ST.items[id]; return !!x && x.b >= SOLID; };
+const pct = (a, b) => b ? Math.round(100 * a / b) : 0;
+
+function formatRows(){
+  const bp = core.blueprint || {formats: []}, by = {};
+  ROWS.forEach(r => {
+    const o = by[r.fmt] || (by[r.fmt] = {stock: 0, tried: 0, n: 0, c: 0, due: 0, solid: 0, mistakes: 0});
+    o.stock++;
+    const x = ST.items[r.id];
+    if (x) { o.tried++; o.n += x.n; o.c += x.c || 0; if (isDue(r.id)) o.due++; if (isSolid(r.id)) o.solid++; if (isMistake(r.id)) o.mistakes++; }
+  });
+  return bp.formats.map(f => {
+    const o = by[f.fmt] || {stock: 0, tried: 0, n: 0, c: 0, due: 0, solid: 0, mistakes: 0};
+    const acc = o.n ? o.c / o.n : null;
+    return Object.assign({}, f, o, {acc: acc, risk: f.perShift * (1 - (acc == null ? 0 : acc))});
+  }).sort((a, b) => b.risk - a.risk || b.perShift - a.perShift);
+}
+const totals = () => ({
+  stock: ROWS.length,
+  due: ROWS.filter(r => isDue(r.id)).length,
+  mistakes: ROWS.filter(r => isMistake(r.id)).length,
+  solid: ROWS.filter(r => isSolid(r.id)).length,
+  tried: ROWS.filter(r => ST.items[r.id]).length,
+});
+
+// ---------------------------------------------------------------- one question
 function qLabel(q){
   if (q.paper) { const p = core.papers.find(x => x.id === q.paper); return p ? `${p.exam}, ${p.date}${p.shift ? ", shift " + p.shift : ""}, Q${q.qno}` : q.id; }
   return q.id.startsWith("q2") ? "Daily" : "Practice";
 }
-
-function qcard(q, onAnswer){
+function qcard(q, o){
+  o = o || {};
   const el = document.createElement("article"); el.className = "q";
-  const chips = `<div class="chips"><span class="chip ${q.level}">${q.level}</span><span class="chip">${esc(core.formats[q.fmt] || q.fmt)}</span><span class="chip">${esc(qLabel(q))}</span>${(q.tech || []).map(t => `<span class="chip">${esc(core.techniques[t] || t)}</span>`).join("")}</div>`;
+  const x = ST.items[q.id];
+  const hist = x ? `<span class="chip ${(x.w || 0) > 0 && x.b < SOLID ? "hot" : isSolid(q.id) ? "Easy" : ""}">seen ${x.n}× · ${x.c || 0} right${isSolid(q.id) ? " · solid" : ""}</span>` : "";
+  const chips = `<div class="chips"><span class="chip ${q.level}">${q.level}</span><span class="chip">${esc(core.formats[q.fmt] || q.fmt)}</span><span class="chip">${esc(qLabel(q))}</span>${(q.tech || []).map(t => `<span class="chip">${esc(core.techniques[t] || t)}</span>`).join("")}${o.exam ? "" : hist}</div>`;
   const pg = q.passage ? passagesById[q.passage] : null;
-  el.innerHTML = chips + (pg ? `<details class="passage"><summary>Passage: ${esc(pg.title)}</summary><p class="lead">${esc(pg.text)}</p><p class="mono muted">${esc(pg.src)}</p></details>` : "") + `<p class="qtext">${mark(q.text)}</p><div class="opts">${q.options.map((o, i) => `<button class="opt" data-i="${i}"><b>${LET[i]}</b><span>${esc(o)}</span></button>`).join("")}</div><div class="reveal" hidden></div>`;
-  el.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
-    const i = +b.dataset.i, ok = LET[i] === q.key;
-    el.querySelectorAll(".opt").forEach((x, j) => { x.disabled = true; if (LET[j] === q.key) x.classList.add("right"); else if (j === i) x.classList.add("wrongpick"); });
-    P[q.id] = ok ? 1 : 0; save();
+  el.innerHTML = chips + (pg ? `<details class="passage" ${o.exam ? "open" : ""}><summary>Passage: ${esc(pg.title)}</summary><p class="lead">${esc(pg.text)}</p><p class="mono muted">${esc(pg.src)}</p></details>` : "") + `<p class="qtext">${mark(q.text)}</p><div class="opts">${q.options.map((op, i) => `<button class="opt" data-i="${i}"><b>${LET[i]}</b><span>${esc(op)}</span></button>`).join("")}</div><div class="reveal" hidden></div>`;
+  const reveal = pick => {
+    el.querySelectorAll(".opt").forEach((b, j) => { b.disabled = true; b.classList.remove("picked"); if (LET[j] === q.key) b.classList.add("right"); else if (LET[j] === pick) b.classList.add("wrongpick"); });
+    const ok = pick === q.key;
     const rv = $(".reveal", el); rv.hidden = false;
     const notes = Object.entries(q.wrong || {}).sort().map(([k, v]) => `<li><b class="mono">${k.toUpperCase()}</b> ${esc(v.note)}${v.kind === "mistake" ? ' <span class="chip Medium">common mistake</span>' : ""}</li>`).join("");
     const rules = (q.rules || []).map(r => rulesById[r]).filter(Boolean).map(r => `<div class="rule"><span>${esc(r.text)}</span>${r.ok ? `<span class="ex ok">${esc(r.ok)}</span>` : ""}${r.bad ? `<span class="ex bad">${esc(r.bad)}</span>` : ""}</div>`).join("");
-    rv.innerHTML = `<span class="verdict ${ok ? "ok" : "no"}">${ok ? "Correct" : "Not quite: the answer is " + q.key.toUpperCase()}</span><p>${esc(q.why)}</p>${q.trick ? `<p><b>Fastest way in:</b> ${esc(q.trick)}</p>` : ""}${rules}<h4>Why each wrong option fails</h4><ul>${notes}</ul>${q.caution ? `<p class="caution"><b>Caution:</b> ${esc(q.caution)}</p>` : ""}${q.keySource === "derived" ? '<p class="mono muted">Key worked out by us, not copied from an answer key.</p>' : q.keySource === "source" ? '<p class="mono muted">Key as printed in the source paper (a coaching "similar paper", not the official SSC key). We checked it against the rule.</p>' : ""}`;
-    if (onAnswer) onAnswer(q, ok);
-  }));
+    const verdict = pick ? (ok ? "Correct" : "Not quite: the answer is " + q.key.toUpperCase()) : "Left blank: the answer is " + q.key.toUpperCase();
+    rv.innerHTML = `<span class="verdict ${ok ? "ok" : "no"}">${verdict}</span><p>${esc(q.why)}</p>${q.trick ? `<p><b>Fastest way in:</b> ${esc(q.trick)}</p>` : ""}${rules}<h4>Why each wrong option fails</h4><ul>${notes}</ul>${q.caution ? `<p class="caution"><b>Caution:</b> ${esc(q.caution)}</p>` : ""}${q.keySource === "derived" ? '<p class="mono muted">Key worked out by us, not copied from an answer key.</p>' : q.keySource === "source" ? '<p class="mono muted">Key as printed in the source paper (a coaching "similar paper", not the official SSC key). We checked it against the rule.</p>' : ""}`;
+    return ok;
+  };
+  if (o.exam) {
+    el._q = q; el._pick = null;
+    el.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
+      el.querySelectorAll(".opt").forEach(z => z.classList.remove("picked"));
+      b.classList.add("picked"); el._pick = LET[+b.dataset.i]; if (o.onPick) o.onPick();
+    }));
+    el._grade = () => reveal(el._pick);
+  } else {
+    el.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
+      const pick = LET[+b.dataset.i], ok = reveal(pick);
+      record(q.id, ok); if (o.onAnswer) o.onAnswer(q, ok);
+    }));
+  }
   return el;
 }
 
 async function allShards(){
+  if (shardCache) return shardCache;
   const out = [];
   for (const [t, m] of Object.entries(core.topics)) if (m.built) { const s = await J(`data/shards/${t}.json`); (s.rules || []).forEach(r => rulesById[r.id] = r); Object.assign(passagesById, s.passages || {}); out.push(s); }
+  return shardCache = out;
+}
+async function everyQuestion(){
+  const by = {};
+  (await allShards()).forEach(s => [...s.pyqs, ...s.practice].forEach(q => by[q.id] = Object.assign({_t: s.topic}, q)));
+  return by;
+}
+
+// pick questions the exam weights most and you are weakest at, unseen first
+function weakFirst(limit, pool){
+  const order = formatRows(), out = [], seen = new Set();
+  const buckets = order.map(f => ROWS.filter(r => r.fmt === f.fmt && (!pool || pool[r.id]))
+    .sort((a, b) => { const xa = ST.items[a.id], xb = ST.items[b.id]; return (xa ? xa.n : 0) - (xb ? xb.n : 0) || (LV.indexOf(a.level) - LV.indexOf(b.level)); }).map(r => r.id));
+  let i = 0;
+  while (out.length < limit && buckets.some(b => b.length)) {
+    const b = buckets[i % buckets.length];
+    if (b.length) { const id = b.shift(); if (!seen.has(id)) { seen.add(id); out.push(id); } }
+    i++;
+  }
   return out;
 }
 
 function stat(n, label){ return `<span><b>${n}</b> ${label}</span>`; }
+const TABS = [["#/", "Today"], ["#/syllabus", "Syllabus"], ["#/review", "Review"], ["#/mock", "Mock paper"], ["#/drill", "Drill"], ["#/words", "Word bank"], ["#/daily", "Daily"], ["#/sources", "Sources"]];
 function setTabs(active){
-  const t = [["#/", "Syllabus"], ["#/daily", "Daily"], ["#/words", "Word bank"], ["#/practice", "Mixed practice"], ["#/sources", "Sources"]];
-  $("#tabs").innerHTML = t.map(([h, l]) => `<a href="${h}" ${h === active ? 'aria-current="page"' : ""}>${l}</a>`).join("");
+  const t = totals();
+  $("#tabs").innerHTML = TABS.map(([h, l]) => `<a href="${h}" ${h === active ? 'aria-current="page"' : ""}>${l}${h === "#/review" && t.due ? ` (${t.due})` : ""}</a>`).join("");
+}
+function header(){
+  const t = totals();
+  $("#stats").innerHTML = stat(t.stock, "questions") + stat(core.lexiconSize, "words") + stat(t.due, "due now") + stat(pct(t.solid, t.stock) + "%", "solid");
+}
+
+// ---------------------------------------------------------------- one question at a time
+function runner(box, items, label, done){
+  let i = 0, right = 0;
+  const step = () => {
+    box.innerHTML = "";
+    if (i >= items.length) {
+      box.innerHTML = `<div class="card"><span class="big">${right} / ${items.length}</span><span class="muted">right in this set</span><div class="actions"><a class="btn primary" href="#/">Back to Today</a></div></div>`;
+      if (done) done(right, items.length);
+      header(); setTabs(location.hash || "#/");
+      return;
+    }
+    const q = items[i];
+    const head = document.createElement("p"); head.className = "qnum"; head.textContent = `${label} ${i + 1} of ${items.length}`;
+    box.appendChild(head);
+    const card = qcard(q, {onAnswer: (_q, ok) => {
+      if (ok) right++;
+      const nx = document.createElement("button"); nx.className = "btn primary"; nx.textContent = i + 1 < items.length ? "Next question" : "Finish";
+      nx.addEventListener("click", () => { i++; step(); });
+      const wrap = document.createElement("div"); wrap.className = "actions"; wrap.appendChild(nx);
+      $(".reveal", card).appendChild(wrap); nx.focus();
+    }});
+    box.appendChild(card);
+  };
+  step();
 }
 
 // ---------------------------------------------------------------- views
-async function vSyllabus(v){
+async function vToday(v){
   setTabs("#/");
+  const t = totals(), bp = core.blueprint, rows = formatRows();
+  const risk = rows.reduce((s, f) => s + f.risk, 0);
+  const lastMock = ST.mocks[ST.mocks.length - 1];
+  let h = `<section class="block"><h2>Today</h2><div class="tiles">
+    <div class="tile ${t.due ? "hot" : ""}"><span>due for review</span><b>${t.due}</b><small>${t.due ? "answer these before anything new" : "nothing waiting"}</small></div>
+    <div class="tile ${t.mistakes ? "hot" : ""}"><span>mistake book</span><b>${t.mistakes}</b><small>wrong at least once, not yet solid</small></div>
+    <div class="tile"><span>solid</span><b>${pct(t.solid, t.stock)}%</b><small>${t.solid} of ${t.stock} answered right ${SOLID}× running</small></div>
+    <div class="tile ${risk > (bp ? bp.perPaper / 2 : 12) ? "hot" : ""}"><span>marks at risk</span><b>${(risk * (bp ? bp.marks.right : 2)).toFixed(0)}</b><small>of ${bp ? bp.perPaper * bp.marks.right : 50}, from your accuracy so far</small></div>
+  </div>
+  <div class="actions">${t.due ? `<a class="btn primary" href="#/review">Review ${t.due} due</a>` : ""}${t.mistakes ? `<a class="btn" href="#/review/mistakes">Clear ${t.mistakes} mistakes</a>` : ""}<a class="btn ${t.due ? "" : "primary"}" href="#/review/weak">Drill my weak spots</a><a class="btn" href="#/mock">Take a timed paper</a></div></section>`;
+
+  if (bp) {
+    h += `<section class="block"><h3>Where the marks are, and where you lose them</h3>
+      <p class="muted" style="margin:0;font-size:13px">One row per question type, heaviest loss first. <b>At risk</b> is how many of the ${bp.perPaper * bp.marks.right} marks this type costs you at your present accuracy — an untried type counts as fully at risk.</p>
+      <div class="wrap"><table class="t"><thead><tr><th>Question type</th><th class="n">Per paper</th><th class="n">Tried</th><th class="n">Accuracy</th><th class="n">At risk</th><th>Practise</th></tr></thead><tbody>`;
+    for (const f of rows) {
+      const acc = f.acc == null ? "—" : pct(f.c, f.n) + "%";
+      h += `<tr><td>${esc(f.label)}</td><td class="n">${f.perShift}</td><td class="n">${f.tried}/${f.stock}</td><td class="n">${acc}</td><td class="n">${(f.risk * bp.marks.right).toFixed(1)}</td><td><a href="#/drill/${f.fmt}">drill</a>${f.due ? ` · <a href="#/review">${f.due} due</a>` : ""}</td></tr>`;
+    }
+    h += `</tbody></table></div><p class="mono muted">${esc(bp.note)}</p></section>`;
+  }
+
+  h += `<section class="block"><h3>Timed papers</h3>`;
+  h += lastMock ? `<div class="grid">${ST.mocks.slice(-4).reverse().map(m => `<div class="card"><b class="big">${m.score} / ${m.max}</b><span class="muted">${new Date(m.ts).toLocaleDateString()} · ${m.right} right, ${m.wrong} wrong, ${m.skipped} left blank</span><span class="mono">${Math.floor(m.secs / 60)}m ${m.secs % 60}s of ${m.minutes}m</span></div>`).join("")}</div>` : `<p class="empty">No timed paper yet. ${bp ? `A paper is ${bp.perPaper} questions in ${bp.minutes} minutes, marked +${bp.marks.right} and ${bp.marks.wrong}, drawn in the same proportions as the papers we have filed.` : ""}</p>`;
+  h += `</section>`;
+
+  h += `<section class="block"><details><summary>Your record, and how to keep it</summary>
+    <p>Everything you answer is stored in this browser only: ${t.tried} of ${t.stock} questions tried on ${ST.days.length} day${ST.days.length === 1 ? "" : "s"}. Clearing site data wipes it, so copy the text below somewhere safe now and then.</p>
+    <textarea id="ex" readonly>${esc(JSON.stringify(ST))}</textarea>
+    <div class="actions"><button class="btn" id="cp">Copy</button><button class="btn" id="im">Paste a saved record back</button></div></details></section>`;
+  v.innerHTML = h;
+  $("#cp").addEventListener("click", () => { const a = $("#ex"); a.select(); try { document.execCommand("copy"); $("#cp").textContent = "Copied"; } catch (e) {} });
+  $("#im").addEventListener("click", () => {
+    const a = $("#ex"); a.readOnly = false; a.value = ""; a.placeholder = "Paste the saved text here, then press this button again"; a.focus();
+    $("#im").textContent = "Load it";
+    $("#im").onclick = () => { try { const o = JSON.parse(a.value); ST = {v: 3, items: o.items || {}, known: o.known || {}, mocks: o.mocks || [], days: o.days || []}; save(); route(); } catch (e) { a.placeholder = "That is not a saved record."; } };
+  });
+}
+
+async function vSyllabus(v){
+  setTabs("#/syllabus");
   const junc = Object.entries(core.nodes).filter(([, n]) => n.kind === "junction").sort((a, b) => a[1].order - b[1].order);
   let h = "";
   for (const [jid, j] of junc) {
@@ -171,9 +352,11 @@ async function vSyllabus(v){
       h += `<div class="card ${m.built ? "" : "dim"}"><a class="title" href="#/topic/${tid}">${esc(t.label)}</a><span class="muted" style="font-size:13px">${esc(t.summary)}</span>`;
       if (m.built) {
         const st = (core.stats.all || {topics: {}}).topics[tid];
-        h += `<div class="chips"><span class="chip">${m.pyqs} past</span><span class="chip">${m.practice} practice</span><span class="chip">${esc(m.tier)}</span>${st ? `<span class="chip" title="share of analysed papers containing this topic">asked in ${st.shifts} of ${core.stats.all.papers} papers · ${esc(st.lik)}</span>` : ""}</div>`;
+        const mine = ROWS.filter(r => r.topic === tid);
+        const solid = mine.filter(r => isSolid(r.id)).length, due = mine.filter(r => isDue(r.id)).length;
+        h += `<div class="chips"><span class="chip">${m.pyqs} past</span><span class="chip">${m.practice} practice</span>${st ? `<span class="chip" title="share of analysed papers containing this topic">asked in ${st.shifts} of ${core.stats.all.papers} papers · ${esc(st.lik)}</span>` : ""}${due ? `<span class="chip due">${due} due</span>` : ""}</div>`;
         h += `<div class="chips">${qtypes.map(([qid, q]) => `<a class="chip" href="#/topic/${tid}/${qid}">${esc(q.short)}</a>`).join("")}</div>`;
-        h += `<div class="bar" title="your progress"><i style="width:${(100 * answeredIn(tid) / Math.max(total, 1)).toFixed(0)}%"></i></div>`;
+        h += `<div class="bar" title="${solid} of ${total} solid"><i style="width:${pct(solid, total)}%"></i></div><span class="mono muted">${pct(solid, total)}% solid</span>`;
       } else h += `<span class="mono muted">not built yet</span>`;
       h += `</div>`;
     }
@@ -181,24 +364,25 @@ async function vSyllabus(v){
   }
   v.innerHTML = h;
 }
-function answeredIn(tid){ return core.bank.rows.filter(r => r[1] === tid && r[0] in P).length; }
 
 async function vTopic(v, tid, qfocus){
-  setTabs("#/");
+  setTabs("#/syllabus");
   const t = core.nodes[tid]; if (!t) { v.innerHTML = `<p class="empty">No such topic.</p>`; return; }
-  if (!core.topics[tid].built) { v.innerHTML = `<p class="pagenav"><a href="#/">← Syllabus</a></p><h2>${esc(t.label)}</h2><p class="empty">No questions yet. Send a paper or a rule sheet for this topic.</p>`; return; }
+  if (!core.topics[tid].built) { v.innerHTML = `<p class="pagenav"><a href="#/syllabus">← Syllabus</a></p><h2>${esc(t.label)}</h2><p class="empty">No questions yet. Send a paper or a rule sheet for this topic.</p>`; return; }
   const s = await J(`data/shards/${tid}.json`);
   (s.rules || []).forEach(r => rulesById[r.id] = r); Object.assign(passagesById, s.passages || {});
   const qts = Object.entries(s.nodes).sort((a, b) => a[1].order - b[1].order);
   const all = [...s.pyqs, ...s.practice].sort((a, b) => LV.indexOf(a.level) - LV.indexOf(b.level));
-  let h = `<p class="pagenav"><a href="#/">← Syllabus</a></p><div><h2>${esc(t.label)}</h2><p class="lead">${esc(t.summary)}</p><p class="mono muted">${s.pyqs.length} past · ${s.practice.length} practice · tier ${esc(s.tier)}</p></div>`;
-  if (s.rules.length) h += `<section class="block"><h3>Study this first</h3>${s.rules.map(r => `<div class="rule"><span>${esc(r.text)}</span>${r.ok ? `<span class="ex ok">${esc(r.ok)}</span>` : ""}${r.bad ? `<span class="ex bad">${esc(r.bad)}</span>` : ""}</div>`).join("")}</section>`;
+  const ruleScore = {};
+  all.forEach(q => (q.rules || []).forEach(r => { const o = ruleScore[r] || (ruleScore[r] = {n: 0, c: 0}); const x = ST.items[q.id]; if (x) { o.n += x.n; o.c += x.c || 0; } }));
+  let h = `<p class="pagenav"><a href="#/syllabus">← Syllabus</a></p><div><h2>${esc(t.label)}</h2><p class="lead">${esc(t.summary)}</p><p class="mono muted">${s.pyqs.length} past · ${s.practice.length} practice · tier ${esc(s.tier)}</p></div>`;
+  if (s.rules.length) h += `<section class="block"><h3>Study this first</h3>${s.rules.map(r => { const o = ruleScore[r.id]; return `<div class="rule"><span>${esc(r.text)}</span>${r.ok ? `<span class="ex ok">${esc(r.ok)}</span>` : ""}${r.bad ? `<span class="ex bad">${esc(r.bad)}</span>` : ""}${o && o.n ? `<span class="mono muted">your answers on this rule: ${o.c} right of ${o.n}</span>` : ""}</div>`; }).join("")}</section>`;
   h += `<section class="block"><h3>The question types</h3><div class="grid">${qts.map(([id, n]) => { const m = s.methods[id]; return `<div class="card" id="t-${id}"><b>${esc(n.label)}</b><span class="muted" style="font-size:13px">${esc(n.summary)}</span><p class="ex" style="margin:0"><b>Spot it:</b> ${esc(m.cue)}</p><p class="ex" style="margin:0"><b>Fast:</b> ${esc(m.fast)}</p><details><summary>Full method, elimination, traps</summary><p><b>Standard:</b> ${esc(m.standard)}</p><p><b>Eliminate:</b> ${esc(m.eliminate)}</p><ul>${m.traps.map(x => `<li>${esc(x)}</li>`).join("")}</ul></details></div>`; }).join("")}</div></section>`;
-  h += `<section class="block"><h3>Questions, easiest first</h3><div class="filters"><select id="fq"><option value="">All types</option>${qts.map(([id, n]) => `<option value="${id}" ${id === qfocus ? "selected" : ""}>${esc(n.short)}</option>`).join("")}</select><select id="fl"><option value="">All levels</option>${LV.map(l => `<option>${l}</option>`).join("")}</select><select id="fp"><option value="">All progress</option><option value="new">Not answered</option><option value="wrong">Got wrong</option></select></div><div id="qs" class="block"></div></section>`;
+  h += `<section class="block"><h3>Questions, easiest first</h3><div class="filters"><select id="fq"><option value="">All types</option>${qts.map(([id, n]) => `<option value="${id}" ${id === qfocus ? "selected" : ""}>${esc(n.short)}</option>`).join("")}</select><select id="fl"><option value="">All levels</option>${LV.map(l => `<option>${l}</option>`).join("")}</select><select id="fp"><option value="">All progress</option><option value="new">Not answered</option><option value="wrong">Got wrong</option><option value="due">Due for review</option></select></div><div id="qs" class="block"></div></section>`;
   v.innerHTML = h;
   const draw = () => {
     const a = $("#fq").value, b = $("#fl").value, c = $("#fp").value;
-    const rows = all.filter(q => (!a || q.qtype === a) && (!b || q.level === b) && (!c || (c === "new" ? !(q.id in P) : P[q.id] === 0)));
+    const rows = all.filter(q => (!a || q.qtype === a) && (!b || q.level === b) && (!c || (c === "new" ? !ST.items[q.id] : c === "due" ? isDue(q.id) : isMistake(q.id))));
     const box = $("#qs"); box.innerHTML = rows.length ? "" : `<p class="empty">No question matches.</p>`;
     rows.forEach(q => box.appendChild(qcard(q)));
   };
@@ -206,15 +390,124 @@ async function vTopic(v, tid, qfocus){
   if (qfocus) { const e = $("#t-" + qfocus); if (e) e.scrollIntoView({block: "start"}); }
 }
 
-async function vPractice(v){
-  setTabs("#/practice");
+async function vReview(v, kind){
+  setTabs("#/review");
+  const by = await everyQuestion();
+  kind = kind || "due";
+  let ids;
+  if (kind === "mistakes") ids = ROWS.filter(r => isMistake(r.id)).map(r => r.id).sort((a, b) => (ST.items[b].w || 0) - (ST.items[a].w || 0));
+  else if (kind === "weak") ids = weakFirst(12, by);
+  else ids = ROWS.filter(r => isDue(r.id)).map(r => r.id).sort((a, b) => ST.items[a].due - ST.items[b].due || (ST.items[b].w || 0) - (ST.items[a].w || 0));
+  const title = {due: "Due for review", mistakes: "Mistake book", weak: "Weak spots first"}[kind];
+  const blurb = {
+    due: "Questions whose turn has come round again. A right answer pushes the next showing further out; a wrong one brings it back to the start.",
+    mistakes: "Every question you have got wrong and not yet answered right three times running.",
+    weak: "New questions, chosen by how many marks the type is worth and how badly you are doing at it.",
+  }[kind];
+  const items = ids.slice(0, kind === "due" ? 20 : 12).map(i => by[i]).filter(Boolean);
+  v.innerHTML = `<div><h2>${title}</h2><p class="muted" style="margin:2px 0 0">${blurb}</p></div>
+    <div class="chips"><a class="chip" href="#/review">Due (${ROWS.filter(r => isDue(r.id)).length})</a><a class="chip" href="#/review/mistakes">Mistakes (${ROWS.filter(r => isMistake(r.id)).length})</a><a class="chip" href="#/review/weak">Weak spots</a></div><div id="run" class="block"></div>`;
+  if (!items.length) { $("#run").innerHTML = `<p class="empty">${kind === "due" ? "Nothing is due. Drill your weak spots or take a timed paper." : kind === "mistakes" ? "No mistakes outstanding." : "No questions left to start."}</p>`; return; }
+  runner($("#run"), items, "Question", null);
+}
+
+async function vMock(v, go){
+  setTabs("#/mock");
+  const bp = core.blueprint;
+  if (!bp) { v.innerHTML = `<p class="empty">No paper has been filed yet, so there is nothing to shape a mock from.</p>`; return; }
+  if (!go) {
+    v.innerHTML = `<div><h2>Timed paper</h2><p class="lead">${bp.perPaper} questions in ${bp.minutes} minutes, marked +${bp.marks.right} for a right answer and ${bp.marks.wrong} for a wrong one. Blanks cost nothing. The mix is the mix of the ${bp.papers} paper${bp.papers === 1 ? "" : "s"} we have filed.</p></div>
+      <div class="wrap"><table class="t"><thead><tr><th>Question type</th><th class="n">In this paper</th></tr></thead><tbody>${Object.entries(bp.mock).map(([f, n]) => `<tr><td>${esc(core.formats[f] || f)}</td><td class="n">${n}</td></tr>`).join("")}</tbody></table></div>
+      <div class="actions"><a class="btn primary" href="#/mock/go">Start the clock</a><a class="btn" href="#/">Not now</a></div>
+      ${ST.mocks.length ? `<section class="block"><h3>Earlier papers</h3><div class="wrap"><table class="t"><thead><tr><th>When</th><th class="n">Score</th><th class="n">Right</th><th class="n">Wrong</th><th class="n">Blank</th><th class="n">Time</th></tr></thead><tbody>${ST.mocks.slice().reverse().map(m => `<tr><td>${new Date(m.ts).toLocaleString()}</td><td class="n">${m.score} / ${m.max}</td><td class="n">${m.right}</td><td class="n">${m.wrong}</td><td class="n">${m.skipped}</td><td class="n">${Math.floor(m.secs / 60)}m ${m.secs % 60}s</td></tr>`).join("")}</tbody></table></div></section>` : ""}`;
+    return;
+  }
+  const by = await everyQuestion();
+  const pool = {};
+  Object.values(by).forEach(q => (pool[q.fmt] || (pool[q.fmt] = [])).push(q));
+  const seenCount = q => { const x = ST.items[q.id]; return x ? x.n : 0; };
+  const picked = [], tail = [];
+  for (const [f, n] of Object.entries(bp.mock)) {
+    let cands = (pool[f] || []).slice();
+    if (f === "rc") {
+      const byP = {};
+      cands.forEach(q => { if (q.passage) (byP[q.passage] || (byP[q.passage] = [])).push(q); });
+      const groups = Object.values(byP).filter(g => g.length >= n);
+      if (groups.length) {
+        groups.sort((a, b) => a.reduce((s, q) => s + seenCount(q), 0) - b.reduce((s, q) => s + seenCount(q), 0));
+        tail.push(...groups[0].slice(0, n)); continue;
+      }
+    }
+    cands.sort((a, b) => seenCount(a) - seenCount(b) || Math.random() - 0.5);
+    picked.push(...cands.slice(0, n));
+  }
+  for (let i = picked.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [picked[i], picked[j]] = [picked[j], picked[i]]; }
+  const paper = picked.concat(tail);
+  v.innerHTML = `<div class="sticky"><span class="timer" id="clock">${bp.minutes}:00</span><span class="mono muted" id="prog">0 of ${paper.length} answered</span><span class="actions"><button class="btn primary" id="sub">Submit</button></span></div><div id="qs" class="block"></div>`;
+  const box = $("#qs"), cards = [];
+  paper.forEach((q, i) => {
+    const head = document.createElement("p"); head.className = "qnum"; head.textContent = `Question ${i + 1}`;
+    box.appendChild(head);
+    const c = qcard(q, {exam: true, onPick: () => { $("#prog").textContent = `${cards.filter(x => x._pick).length} of ${paper.length} answered`; }});
+    cards.push(c); box.appendChild(c);
+  });
+  let left = bp.minutes * 60, timer = null, submitted = false;
+  const tick = () => {
+    left--;
+    const m = Math.floor(Math.max(left, 0) / 60), s = Math.max(left, 0) % 60;
+    const c = $("#clock"); if (!c) { clearInterval(timer); return; }
+    c.textContent = `${m}:${String(s).padStart(2, "0")}`;
+    if (left <= 60) c.classList.add("low");
+    if (left <= 0) submit(true);
+  };
+  const submit = auto => {
+    if (submitted) return; submitted = true;
+    clearInterval(timer);
+    let right = 0, wrong = 0, skipped = 0;
+    const byFmt = {};
+    cards.forEach(c => {
+      const q = c._q, pick = c._pick, o = byFmt[q.fmt] || (byFmt[q.fmt] = {n: 0, c: 0});
+      o.n++;
+      if (!pick) skipped++; else if (pick === q.key) { right++; o.c++; record(q.id, true); } else { wrong++; record(q.id, false); }
+      c._grade();
+    });
+    const score = right * bp.marks.right + wrong * bp.marks.wrong, max = paper.length * bp.marks.right;
+    const secs = bp.minutes * 60 - Math.max(left, 0);
+    ST.mocks.push({ts: Date.now(), score: score, max: max, right: right, wrong: wrong, skipped: skipped, secs: secs, minutes: bp.minutes, byFmt: byFmt});
+    save(); header();
+    const rows = Object.entries(byFmt).sort((a, b) => (a[1].c / a[1].n) - (b[1].c / b[1].n))
+      .map(([f, o]) => `<tr><td>${esc(core.formats[f] || f)}</td><td class="n">${o.c}/${o.n}</td></tr>`).join("");
+    const card = document.createElement("section"); card.className = "block";
+    card.innerHTML = `<div class="card"><span class="big">${score} / ${max}</span><span class="muted">${right} right · ${wrong} wrong (${(wrong * bp.marks.wrong).toFixed(1)} marks) · ${skipped} left blank${auto ? " · time ran out" : ""}</span><span class="mono">${Math.floor(secs / 60)}m ${secs % 60}s used of ${bp.minutes}m</span></div>
+      <div class="wrap"><table class="t"><thead><tr><th>Question type</th><th class="n">Right</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="actions"><a class="btn primary" href="#/">Back to Today</a><a class="btn" href="#/review/mistakes">Work on what went wrong</a></div>
+      <p class="muted">Every answer below is marked, with the rule behind it. Scroll through the ones you got wrong first.</p>`;
+    $("#sub").replaceWith(card);
+    $("#clock").textContent = "done"; $("#prog").textContent = `${right} right of ${paper.length}`;
+    window.scrollTo(0, 0);
+  };
+  $("#sub").addEventListener("click", () => submit(false));
+  timer = setInterval(tick, 1000);
+  window.addEventListener("hashchange", () => clearInterval(timer), {once: true});
+}
+
+async function vDrill(v, fmt){
+  setTabs("#/drill");
+  const by = await everyQuestion();
+  const all = Object.values(by);
   const shards = await allShards();
-  const all = shards.flatMap(s => [...s.pyqs, ...s.practice.map(q => q)].map(q => ({...q, _t: s.topic})));
-  v.innerHTML = `<div><h2>Mixed practice</h2><p class="muted" style="margin:2px 0 0">Every question from every built topic.</p></div><div class="filters"><select id="ft"><option value="">All topics</option>${shards.map(s => `<option value="${s.topic}">${esc(core.nodes[s.topic].label)}</option>`).join("")}</select><select id="ff"><option value="">All formats</option>${Object.entries(core.formats).map(([k, l]) => `<option value="${k}">${esc(l)}</option>`).join("")}</select><select id="fl"><option value="">All levels</option>${LV.map(l => `<option>${l}</option>`).join("")}</select><select id="fs"><option value="">Past + practice</option><option value="pyq">Past only</option><option value="prac">Practice only</option></select><select id="fp"><option value="">All progress</option><option value="new">Not answered</option><option value="wrong">Got wrong</option></select><button class="btn primary" id="shuf">Shuffle</button></div><p class="mono muted" id="cnt"></p><div id="qs" class="block"></div>`;
+  v.innerHTML = `<div><h2>Drill</h2><p class="muted" style="margin:2px 0 0">Every question in the bank. Pick what you want to work on, or let it choose by how many marks you are losing.</p></div>
+    <div class="filters"><select id="ft"><option value="">All topics</option>${shards.map(s => `<option value="${s.topic}">${esc(core.nodes[s.topic].label)}</option>`).join("")}</select>
+    <select id="ff"><option value="">All formats</option>${Object.entries(core.formats).map(([k, l]) => `<option value="${k}" ${k === fmt ? "selected" : ""}>${esc(l)}</option>`).join("")}</select>
+    <select id="fl"><option value="">All levels</option>${LV.map(l => `<option>${l}</option>`).join("")}</select>
+    <select id="fs"><option value="">Past + practice</option><option value="pyq">Past only</option><option value="prac">Practice only</option></select>
+    <select id="fp"><option value="">All progress</option><option value="new">Not answered</option><option value="wrong">Got wrong</option><option value="due">Due for review</option></select>
+    <button class="btn" id="shuf">Shuffle</button><a class="btn primary" href="#/review/weak">Weakest first</a></div><p class="mono muted" id="cnt"></p><div id="qs" class="block"></div>`;
   let order = null;
   const draw = () => {
-    const f = { t: $("#ft").value, f: $("#ff").value, l: $("#fl").value, s: $("#fs").value, p: $("#fp").value };
-    let rows = all.filter(q => (!f.t || q._t === f.t) && (!f.f || q.fmt === f.f) && (!f.l || q.level === f.l) && (!f.s || (f.s === "pyq" ? !!q.paper : !q.paper)) && (!f.p || (f.p === "new" ? !(q.id in P) : P[q.id] === 0)));
+    const f = {t: $("#ft").value, f: $("#ff").value, l: $("#fl").value, s: $("#fs").value, p: $("#fp").value};
+    let rows = all.filter(q => (!f.t || q._t === f.t) && (!f.f || q.fmt === f.f) && (!f.l || q.level === f.l) && (!f.s || (f.s === "pyq" ? !!q.paper : !q.paper))
+      && (!f.p || (f.p === "new" ? !ST.items[q.id] : f.p === "due" ? isDue(q.id) : isMistake(q.id))));
     if (order) rows = rows.slice().sort((a, b) => order[a.id] - order[b.id]);
     $("#cnt").textContent = `${rows.length} question${rows.length === 1 ? "" : "s"}${rows.length > 10 ? " · showing 10" : ""}`;
     const box = $("#qs"); box.innerHTML = rows.length ? "" : `<p class="empty">No question matches these filters.</p>`;
@@ -231,10 +524,10 @@ async function vWords(v){
   v.innerHTML = `<div><h2>Word bank</h2><p class="muted" style="margin:2px 0 0">Every word, idiom, one-word substitution and phrasal verb filed so far. Tick the ones you know.</p></div><div class="filters"><input type="search" id="ws" placeholder="Search a word or meaning" aria-label="Search"><select id="wk"><option value="">All kinds</option>${Object.entries(core.kinds).map(([k, l]) => `<option value="${k}">${esc(l)}</option>`).join("")}</select><select id="wp"><option value="">All</option><option value="new">Still learning</option><option value="known">Known</option></select></div><p class="mono muted" id="cnt"></p><div class="grid" id="ws2"></div>`;
   const draw = () => {
     const s = $("#ws").value.trim().toLowerCase(), k = $("#wk").value, p = $("#wp").value;
-    const rows = lex.filter(e => (!k || e.kind === k) && (!p || (p === "known") === !!K[e.id]) && (!s || (e.w + " " + e.meaning + " " + e.syn.join(" ")).toLowerCase().includes(s)));
+    const rows = lex.filter(e => (!k || e.kind === k) && (!p || (p === "known") === !!ST.known[e.id]) && (!s || (e.w + " " + e.meaning + " " + e.syn.join(" ")).toLowerCase().includes(s)));
     $("#cnt").textContent = `${rows.length} of ${lex.length}`;
-    $("#ws2").innerHTML = rows.length ? rows.map(e => `<div class="card lex"><span class="w">${esc(e.w)} <span class="chip">${esc(core.kinds[e.kind])}${e.pos ? " · " + esc(e.pos) : ""}</span></span><span class="m">${esc(e.meaning)}</span>${e.syn.length ? `<span class="mono"><b>Syn</b> ${esc(e.syn.join(", "))}</span>` : ""}${e.ant.length ? `<span class="mono"><b>Ant</b> ${esc(e.ant.join(", "))}</span>` : ""}<span class="ex muted">“${esc(e.ex)}”</span><label class="mono"><input type="checkbox" data-id="${esc(e.id)}" ${K[e.id] ? "checked" : ""}> I know this</label></div>`).join("") : `<p class="empty">No words yet.</p>`;
-    $("#ws2").querySelectorAll("input[type=checkbox]").forEach(c => c.addEventListener("change", () => { if (c.checked) K[c.dataset.id] = 1; else delete K[c.dataset.id]; save(); }));
+    $("#ws2").innerHTML = rows.length ? rows.map(e => `<div class="card lex"><span class="w">${esc(e.w)} <span class="chip">${esc(core.kinds[e.kind])}${e.pos ? " · " + esc(e.pos) : ""}</span></span><span class="m">${esc(e.meaning)}</span>${e.syn.length ? `<span class="mono"><b>Syn</b> ${esc(e.syn.join(", "))}</span>` : ""}${e.ant.length ? `<span class="mono"><b>Ant</b> ${esc(e.ant.join(", "))}</span>` : ""}<span class="ex muted">“${esc(e.ex)}”</span>${e.note ? `<span class="mono muted">${esc(e.note)}</span>` : ""}<label class="mono"><input type="checkbox" data-id="${esc(e.id)}" ${ST.known[e.id] ? "checked" : ""}> I know this</label></div>`).join("") : `<p class="empty">No words yet.</p>`;
+    $("#ws2").querySelectorAll("input[type=checkbox]").forEach(c => c.addEventListener("change", () => { if (c.checked) ST.known[c.dataset.id] = 1; else delete ST.known[c.dataset.id]; save(); }));
   };
   ["ws", "wk", "wp"].forEach(i => $("#" + i).addEventListener("input", draw)); draw();
 }
@@ -253,7 +546,7 @@ async function vDaily(v, date){
   if (d.passage) h += `<section class="block"><h3>${esc(d.passage.title)}</h3><p class="lead">${esc(d.passage.text)}</p><div id="pq" class="block"></div></section>`;
   h += `<section class="block"><h3>Quiz</h3><div id="dq" class="block"></div></section>`;
   v.innerHTML = h;
-  const fin = q => { const o = {...q, wrong: Object.fromEntries(Object.entries(q.wrong).map(([k, x]) => [k, typeof x === "string" ? {kind: "ruled-out", note: x} : x])), level: q.level || "Easy", tech: q.tech || []}; return o; };
+  const fin = q => Object.assign({}, q, {wrong: Object.fromEntries(Object.entries(q.wrong).map(([k, x]) => [k, typeof x === "string" ? {kind: "ruled-out", note: x} : x])), level: q.level || "Easy", tech: q.tech || []});
   (d.passage ? d.passage.questions : []).forEach(q => $("#pq").appendChild(qcard(fin(q))));
   d.quiz.forEach(q => $("#dq").appendChild(qcard(fin(q))));
 }
@@ -261,10 +554,15 @@ async function vDaily(v, date){
 async function vSources(v){
   setTabs("#/sources");
   const link = l => l ? `<a href="${esc(l)}" rel="noopener" target="_blank">open</a>` : `<span class="muted">no link</span>`;
-  v.innerHTML = `<h2>Sources</h2><section class="block"><h3>Papers</h3>${core.papers.length ? `<div class="grid">${core.papers.map(p => `<div class="card"><b>${esc(p.exam)} · ${esc(p.date)}${p.shift ? " · shift " + p.shift : ""}</b><span class="muted">${esc(p.kind)}${p.publisher ? " · " + esc(p.publisher) : ""}</span><span class="mono">${p.n} questions, ${p.built} playable${p.derivedKeys ? `, ${p.derivedKeys} keys worked out by us` : ""}</span>${link(p.link)}</div>`).join("")}</div>` : `<p class="empty">No papers filed yet.</p>`}</section>
+  const bp = core.blueprint;
+  v.innerHTML = `<h2>Sources</h2><section class="block"><h3>Papers</h3>${core.papers.length ? `<div class="grid">${core.papers.map(p => `<div class="card"><b>${esc(p.exam)} · ${esc(p.date)}${p.shift ? " · shift " + p.shift : ""}</b><span class="muted">${esc(p.kind)}${p.publisher ? " · " + esc(p.publisher) : ""}</span><span class="mono">${p.n} questions, ${p.built} playable${p.derivedKeys ? `, ${p.derivedKeys} keys not from an official SSC key` : ""}</span>${link(p.link)}</div>`).join("")}</div>` : `<p class="empty">No papers filed yet.</p>`}</section>
   <section class="block"><h3>Daily sources</h3>${core.days.length ? `<div class="grid">${core.days.map(d => `<div class="card"><b>${esc(d.date)}</b><span class="muted">${esc(d.publication || "")}${d.pages ? " · p. " + esc(d.pages) : ""}</span>${link(d.link)}</div>`).join("")}</div>` : `<p class="empty">No daily drops yet.</p>`}</section>
   <section class="block"><h3>Outside reading</h3>${core.refs.length ? `<ul>${core.refs.map(r => `<li><a href="${esc(r.url)}" rel="noopener" target="_blank">${esc(r.title)}</a> <span class="muted">${esc(r.note)}</span></li>`).join("")}</ul>` : `<p class="empty">None yet.</p>`}</section>
-  <details><summary>How difficulty and likelihood are worked out</summary><ul>${Object.values(core.rubric).map(x => `<li>${esc(x)}</li>`).join("")}</ul><p>${esc(core.likelihood)}</p></details>`;
+  <details><summary>How the paper is measured, and what the words on this site mean</summary>
+    ${bp ? `<p><b>The blueprint.</b> ${esc(bp.note)} A paper is taken to be ${bp.perPaper} questions in ${bp.minutes} minutes at +${bp.marks.right} and ${bp.marks.wrong}.</p>
+    <p><b>Marks at risk.</b> For each question type, its questions per paper multiplied by the share you are getting wrong, turned into marks. A type you have never tried counts as fully at risk.</p>
+    <p><b>Solid.</b> A question becomes solid when you have answered it right ${SOLID} times running; it then comes back after a week, then a fortnight, then five weeks.</p>` : ""}
+    <ul>${Object.values(core.rubric).map(x => `<li>${esc(x)}</li>`).join("")}</ul><p>${esc(core.likelihood)}</p></details>`;
 }
 
 // ---------------------------------------------------------------- router
@@ -272,22 +570,25 @@ async function route(){
   const v = $("#view"), h = location.hash || "#/";
   try {
     const [, a, b, c] = h.split("/");
-    if (!a) await vSyllabus(v);
+    if (!a) await vToday(v);
+    else if (a === "syllabus") await vSyllabus(v);
     else if (a === "topic") await vTopic(v, b, c);
+    else if (a === "review") await vReview(v, b);
+    else if (a === "mock") await vMock(v, b === "go");
+    else if (a === "drill" || a === "practice") await vDrill(v, b);
     else if (a === "daily") await vDaily(v, b);
     else if (a === "words") await vWords(v);
-    else if (a === "practice") await vPractice(v);
     else if (a === "sources") await vSources(v);
-    else await vSyllabus(v);
+    else await vToday(v);
     if (!c) window.scrollTo(0, 0);
   } catch (e) { v.innerHTML = `<p class="empty">Could not load this page (${esc(e.message)}).</p>`; }
 }
 (async function(){
   try {
     core = await J("data/core.json");
-    const q = core.bank.rows.length;
-    $("#stats").innerHTML = stat(q, "questions") + stat(core.lexiconSize, "words") + stat(core.days.length, "daily drops") + stat(core.papers.length, "papers");
-    $("#foot").textContent = "Progress is saved in this browser only.";
+    ROWS = core.bank.rows.map(r => ({id: r[0], topic: r[1], qtype: r[2], fmt: r[3], level: r[4], src: r[5]}));
+    header();
+    $("#foot").textContent = "Your answers are saved in this browser only. Today → Your record has a copy you can keep.";
     window.addEventListener("hashchange", route); route();
   } catch (e) { $("#view").innerHTML = `<p class="empty">Could not load the data (${esc(e.message)}).</p>`; }
 })();

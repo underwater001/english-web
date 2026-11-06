@@ -86,3 +86,33 @@ Not machine-checked: whether a grammar rule is applied correctly in a sentence.
 Up to 2 Easy, 3 Medium, 4 or more Hard.
 
 **Likelihood** is the share of analysed papers that contained the topic: High at 2/3 or more, Medium at 1/3 or more, Low below. Read it with the number of papers, and remember official, memory-based and coaching papers differ.
+
+## The blueprint and the coverage gate
+
+`tools/build.py` measures the filed papers and writes a `blueprint` block into `data/core.json`:
+
+- `perPaper` — questions in one paper (the filed rows divided by the number of papers)
+- `formats[]` — one row per format: `perShift` (how often the papers ask it), `floor` (five papers' worth, at least 4),
+  `practice` and `pyqs` (what the bank holds), `short` (how many practice questions are missing)
+- `mock` — the same weights apportioned to whole questions, which is the mix a timed paper is drawn from
+- `minutes`, `marks` — 13 minutes, +2 and −0.5
+
+`python3 tools/build.py` prints the shortfalls as a warning so the site still builds while drills are being written.
+`python3 tools/build.py --coverage`, which is what `tools/check.py` runs, **fails** on any shortfall. So filing a paper that
+introduces a new format immediately demands practice questions for it; that is deliberate.
+
+The front end uses the blueprint for three things: the marks-at-risk table on Today (`perShift × share wrong × 2`),
+the mix of a mock paper, and the order in which "weak spots first" hands out new questions.
+
+## What the browser stores
+
+One key, `ew-state`, version 3:
+
+```
+{ v, items: { "<question id>": {b, c, n, w, last, due, ok} }, known: {"<word id>": 1}, mocks: [...], days: [...] }
+```
+
+`b` is the Leitner box (0–5, intervals 0, 1, 3, 7, 16, 35 days), `c` right answers, `n` attempts, `w` wrong answers,
+`due` the day number it comes back on. A question with `b >= 3` is "solid"; one with `w > 0` and `b < 3` is in the mistake book.
+Day numbers are local days, not UTC. The old `ew-progress` / `ew-known` keys are migrated on first load.
+Because question ids are what the schedule hangs on, **never renumber a practice id** — only append.

@@ -99,7 +99,7 @@ PYQS = [
 ]
 
 
-def practice_items():
+def _base():
     return [
         q("q-ap-passive", "transform", _P + "The committee will announce the results tomorrow.",
           ["The results will be announced by the committee tomorrow.", "The results will announced by the committee tomorrow.", "The results would be announced by the committee tomorrow.", "The results are announced by the committee tomorrow."], "a",
@@ -118,3 +118,52 @@ def practice_items():
           "'Who wrote' is simple past; the passive is 'By whom was this letter written?'",
           {"b": mistake("Present simple loses the past tense."), "c": ruled_out("'Who' cannot replace the 'by whom' agent here."), "d": mistake("Present perfect changes the tense.")}, rules=["ap-r3"], uid="ap-p04", rare=True),
     ]
+
+_EXTRA = [
+    q("q-ap-passive", "transform", _P + "The gardener is watering the plants.",
+      ["The plants are watered by the gardener.", "The plants are being watered by the gardener.", "The plants were being watered by the gardener.", "The plants have been watered by the gardener."], "b",
+      "Present continuous passive keeps both the present and the continuous: is/are + being + past participle.",
+      {"a": mistake("This is the present simple passive and loses the 'at this moment' sense of 'is watering'."),
+       "c": mistake("'Were being watered' moves the sentence into the past."),
+       "d": mistake("'Have been watered' is the present perfect: the action is finished, not going on.")}, rules=["ap-r1"], uid="ap-p05"),
+    q("q-ap-passive", "transform", _P + "You must submit the form before Friday.",
+      ["The form must be submitted before Friday.", "The form must being submitted before Friday.", "The form should be submitted before Friday.", "The form is must submitted before Friday."], "a",
+      "A modal is carried over unchanged and takes be + past participle: must be submitted.",
+      {"b": ruled_out("'Must being submitted' is not a possible form; a modal takes the bare 'be'."),
+       "c": mistake("'Should' weakens 'must' from an obligation to a recommendation."),
+       "d": ruled_out("'Is must submitted' puts two verbs together with no passive form at all.")}, rules=["ap-r2"], uid="ap-p06"),
+    q("q-ap-passive", "transform", _P + "They had completed the survey before the monsoon began.",
+      ["The survey was completed before the monsoon began.", "The survey has been completed before the monsoon began.", "The survey had been completed before the monsoon began.", "The survey had being completed before the monsoon began."], "c",
+      "Past perfect active 'had completed' becomes past perfect passive 'had been completed'; the tense must survive the change.",
+      {"a": mistake("'Was completed' is the simple past and loses the 'earlier than the other past event' sense that 'had' carries."),
+       "b": mistake("'Has been completed' is the present perfect, which cannot sit beside the past 'began'."),
+       "d": ruled_out("'Had being completed' is not a possible form.")}, rules=["ap-r1", "ap-r2"], uid="ap-p07"),
+    q("q-ap-active", "transform", _A + "The decision was taken by the committee last week.",
+      ["The committee took the decision last week.", "The committee had taken the decision last week.", "The committee takes the decision last week.", "The committee was taking the decision last week."], "a",
+      "Simple past passive 'was taken' returns to the simple past active 'took', and the 'by' agent becomes the subject.",
+      {"b": mistake("'Had taken' is the past perfect, a tense the original does not have."),
+       "c": ruled_out("The present simple cannot go with 'last week'."),
+       "d": mistake("'Was taking' adds a continuous aspect the original does not have.")}, rules=["ap-r4"], uid="ap-p08"),
+    q("q-ap-active", "transform", _A + "The streets are swept every morning.",
+      ["The streets sweep every morning.", "Someone sweeps the streets every morning.", "Someone is sweeping the streets every morning.", "The morning sweeps the streets."], "b",
+      "No doer is named, so 'someone' becomes the subject, and the present simple passive returns to the present simple active.",
+      {"a": ruled_out("Streets cannot sweep; this makes the object the doer."),
+       "c": mistake("'Is sweeping' adds a continuous aspect that 'are swept every morning' does not have."),
+       "d": mistake("'The morning' is the time, not the doer; it is the same mistake as making the destination the subject.")}, rules=["ap-r4", "ap-r5"], uid="ap-p09"),
+    q("q-ap-active", "transform", _A + "It is believed by many that the bridge is unsafe.",
+      ["Many believe that the bridge is unsafe.", "Many believed that the bridge is unsafe.", "The bridge is believed unsafe by many.", "Many are believing that the bridge is unsafe."], "a",
+      "'It is believed by many' becomes 'Many believe'; the that-clause is left as it stands.",
+      {"b": mistake("'Believed' moves the sentence into the past, which the original does not."),
+       "c": ruled_out("This stays in the passive instead of turning the sentence active."),
+       "d": ruled_out("'Are believing' is not used for a state of belief.")}, rules=["ap-r4"], uid="ap-p10"),
+    q("q-ap-active", "transform", _A + "Why was the meeting cancelled by the secretary?",
+      ["Why the secretary cancelled the meeting?", "Why did the secretary cancel the meeting?", "Why has the secretary cancelled the meeting?", "Why the meeting was cancelled by the secretary?"], "b",
+      "A passive past question becomes an active past question with 'did' and the bare verb: Why did the secretary cancel the meeting?",
+      {"a": ruled_out("A question needs the auxiliary 'did' before the subject."),
+       "c": mistake("'Has cancelled' is the present perfect, not the simple past of the original."),
+       "d": ruled_out("This leaves the sentence passive and also drops the question word order.")}, rules=["ap-r3", "ap-r4"], uid="ap-p11", rare=True),
+]
+
+
+def practice_items():
+    return _base() + _EXTRA

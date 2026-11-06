@@ -73,6 +73,12 @@ def main():
     case("spelling option that is not a declared misspelling", lambda r: (sub(r, sp, '"Ventriculoatriall", "Ventriculoateriel"]', '"Ventriculoatriall", "Ventriculoatreal"]'), run(r, "build_topic.py", "--all", "--force"))[1], "is not a declared misspelling")
     case("misspelt-word question with an unstored 'correct' option", lambda r: (sub(r, sp, '("vicereine", "vicereine",', '("vicereine", "vicereen",'), run(r, "build_topic.py", "--all", "--force"))[1], "is not stored as a correct spelling")
 
+    def coverage(r):
+        sub(r, "tools/topics/para_jumbles.py", "return _base() + _EXTRA", "return _base()")
+        run(r, "build_topic.py", "--all", "--force")
+        return run(r, "build.py", "--coverage")
+    case("a format with less drill stock than the blueprint asks for", coverage, "is asked 2.00 times a paper")
+
     def stale(r):
         run(r, "build_topic.py", "--all", "--force")
         sub(r, sa, '"frugal", "frugal"', '"frugal", "frugal"  ')

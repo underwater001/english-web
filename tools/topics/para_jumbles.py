@@ -91,7 +91,7 @@ PYQS = [
 ]
 
 
-def practice_items():
+def _base():
     return [
         q("q-pj-process", "rearrange", _R1 + "1. The seeds were sown in early June.\n2. The farmer ploughed the field after the first rains.\n3. By October the crop was ready to be harvested.\n4. Green shoots appeared within two weeks.",
           ["2-1-4-3", "1-2-4-3", "2-4-1-3", "3-4-1-2"], "a",
@@ -109,3 +109,59 @@ def practice_items():
           {"b": mistake("1 (the whole village joining) comes before the neighbours notice (4)."), "c": ruled_out("This opens with 'Their effort', which has nothing to refer to."), "d": ruled_out("The result (3) is placed before the village joins (1).")},
           rules=["pj-r1", "pj-r2"], uid="pj-p03", rare=True),
     ]
+
+_EXTRA = [
+    q("q-pj-para", "rearrange", _R2 + "1. The habit spread quickly once tea became cheap enough for a daily cup.\n2. Tea reached Britain as a luxury that only the rich could afford.\n3. By the end of the century it had become the drink of the whole country.\n4. Falling prices, in turn, depended on new plantations in India and Ceylon.",
+      ["2, 1, 4, 3", "1, 2, 3, 4", "4, 2, 1, 3", "3, 2, 4, 1"], "a",
+      "2 introduces tea as a luxury, 1 says the habit spread when it grew cheap, 4 explains what made it cheap, and 3 states the result.",
+      {"b": ruled_out("This opens with 'The habit', which has no habit before it to refer to."),
+       "c": mistake("'Falling prices, in turn' answers a point already made, so it cannot open the paragraph."),
+       "d": ruled_out("This opens with the final result and then explains the beginning.")},
+      rules=["pj-r1", "pj-r2"], uid="pj-p04", tech=["first-sentence", "connectors"]),
+    q("q-pj-para", "rearrange", _R2 + "1. However, a single reading tells us very little about a patient's usual pressure.\n2. Blood pressure is measured in almost every clinic, often within a minute of the patient sitting down.\n3. For this reason, doctors now prefer several readings taken at home over one taken in the clinic.\n4. It rises with anxiety, with a brisk walk to the door and even with a full bladder.",
+      ["2, 1, 4, 3", "2, 4, 1, 3", "1, 4, 2, 3", "4, 1, 2, 3"], "a",
+      "2 states the practice, 1 ('However') raises the doubt, 4 gives the reasons the single reading misleads, and 3 ('For this reason') draws the conclusion.",
+      {"b": mistake("Putting 4 before 1 gives the reasons before the doubt they support, so 'However' loses the point it contrasts with."),
+       "c": ruled_out("This opens with 'However', which needs an earlier statement."),
+       "d": ruled_out("This opens with 'It rises', where 'It' has nothing to refer to.")},
+      rules=["pj-r1", "pj-r2"], uid="pj-p05", tech=["first-sentence", "connectors"]),
+    q("q-pj-para", "rearrange", _R2 + "1. Such a lamp paid for itself within a year and then went on saving.\n2. The early models were dim, slow to brighten and unpleasant to read by.\n3. Compact fluorescent lamps were sold in the 1990s as the answer to the household electricity bill.\n4. Later versions fixed all three faults while keeping the saving.",
+      ["3, 2, 4, 1", "2, 3, 1, 4", "3, 1, 2, 4", "1, 3, 2, 4"], "a",
+      "3 introduces the lamps, 2 lists the early faults, 4 says later versions fixed those three faults, and 1 states what such a lamp then achieved.",
+      {"b": ruled_out("This opens with 'The early models', which needs the product to be named first."),
+       "c": mistake("'Such a lamp' in 1 can only follow the sentence that describes the improved lamp, so it cannot come before 2 and 4."),
+       "d": ruled_out("This opens with 'Such a lamp', which has nothing to refer to.")},
+      rules=["pj-r1", "pj-r2"], uid="pj-p06", tech=["first-sentence", "connectors"], rare=True),
+    q("q-pj-process", "rearrange", _R1 + "1. The shortlisted applications were verified against the records.\n2. Advertisements were published in three newspapers.\n3. Appointment letters were issued to the selected candidates.\n4. The applications received were screened against the minimum qualifications.",
+      ["2-4-1-3", "4-2-1-3", "2-1-4-3", "1-2-4-3"], "a",
+      "The post is advertised (2), the applications are screened (4), the shortlist is verified (1), and letters are issued (3).",
+      {"b": ruled_out("Applications are screened before they have been invited by an advertisement."),
+       "c": mistake("Verification of the shortlist (1) is placed before the screening (4) that produces the shortlist."),
+       "d": ruled_out("This opens with the verification of a shortlist that does not yet exist.")},
+      rules=["pj-r3"], uid="pj-p07", tech=["first-sentence", "pair-up"]),
+    q("q-pj-process", "rearrange", _R1 + "1. The samples were tested in the district laboratory.\n2. Notices were served on the two dairies whose milk had failed.\n3. Inspectors collected milk samples from eleven shops.\n4. The results were entered in the inspection register.",
+      ["3-1-4-2", "1-3-4-2", "3-4-1-2", "2-3-1-4"], "a",
+      "Samples are collected (3), tested (1), the results recorded (4), and notices served on the dairies that failed (2).",
+      {"b": ruled_out("Samples cannot be tested before they are collected."),
+       "c": mistake("Results are entered in the register (4) before the testing (1) that produces them."),
+       "d": ruled_out("Notices are served before any sample has been collected or tested.")},
+      rules=["pj-r3"], uid="pj-p08", tech=["first-sentence", "pair-up"]),
+    q("q-pj-para", "rearrange", _R2 + "1. They settled instead on a rule of thumb: plant where the shade will fall on a wall by noon.\n2. The committee wanted a formula for deciding where to plant street trees.\n3. None of the formulas it examined survived contact with the city's narrow lanes.\n4. Two summers later, the rule had produced more usable shade than any formula would have.",
+      ["2, 3, 1, 4", "2, 1, 3, 4", "3, 2, 1, 4", "1, 2, 3, 4"], "a",
+      "2 states the aim, 3 reports that the formulas failed, 1 ('They settled instead') gives what was adopted, and 4 reports the outcome.",
+      {"b": mistake("'They settled instead' in 1 must follow the failure in 3, not come before it."),
+       "c": ruled_out("This opens with 'None of the formulas it examined', where 'it' has no antecedent."),
+       "d": ruled_out("This opens with 'They settled instead', which needs an earlier attempt to replace.")},
+      rules=["pj-r1", "pj-r2"], uid="pj-p09", tech=["first-sentence", "connectors"]),
+    q("q-pj-para", "rearrange", _R2 + "1. In addition, a bus that is predictable is worth more to a passenger than one that is merely frequent.\n2. Most cities measure their bus service by the number of buses they run.\n3. A better measure is the share of passengers who reach their stop within a minute of the published time.\n4. That number says nothing about whether the buses arrive when they are expected.",
+      ["2, 4, 3, 1", "2, 3, 4, 1", "4, 2, 3, 1", "1, 2, 4, 3"], "a",
+      "2 states the usual measure, 4 ('That number') criticises it, 3 offers a better one, and 1 ('In addition') adds a supporting point.",
+      {"b": mistake("3 offers the better measure before 4 has explained what is wrong with the old one, so 'That number' has nothing to point back to."),
+       "c": ruled_out("This opens with 'That number', which has no number before it."),
+       "d": ruled_out("This opens with 'In addition', which needs an earlier point to add to.")},
+      rules=["pj-r1", "pj-r2"], uid="pj-p10", tech=["first-sentence", "connectors"]),
+]
+
+
+def practice_items():
+    return _base() + _EXTRA

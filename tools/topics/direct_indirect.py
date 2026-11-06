@@ -102,7 +102,7 @@ PYQS = [
 ]
 
 
-def practice_items():
+def _base():
     return [
         q("q-di-statement", "transform", _TO_I + "She said, \"I will call you tomorrow.\"",
           ["She said that she would call me the next day.", "She said that she will call me tomorrow.", "She said that she would call you tomorrow.", "She said that she called me the next day."], "a",
@@ -117,3 +117,52 @@ def practice_items():
           "Past perfect goes back to the simple past, and the previous day goes back to yesterday.",
           {"b": mistake("'The previous day' is a reported-speech time word."), "c": mistake("This keeps the past perfect that belongs to indirect speech."), "d": ruled_out("'He' should be 'I' in his own words.")}, rules=["di-r1", "di-r2"], uid="di-p03"),
     ]
+
+_EXTRA = [
+    q("q-di-statement", "transform", _TO_I + "He said, \"I am reading this book now.\"",
+      ["He said that he was reading that book then.", "He said that he is reading this book now.", "He said that he had read that book then.", "He said that he was reading this book now."], "a",
+      "The reporting verb is past, so 'am reading' becomes 'was reading', 'this' becomes 'that' and 'now' becomes 'then'.",
+      {"b": mistake("Nothing is shifted: the tense, the demonstrative and the time word all stay as they were."),
+       "c": mistake("'Had read' changes a continuous action into a completed one."),
+       "d": mistake("The tense is shifted but 'this book now' is left unchanged.")},
+      rules=["di-r1", "di-r2"], uid="di-p04"),
+    q("q-di-question", "transform", _TO_I + "She asked me, \"Are you coming with us?\"",
+      ["She asked me if I was coming with them.", "She asked me if I am coming with them.", "She asked me was I coming with them.", "She asked me if was I coming with her."], "a",
+      "A yes/no question becomes 'if' plus statement order, with 'are' back-shifted to 'was' and 'us' changed to 'them'.",
+      {"b": mistake("'Am coming' keeps the present tense, which a past reporting verb does not allow."),
+       "c": mistake("'Was I coming' keeps the question inversion and leaves out the linking 'if'."),
+       "d": mistake("'If was I' keeps the inversion after the linking word, and 'with her' loses the plural 'us'.")},
+      rules=["di-r3"], uid="di-p05"),
+    q("q-di-question", "transform", _TO_D + "He asked whether I had seen the file.",
+      ["He asked, \"Have you seen the file?\"", "He asked, \"Had you seen the file?\"", "He asked, \"Did you see the file?\"", "He asked, \"Have I seen the file?\""], "a",
+      "Going back to direct speech, the past perfect 'had seen' returns to the present perfect 'have seen' and 'I' becomes 'you'.",
+      {"b": mistake("'Had you seen' leaves the back-shift in place, as though the original had been in the past perfect."),
+       "c": mistake("'Did you see' is the simple past; the reverse of 'had seen' in this pattern is 'have seen'."),
+       "d": ruled_out("'Have I seen' makes the speaker ask about himself, which reverses who is being questioned.")},
+      rules=["di-r1", "di-r3"], uid="di-p06", rare=True),
+    q("q-di-command", "transform", _TO_I + "The officer said to the driver, \"Stop the van at once.\"",
+      ["The officer ordered the driver to stop the van at once.", "The officer said the driver to stop the van at once.", "The officer ordered the driver that he stops the van at once.", "The officer told to the driver to stop the van at once."], "a",
+      "A command is reported with 'ordered' or 'told' plus the person and 'to' before the verb.",
+      {"b": mistake("'Said' cannot take a person as its direct object; 'said to the driver' would be needed, with 'that'."),
+       "c": ruled_out("A reported command uses 'to' plus the bare verb, not a that-clause with a present-tense verb."),
+       "d": mistake("'Told to the driver' puts an extra 'to' before the person.")},
+      rules=["di-r4"], uid="di-p07"),
+    q("q-di-command", "transform", _TO_I + "The doctor said to him, \"Do not skip the tablets.\"",
+      ["The doctor advised him not to skip the tablets.", "The doctor advised him to not skipping the tablets.", "The doctor advised him that do not skip the tablets.", "The doctor advised to him not to skip the tablets."], "a",
+      "A negative command is reported as 'not to' plus the bare verb: advised him not to skip.",
+      {"b": ruled_out("'To not skipping' puts an -ing form after 'to', which the pattern does not allow."),
+       "c": ruled_out("A that-clause cannot carry the imperative 'do not'."),
+       "d": mistake("'Advised to him' adds a 'to' before the person, which 'advise' does not take.")},
+      rules=["di-r4"], uid="di-p08"),
+    q("q-di-command", "transform", _TO_D + "She requested her brother to lend her the laptop.",
+      ["She said to her brother, \"Please lend me the laptop.\"", "She said to her brother, \"Lend her the laptop.\"", "She asked her brother, \"Will you lending me the laptop?\"", "She said to her brother, \"I request to lend the laptop.\""], "a",
+      "A reported request returns to a polite imperative in the speaker's own words, so 'her' becomes 'me'.",
+      {"b": mistake("'Lend her' keeps the reported pronoun; in her own words the speaker says 'me'."),
+       "c": ruled_out("'Will you lending' is not a possible form."),
+       "d": ruled_out("This keeps the reporting verb inside the quotation, which direct speech does not do.")},
+      rules=["di-r4"], uid="di-p09", rare=True),
+]
+
+
+def practice_items():
+    return _base() + _EXTRA
