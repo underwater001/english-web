@@ -84,6 +84,13 @@ PYQS = [
        "c": ruled_out("'Either' is the start of the pair either ... or and cannot partner 'neither'."),
        "d": mistake("'Nor did' adds an auxiliary and inverts the sentence, which the following 'were prepared' does not allow.")},
       rules=["cj-r1"], paper=S2, qno=90, tech=["connectors"], trick="Neither -> nor."),
+    q("q-cj-correlative", "spot-error", _S + "No sooner had the verdict been announced when the defence counsel rose to file an appeal.",
+      ["No sooner had the verdict been announced", "when the defence counsel", "rose to file", "an appeal"], "b",
+      "'No sooner' pairs with 'than', never 'when'; the segment should read 'than the defence counsel'.",
+      {"a": ruled_out("'No sooner had the verdict been announced' correctly inverts the auxiliary after 'no sooner' and holds no error."),
+       "c": ruled_out("'Rose to file' is a correctly formed verb phrase and holds no error."),
+       "d": ruled_out("'An appeal' is a correct object and holds no error.")},
+      rules=["cj-r1"], paper="2026-10-10", qno=89, tech=["connectors"], trick="No sooner ... than, never 'when'."),
 ]
 
 

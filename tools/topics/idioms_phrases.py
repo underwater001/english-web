@@ -153,6 +153,11 @@ _I = [
     ("work-the-system", "work the system", "To take advantage of a set of rules, procedures, or structures to achieve a personal or institutional goal, often in a way that is clever, slightly dishonest, or exploits loopholes.",
      "The contractor worked the system to win every tender without ever technically breaking a rule.", "exploit", ()),
     ("bang-for-buck", "bang for your buck", "Greater value for the amount of money one is spending.", "Buying the family-size pack gives you a much bigger bang for your buck.", "value", ()),
+    ("hoist-with-own-petard", "hoist with one's own petard", "To be harmed or ruined by the very scheme or trap one devised against someone else.",
+     "The con artist was hoist with his own petard when his forged contract was used as evidence against him.", "backfire",
+     ("To be harmed or ruined by the very scheme one devised against another",)),
+    ("horses-mouth", "straight from the horse's mouth", "Directly from the original or most reliable source.",
+     "I didn't believe the rumour until I heard it straight from the horse's mouth.", "source", ("From a reliable source",)),
 ]
 
 WORDS = [word(i, t, "idiom", m, ex=e, also=list(a)) for i, t, m, e, g, a in _I]
@@ -273,6 +278,21 @@ PYQS = [
         {"a": ruled_out("Putting forth more effort is unrelated to value for money."),
          "b": ruled_out("Being very healthy has no connection to spending money."),
          "c": mistake("Making money dishonestly or without effort describes a different idiom ('easy money'), not getting good value for what one spends.")}),
+    _pq(84, "2026-10-10", "hoist-with-own-petard",
+        ["To be promoted far beyond one's competence", "To be rescued unexpectedly at the last moment", "To be burdened with another person's debts",
+         "To be harmed or ruined by the very scheme one devised against another"], "d",
+        "To be hoist with one's own petard is to be harmed or ruined by the very trap or scheme one set up against someone else.",
+        {"a": ruled_out("Being promoted beyond one's competence describes a different idea entirely, not a scheme turning on its own maker."),
+         "b": ruled_out("Being rescued unexpectedly is close to the opposite of being caught out by one's own plot."),
+         "c": ruled_out("Being burdened with another person's debts is a financial idiom, unrelated to a scheme backfiring on its own author.")},
+        trick="A petard was an explosive device; being 'hoist' (blown up) by one's own petard means your own trap destroys you."),
+    _pq(85, "2026-10-10", "horses-mouth",
+        ["From an anonymous tip", "Hearing it from someone else", "Reading it from a book", "From a reliable source"], "d",
+        "Straight from the horse's mouth means directly from the original or most reliable source, not through any go-between.",
+        {"a": ruled_out("An anonymous tip is by definition not traceable to a known, reliable source, the opposite sense of this idiom."),
+         "b": mistake("Hearing it from someone else suggests it passed through an intermediary, exactly what 'straight from the horse's mouth' rules out."),
+         "c": ruled_out("Reading it from a book is one possible source but not what the idiom names; the idiom is about directness, not books specifically.")},
+        trick="'Straight from' signals no middleman: the information comes directly from the one who would know best."),
 ]
 
 

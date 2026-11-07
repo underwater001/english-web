@@ -14,6 +14,8 @@ NODES = {
                   "summary": "One part of the sentence uses the partner word by mistake.", "links": []},
     "q-cf-replace": {"short": "Fix or leave it", "label": "Replace the highlighted phrase, or say none is needed", "kind": "qtype", "parent": TOPIC, "order": 3,
                      "summary": "A sentence highlights a phrase built on a confused word; pick the correct replacement, or 'No substitution required' if it is already correct.", "links": []},
+    "q-cf-dual": {"short": "Two blanks", "label": "Two blanks filled from the same confused pair", "kind": "qtype", "parent": TOPIC, "order": 4,
+                  "summary": "One sentence with two blanks; each option gives both members of a confused pair, in some order, and only one order fits both blanks.", "links": []},
 }
 
 RULES = [
@@ -27,6 +29,8 @@ RULES = [
      "ok": "He lies down after lunch. He laid the book on the table.", "bad": "He lays down after lunch. He lied the book on the table."},
     {"id": "cf-r5", "node": "q-cf-replace", "text": "First decide whether the highlighted phrase is already correct; if it is, the answer is 'No substitution required', not the closest-looking candidate. 'Comprise' already means 'consist of' or 'be made up of', so 'comprises of' is always wrong and must lose the 'of'.",
      "ok": "The committee comprises nine members: this already needs no change.", "bad": "Changing an already-correct 'comprises' because the option list offers a near-miss."},
+    {"id": "cf-r6", "node": "q-cf-dual", "text": "When two blanks in one sentence are both filled from the same confused pair, work out what each blank needs on its own. The right option gives the correct member of the pair for the first blank AND the correct member for the second, in that order; a pair with the right two words in the wrong order is still wrong.",
+     "ok": "The drug did not ___ (affect) her blood pressure, so its ___ (effect) was called negligible.", "bad": "The drug did not ___ (effect) her blood pressure, so its ___ (affect) was called negligible."},
 ]
 
 METHODS = {
@@ -50,6 +54,12 @@ METHODS = {
                      "eliminate": "Drop every option that merely adds a different wrong preposition or form; what remains is either the one correct phrase or 'No substitution required'.",
                      "traps": ["Assuming an error exists just because the question offers correction options.", "'Comprises of' and 'is comprised of', both of which keep an unwanted 'of'."],
                      "rules": ["cf-r5"], "tech": ["read-whole"]},
+    "q-cf-dual": {"cue": "One sentence with two blanks, and four options each giving two words from a confused pair in some order.",
+                  "standard": "Work out the sense each blank needs on its own first, then find the option that supplies the right word for the first blank and the right word for the second, in that order.",
+                  "fast": "Decide the part of speech or sense each blank needs before looking at the options; an option with both words the right way round is the only one that can fit both blanks.",
+                  "eliminate": "Drop any option built from the wrong pair of words entirely, then drop the option that has the right pair but the two words swapped.",
+                  "traps": ["An option with the right pair of words but in the wrong order for the two blanks.", "An option built from a different, unrelated confused pair altogether."],
+                  "rules": ["cf-r6"], "tech": ["back-substitute"]},
 }
 
 REFS = []
@@ -256,7 +266,23 @@ def practice_items():
            "c": mistake("'Comprise' (with no 's') does not agree with the singular subject 'the committee'.")},
           rules=["cf-r5"], uid="cf-p06"),
     ]
-    return hand + _gen() + rep
+    dual = [
+        q("q-cf-dual", "fill", _F + "I will not ___ you on something I know nothing about, but my honest ___ is always to ask an expert first.",
+          ["advice, advise", "advise, advice", "practice, practise", "practise, practice"], "b",
+          "The first blank needs the verb 'advise' (to offer guidance); the second needs the noun 'advice' (guidance given). So the pair is 'advise, advice', in that order.",
+          {"a": mistake("This has the right pair of words but in the wrong order: the first blank needs the verb 'advise', not the noun 'advice'."),
+           "c": ruled_out("'Practice' (repeated doing) and 'practise' (to do repeatedly) are a different confused pair and do not fit a sentence about giving guidance."),
+           "d": ruled_out("This is the same unrelated practice/practise pair as (c), only reordered, and still does not fit a sentence about giving guidance.")},
+          rules=["cf-r1", "cf-r6"], uid="cf-p07", tech=["back-substitute"]),
+        q("q-cf-dual", "fill", _F + "The tailor said the scarf would ___ my coat perfectly, and I took it as a nice ___ on my choice of colours.",
+          ["complement, compliment", "compliment, complement", "principal, principle", "principle, principal"], "a",
+          "The first blank needs 'complement' (to go well with); the second needs 'compliment' (an expression of praise). So the pair is 'complement, compliment', in that order.",
+          {"b": mistake("This has the right pair but in the wrong order: the first blank needs 'complement' (to go well with), not 'compliment' (praise)."),
+           "c": ruled_out("'Principal' (chief, or head of a college) and 'principle' (a rule) are a different confused pair and do not fit a sentence about matching colours and praise."),
+           "d": ruled_out("This is the same unrelated principal/principle pair as (c), only reordered, and still does not fit this sentence.")},
+          rules=["cf-r2", "cf-r6"], uid="cf-p08", tech=["back-substitute"]),
+    ]
+    return hand + _gen() + rep + dual
 
 
 PYQS = [
@@ -268,4 +294,12 @@ PYQS = [
        "c": mistake("'Comprising of' keeps the same unwanted 'of' in a different grammatical form."),
        "d": mistake("This says no change is needed, but 'comprises of' is a standard error; the 'of' must be dropped.")},
       rules=["cf-r5"], paper="2026-10-09", qno=76, rare=True),
+    q("q-cf-dual", "fill", _F + "The new medication did not ___ the patient's symptoms as expected, so the doctor questioned its overall ___.",
+      ["alter, altar", "altar, alter", "effect, affect", "affect, effect"], "d",
+      "The first blank needs a verb for 'to influence': 'affect'. The second needs a noun for 'a result': 'effect'. So the pair reads 'affect, effect', in that order.",
+      {"a": ruled_out("'Alter' (to change) and 'altar' (a table used in worship) are an unrelated pair; neither word concerns a medication's influence or its result."),
+       "b": ruled_out("This is the same unrelated alter/altar pair as (a), only reordered, and still has nothing to do with a medication's influence or result."),
+       "c": mistake("This has the right pair of words but in the wrong order: the first blank needs the verb 'affect', and the second needs the noun 'effect', not the reverse.")},
+      rules=["cf-r1", "cf-r6"], paper="2026-10-10", qno=83, tech=["back-substitute"],
+      trick="Blank 1 is a verb (affect); blank 2 is a noun after 'overall' (effect)."),
 ]

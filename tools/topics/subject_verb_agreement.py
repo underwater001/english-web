@@ -341,6 +341,22 @@ PYQS = PYQS + [
        "d": mistake("'Is studying' is singular for the same reason, and also drops the sense of an action that has been continuing, not just happening right now.")},
       rules=["sva-r16"], paper="2026-10-09", qno=80),
 ]
+PYQS = PYQS + [
+    q("q-sva-each", "spot-error",
+      "Each sentence below stands on its own. Identify the one that contains a grammatical error.\n"
+      "Mitali's hair is long and black.\n"
+      "Either of the alternatives seem to present major difficulties.\n"
+      "One of the cars in the garage is fifty years old.\n"
+      "Sharon has six brothers.",
+      ["Mitali's hair is long and black.", "Either of the alternatives seem to present major difficulties.",
+       "One of the cars in the garage is fifty years old.", "Sharon has six brothers."], "b",
+      "'Either' is the subject and is singular, so the verb must be 'seems'; the plural 'alternatives' after 'of' does not change it: 'Either of the alternatives seems to present major difficulties.'",
+      {"a": ruled_out("'Mitali's hair is long and black.' has the singular subject 'hair' correctly taking 'is'; there is no error here."),
+       "c": ruled_out("'One of the cars in the garage is fifty years old.' has the singular subject 'One' correctly taking 'is'; 'of the cars' is only a prepositional phrase."),
+       "d": ruled_out("'Sharon has six brothers.' is a correctly formed sentence with a singular subject and 'has'.")},
+      rules=["sva-r1"], paper="2026-10-10", qno=99, tech=["subject-first"],
+      trick="Either/neither/each/every + of + a plural noun still takes a singular verb."),
+]
 
 
 def practice_items():

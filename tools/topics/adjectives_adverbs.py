@@ -26,6 +26,8 @@ NODES = {
                     "summary": "'Enough' follows the adjective or adverb it modifies (brave enough, fast enough), and that word stays in its plain positive form.", "links": []},
     "q-aa-asverb": {"short": "as with certain verbs", "label": "regard/describe/define need 'as'; elect/call/appoint refuse it", "kind": "qtype", "parent": TOPIC, "order": 10,
                     "summary": "Regard, describe, define, treat, view and know take 'as' before the complement; name, elect, think, consider, call, appoint, make and choose take no 'as' at all.", "links": []},
+    "q-aa-asnoun": {"short": "Adjective, not its noun twin", "label": "essential vs essentials, original vs originals", "kind": "qtype", "parent": TOPIC, "order": 11,
+                    "summary": "A few words double as a plain adjective and a related plural noun; describing one single thing's quality needs the adjective, not the plural noun.", "links": []},
 }
 
 RULES = [
@@ -51,6 +53,8 @@ RULES = [
      "ok": "She is wise enough to understand the risk.", "bad": "She is enough wise to understand the risk."},
     {"id": "aa-r11", "node": "q-aa-asverb", "text": "Regard, describe, define, treat, view and know take 'as' before their complement (regarded him as a brother). Name, elect, think, consider, call, appoint, make and choose take the complement directly, with no 'as' at all (elected him president, considered him the best).",
      "ok": "I regard him as my own brother. They elected him the president of the club.", "bad": "I regard him my own brother. They elected him as the president of the club."},
+    {"id": "aa-r12", "node": "q-aa-asnoun", "text": "A few words double as a plain adjective and a related plural noun built from the same root: essential/essentials, original/originals, basic/basics, extra/extras. After 'see/regard/find X as ___', the slot describes a quality of X and needs the plain adjective, not the plural noun, even when the noun looks like a natural fit.",
+     "ok": "Most of them saw the course as essential.", "bad": "Most of them saw the course as essentials."},
 ]
 
 METHODS = {
@@ -114,6 +118,12 @@ METHODS = {
                     "eliminate": "Drop any option that adds 'as' after elect/call/appoint/consider, or drops 'as' after regard/describe/define.",
                     "traps": ["'Considered as the best' and 'appointed him as lecturer' both wrongly add 'as' to a verb that refuses it.", "'Regard him my brother' wrongly drops the 'as' this verb requires."],
                     "rules": ["aa-r11"], "tech": ["read-whole"]},
+    "q-aa-asnoun": {"cue": "A linking verb or 'see/regard/find X as ___' followed by a word that could also be read as a plural noun (essentials, originals, basics).",
+                    "standard": "Decide whether the slot describes a quality of one single thing (needs the plain adjective) or names an actual set of items (needs the plural noun).",
+                    "fast": "If a singular 'it' or a single named thing is what's being described, use the plain adjective, not the plural noun.",
+                    "eliminate": "Drop the plural-noun reading whenever the sentence is attributing a quality to one thing, not listing a group of items.",
+                    "traps": ["'Essentials' looks natural after 'as' because it is a common standalone noun (the essentials of cooking), but 'saw it as ___' describes 'it' and needs the adjective 'essential'."],
+                    "rules": ["aa-r12"], "tech": ["read-whole"]},
 }
 
 REFS = []
@@ -145,6 +155,14 @@ PYQS = [
        "c": mistake("'Other than impressive' means different from impressive, which would mean not impressive."),
        "d": ruled_out("'Rather than impressive' is not a comparison of degree.")},
       rules=["aa-r2"], paper=S3, qno=97, tech=["context-clue"], trick="More than = beyond."),
+    q("q-aa-asnoun", "spot-error", _S + "When asked why students had enrolled in the geometry class, 85% of them saw it as essentials.",
+      ["When asked why students had enrolled", "in the geometry class,", "85% of them saw it as essentials.", "No error"], "c",
+      "'Saw it as ___' describes a quality of 'it' (the class), which needs the plain adjective 'essential', not the plural noun 'essentials'; it should read 'saw it as essential'.",
+      {"a": ruled_out("'When asked why students had enrolled' is a correctly built opening clause."),
+       "b": ruled_out("'In the geometry class,' is a correct continuation of the opening clause."),
+       "d": mistake("This says there is no error, but the third segment wrongly uses the plural noun 'essentials' where the singular adjective 'essential' is needed.")},
+      rules=["aa-r12"], paper="2026-10-10", qno=88, tech=["read-whole"],
+      trick="essential (a quality of one thing) vs essentials (a set of actual items): 'saw it as' names a quality."),
 ]
 
 
@@ -254,4 +272,10 @@ def practice_items():
           "'Regard' requires 'as' before its complement; it should read 'regarded him as his best student'.",
           {"a": ruled_out("'The teacher always' is a correct opening."), "c": ruled_out("'Student and' is a correct continuation once 'as' is added."), "d": ruled_out("'Praised his sincerity' is a correct closing phrase.")},
           rules=["aa-r11"], uid="aa-p19", tech=["read-whole"], rare=True),
+        q("q-aa-asnoun", "spot-error", _S + "When the course ended, / most of the new recruits said / they now saw the safety briefing as essentials / for the job ahead.",
+          ["When the course ended,", "most of the new recruits said", "they now saw the safety briefing as essentials", "for the job ahead."], "c",
+          "'Saw the briefing as ___' describes a quality of the briefing, which needs the plain adjective 'essential', not the plural noun 'essentials'.",
+          {"a": ruled_out("'When the course ended,' is a correct opening clause."), "b": ruled_out("'Most of the new recruits said' is a correctly built reporting clause."),
+           "d": ruled_out("'For the job ahead.' is a correct closing phrase.")},
+          rules=["aa-r12"], uid="aa-p20", tech=["read-whole"]),
     ]

@@ -205,6 +205,13 @@ _EXTRA = [
        "c": ruled_out("This places 2, the stage demonstration, before 1 has explained why tailors were avoiding zips in the first place."),
        "d": ruled_out("This opens with 2, the stage demonstration, before the zip fastener itself (3) has been introduced at all.")},
       rules=["pj-r1", "pj-r2"], uid="pj-p15", tech=["first-sentence", "connectors"]),
+    q("q-pj-para", "rearrange", _R2 + "1. For centuries, a letter's recipient, not its sender, paid the postman for delivery.\n2. This arrangement left postmen stuck with letters whose recipients refused to pay, so reform became necessary.\n3. In 1840 the Penny Black let the sender prepay with a stamp instead, solving the problem at a stroke.\n4. Other countries copied the idea so quickly that, within a decade, a sender almost anywhere could prepay a letter with a stamp of their own.",
+      ["1, 2, 3, 4", "2, 1, 3, 4", "1, 3, 2, 4", "3, 1, 2, 4"], "a",
+      "1 sets up the old system of recipient-paid postage. 2 ('this arrangement') explains why it broke down. 3 introduces the Penny Black as the fix. 4 reports how quickly other countries copied it.",
+      {"b": mistake("This opens with 2, 'this arrangement', before 1 has named the arrangement it refers to."),
+       "c": mistake("This places 3, the Penny Black's fix, before 2 has explained the problem with the old system that the fix was solving."),
+       "d": ruled_out("This opens with 3, the Penny Black, before 1 has even described the older system it replaced.")},
+      rules=["pj-r1", "pj-r2"], uid="pj-p16", tech=["first-sentence", "connectors"]),
 ]
 
 
@@ -300,7 +307,65 @@ _PYQ4 = [
        "d": ruled_out("This opens with R, few becoming wealthy, before P and Q have set up the migration and the prospectors it drew at all.")},
       rules=["pj-r1", "pj-r2"], paper="2026-10-09", qno=94, tech=["first-sentence", "connectors"]),
 ]
-PYQS = PYQS + _PYQ2 + _PYQ3 + _PYQ4
+_PYQ5 = [
+    q("q-pj-fixed", "rearrange",
+      "The first and the last sentences of a paragraph (S1 and S2) are fixed. Arrange A, B, C and D in the correct order between them:\n"
+      "S1 Then, one day, she was up, playing; Isabel was in the kitchen fixing lunch for the two boys when they'd come in from school, and she heard Grace fall down in the living room.\n"
+      "A. And she ran to the living room and there was little Grace on the floor, all twisted up, and the reason she hadn't screamed was that she couldn't get her breath.\n"
+      "B. When you have a lot of children you don't always start running when one of them falls, unless they start screaming or something.\n"
+      "C. Yet, Isabel says that when she heard that thump and then that silence, something happened in her to make her afraid.\n"
+      "D. And, this time, Grace was quiet.\n"
+      "S2 And when she did scream, it was the worst sound, Isabel says, that she'd ever heard in all her life, and she still hears it sometimes in her dreams.",
+      ["ADBC", "DCBA", "BDCA", "DCAB"], "c",
+      "B explains why Isabel did not react the instant Grace fell. D notes that, unlike other falls, this time there was no scream, just quiet. C has the silence frighten her. A shows her running in and finding Grace unable to breathe, leading into S2's scream.",
+      {"a": mistake("This opens with A, Isabel already running to Grace, before B has given the reason she did not react at once and before D and C explain why this fall felt different."),
+       "b": mistake("This places B, the general reason for not running at every fall, after D and C instead of right after S1, where it explains her first reaction."),
+       "d": ruled_out("This ends with B, the general reason for not running, after Isabel has already reached Grace in A, putting the explanation after the action it explains.")},
+      rules=["pj-r4"], paper="2026-10-10", qno=81, tech=["first-sentence", "pair-up"]),
+    q("q-pj-process", "rearrange", _R1 + "P. He created mockups of each screen the user would view in order to build the user interface.\nQ. He programmed the app's features and response, writing the fundamental logic.\nR. He fixed errors and made sure the app ran well by testing it on a variety of devices.\nS. He made the finished product available for download by uploading it to the app store.",
+      ["RQPS", "QPRS", "SQRP", "PQRS"], "d",
+      "Mockups of the screens (P) must exist before the features and logic can be programmed (Q); the app is then tested and fixed (R) before the finished product is uploaded for download (S): P, Q, R, S.",
+      {"a": mistake("This starts with R, testing and fixing errors, before Q has written the logic and P has even designed the screens there would be to test."),
+       "b": mistake("This programs the features (Q) before the mockups (P) that define what those features look like have been created."),
+       "c": ruled_out("This uploads the finished product (S) first, before any of the design, programming or testing steps that produce it have happened.")},
+      rules=["pj-r3"], paper="2026-10-10", qno=87, tech=["first-sentence", "pair-up"], trick="Design, then build, then test, then release."),
+    q("q-pj-fixed", "rearrange",
+      "The first and the last sentences of a paragraph (S1 and S2) are fixed. Arrange A, B, C and D in the correct order between them:\n"
+      "S1 One day, as he was walking about beneath the tree, he saw several young snakes coming out of a hole in the ground.\n"
+      "A. I left you starving, and now here you are, well and strong!\n"
+      "B. When they grew strong and began to move about in the jungle, they met their mother, who exclaimed: I can't believe it!\n"
+      "C. The herdsman felt sorry for them, so every day he gave them some milk.\n"
+      "D. They looked thin and miserable.\n"
+      "S2 They told her how the herdsman had taken care of them.",
+      ["DCBA", "CDAB", "BDCA", "ACBD"], "a",
+      "D describes the snakes as thin and miserable right after S1 introduces them. C has the herdsman take pity and feed them. B moves time forward to when they are strong and meet their mother, who begins to exclaim. A continues that same exclamation, leading into S2's account of what they told her.",
+      {"b": mistake("This places D, the snakes being thin and miserable, after C, the herdsman already feeding them out of pity, reversing the cause and its effect; it also puts A before B, though A continues the very exclamation B begins."),
+       "c": ruled_out("This opens with B, the mother's exclamation, before D and C have even described the snakes' condition and the herdsman's care that the mother is reacting to."),
+       "d": mistake("This opens with A, the second half of the mother's exclamation, before B has given its first half, and ends with D, the snakes' condition, which belongs right after S1, not last.")},
+      rules=["pj-r4"], paper="2026-10-10", qno=90, tech=["first-sentence", "pair-up"]),
+    q("q-pj-fixed", "rearrange",
+      "The first and the last sentences of a paragraph (S1 and S2) are fixed. Arrange A, B, C and D in the correct order between them:\n"
+      "S1 Although he was married, with children, his was a solitary disposition; he liked best to work alone.\n"
+      "A. Autumn was best for this, better than spring.\n"
+      "B. It pleased him when he was given a bank to build up or a gate to mend at the far end of the peninsula, where the sea surrounded the farmland on either side.\n"
+      "C. Then, at midday, he would pause and eat the pasty that his wife had baked for him and, sitting on the cliff's edge, would watch the birds.\n"
+      "D. In spring the birds flew inland, purposeful, intent; they knew where they were bound; the rhythm and ritual of their life brooked no delay.\n"
+      "S2 In autumn those that had not migrated overseas but remained to pass the winter were caught up in the same driving urge, but because migration was denied them, followed a pattern of their own.",
+      ["BCAD", "BACD", "ACDB", "CDAB"], "a",
+      "B describes the solitary work at the far end of the peninsula that S1 introduces. C adds his midday habit of watching the birds there. A names autumn as the best season for this watching. D then describes what the birds do in spring, setting up the contrast that S2 continues with what they do in autumn.",
+      {"b": mistake("This places A, 'autumn was best for this', directly after B, before C has described the midday bird-watching that 'this' refers to."),
+       "c": ruled_out("This opens with A, 'autumn was best for this', before either B or C has introduced the work or the bird-watching that 'this' points to, and ends with B, which belongs right after S1."),
+       "d": mistake("This opens with C, the midday bird-watching, before B has described the peninsula work this routine is part of, and places B last instead of right after S1.")},
+      rules=["pj-r4"], paper="2026-10-10", qno=91, tech=["first-sentence", "pair-up"]),
+    q("q-pj-para", "rearrange", _R2 + "A. Sleep, long regarded as a passive interval between useful hours, is now understood as a period of intense metabolic housekeeping.\nB. The implication is uncomfortable for a culture that treats sleeplessness as a badge of industry.\nC. During it, the brain flushes out proteins whose accumulation is associated with degenerative disease.\nD. Deprivation, therefore, is not merely tiring; it is corrosive.",
+      ["ACDB", "ADCB", "CADB", "ABCD"], "a",
+      "A names sleep as a period of housekeeping. C explains what happens 'during it': the brain flushing out harmful proteins. D draws the consequence with 'therefore': deprivation is corrosive. B then states the cultural implication of that claim.",
+      {"b": mistake("This places D, 'therefore ... corrosive', directly after A, before C has given the protein-flushing process that D's 'therefore' is concluding from."),
+       "c": ruled_out("This opens with C, 'during it', before A has introduced the period of housekeeping that 'it' refers to."),
+       "d": mistake("This places B, the cultural implication, directly after A, before C's mechanism and D's consequence have given anything for the implication to refer to.")},
+      rules=["pj-r1", "pj-r2"], paper="2026-10-10", qno=100, tech=["first-sentence", "connectors"]),
+]
+PYQS = PYQS + _PYQ2 + _PYQ3 + _PYQ4 + _PYQ5
 
 
 def practice_items():

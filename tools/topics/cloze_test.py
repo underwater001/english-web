@@ -112,6 +112,26 @@ _P5 = ("An arbitral tribunal, entrusted with resolving commercial disputes outsi
        "become routine, the appearance of fairness can __4__ its substance altogether, however scrupulously the final award is reasoned.")
 
 
+_P7 = ("The potter's wheel has survived every forecast of its own disappearance. Each generation of factory owners has confidently "
+       "predicted its __1__, and each has been forced to watch the wheel keep turning in villages where large machines never arrived. "
+       "Part of the reason is economic: a wheel costs almost nothing, takes up a corner of a courtyard, and can be __2__ by a single "
+       "artisan with no engine, no warehouse and no fixed shift. But economics alone does not explain why the craft endures. A "
+       "hand-thrown pot carries small asymmetries, a rim that is not quite round, a glaze that pools unevenly, that a factory mould is "
+       "built to avoid, and collectors have lately begun to __3__ precisely those marks as proof that a human hand, not a machine, made "
+       "the piece. What the factory treats as a flaw, the market has learned to read as a signature. Government schemes, meanwhile, "
+       "have not helped as much as their budgets suggest. Programmes drafted in distant offices tend to __4__ potters as recipients of "
+       "charity rather than as entrepreneurs running their own trade, handing out small grants while leaving the chain of debt and "
+       "middlemen completely untouched. The potters' own associations argue, not without reason, that what the craft needs is not "
+       "charity but access, to clay at a fair price, to new designs, and above all to the buyer, from whom they remain __5__ by a "
+       "string of traders who keep most of the margin for themselves.")
+
+
+_P8 = ("City planners have begun to treat noise as seriously as they treat air quality, since chronic exposure to traffic noise is now "
+       "__1__ linked to raised blood pressure and disturbed sleep. A few cities have experimented with porous road surfaces that absorb "
+       "engine noise rather than reflecting it, and early results suggest the change is __2__ enough to notice within a single afternoon "
+       "of walking the affected street.")
+
+
 def practice_items():
     return [
         _c("cz-p01", "q-cz-sense", _P1, 1, ["anything", "nothing", "something", "everything"], "b",
@@ -185,6 +205,18 @@ def practice_items():
            {"b": mistake("'Theoretical' repeats the very idea the sentence is contrasting against ('exists only on paper'), rather than opposing it."),
             "c": ruled_out("'Optional' is about choice, not about whether the service can be trusted to exist."),
             "d": ruled_out("'Expensive' is about cost, which the sentence never raises.")},
+           ["cz-r3", "cz-r4"], ["context-clue"]),
+        _c("cz-p13", "q-cz-sense", _P8, 1, ["firmly", "loosely", "rarely", "vaguely"], "a",
+           "The sentence states an established medical link serious enough for city planners to act on, which calls for 'firmly' (strongly, solidly), not a word suggesting the link is weak or uncertain.",
+           {"b": mistake("'Loosely linked' suggests a weak, uncertain connection, which contradicts treating noise 'as seriously as' air quality."),
+            "c": ruled_out("'Rarely linked' would mean the connection is seldom found at all, the opposite of the established link the sentence describes."),
+            "d": ruled_out("'Vaguely linked' suggests an unclear connection, again the opposite of a link serious enough to prompt city planning.")},
+           ["cz-r3", "cz-r4"], ["context-clue"]),
+        _c("cz-p14", "q-cz-sense", _P8, 2, ["significant", "negligible", "theoretical", "permanent"], "a",
+           "A change 'enough to notice within a single afternoon' must be a sizeable one, which is 'significant'; 'negligible' means too small to matter, the opposite.",
+           {"b": mistake("'Negligible' means too small to matter, which contradicts a change noticeable within a single afternoon of walking."),
+            "c": ruled_out("'Theoretical' means existing only in theory, not actually observed, which contradicts 'early results suggest'."),
+            "d": ruled_out("'Permanent' describes how long a change lasts, not how large or noticeable it is.")},
            ["cz-r3", "cz-r4"], ["context-clue"]),
     ]
 
@@ -274,4 +306,34 @@ PYQS = [
          "c": ruled_out("'Vindicate' means to clear of blame or show to be right, the opposite of spoiling something."),
          "d": ruled_out("'Ameliorate' means to make better, again the opposite of what unchecked delay does to fairness.")},
         ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-09", qno=93, rare=True),
+    _cq("cz-oct10-93", "q-cz-sense", _P7, 1, ["inception", "demise", "resurgence", "decree"], "b",
+        "Every earlier forecast has failed, so the blank needs a word for 'coming to an end'; 'demise' fits that sense exactly.",
+        {"a": mistake("'Inception' means the beginning of something, the opposite of what each generation keeps predicting for the craft."),
+         "c": mistake("'Resurgence' means a revival or renewed rise, again the opposite of the ending each generation forecasts."),
+         "d": ruled_out("'Decree' is an official order; it does not describe a craft coming to an end.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-10", qno=93, rare=True),
+    _cq("cz-oct10-94", "q-cz-sense", _P7, 2, ["plied", "levied", "forged", "hewn"], "a",
+        "The sentence needs a verb for 'carried on' or 'worked at' by a single artisan; 'plied' (as in 'to ply a trade') fits exactly.",
+        {"b": ruled_out("'Levied' means imposed or collected, as with a tax; it does not describe a craft being carried on."),
+         "c": mistake("'Forged' suggests shaping metal by hammering, which might tempt a reader thinking of a workshop, but it does not fit 'a trade carried on by a single artisan'."),
+         "d": ruled_out("'Hewn' means cut or shaped by force, usually from stone or wood, not a trade being carried on.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-10", qno=94, rare=True),
+    _cq("cz-oct10-95", "q-cz-sense", _P7, 3, ["deplore", "forfeit", "mimic", "prize"], "d",
+        "The sentence needs a verb meaning 'to value highly'; collectors have begun to 'prize' those very imperfections as proof of a human maker.",
+        {"a": mistake("'Deplore' means to strongly disapprove of, the opposite of valuing the marks as proof of authenticity."),
+         "b": ruled_out("'Forfeit' means to lose a right through some failure; it has nothing to do with valuing an imperfection."),
+         "c": mistake("'Mimic' means to imitate, which would mean copying the flaw deliberately, not valuing it when it occurs naturally.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-10", qno=95, rare=True),
+    _cq("cz-oct10-96", "q-cz-sense", _P7, 4, ["cast", "enlist", "absolve", "nominate"], "a",
+        "The sentence needs a verb for 'assign a role to'; schemes 'cast potters as recipients of charity', the sense of giving someone a part in a story rather than letting them choose it.",
+        {"b": mistake("'Enlist' means to recruit someone's help for a cause; it does not capture the sense of assigning a passive role to someone."),
+         "c": ruled_out("'Absolve' means to free someone from blame, unrelated to assigning them a role."),
+         "d": mistake("'Nominate' means to formally propose someone for a position, which does not fit 'as recipients of charity' the way 'cast ... as' does.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-10", qno=96, rare=True),
+    _cq("cz-oct10-97", "q-cz-sense", _P7, 5, ["inoculated", "insulated", "instigated", "inculcated"], "b",
+        "The sentence needs a word for 'kept apart or shielded'; the potters remain 'insulated' from the buyer by the traders standing between them.",
+        {"a": mistake("'Inoculated' means given a vaccine, or figuratively made immune to something; it loosely shares the 'protected' idea but does not fit 'from the buyer' the way 'insulated' does."),
+         "c": ruled_out("'Instigated' means stirred up or caused to happen, unrelated to being kept apart from a buyer."),
+         "d": ruled_out("'Inculcated' means instilled an idea into someone over time, unrelated to being kept apart from a buyer.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-10", qno=97, rare=True),
 ]

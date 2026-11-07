@@ -189,6 +189,15 @@ _W = [
      "The judge was lenient with the first-time offender.", "kind", False),
     ("abundant", "abundant", "adj", "Present in large quantity.", ["plentiful", "ample", "profuse", "bountiful"], ["scanty", "meagre", "sparse", "deficient"],
      "Fish are abundant in the delta.", "quantity", False),
+    # words from the 10 Oct 2026 paper
+    ("pristine", "pristine", "adj", "In its original condition; completely clean and unspoiled.", ["immaculate", "unspoiled", "spotless", "untouched"], ["sullied", "tainted", "soiled", "contaminated"],
+     "The explorers found the glacier valley still pristine, with no sign that anyone had passed through.", "clean", False),
+    ("virtue", "virtue", "noun", "A good moral quality or behaviour.", ["goodness", "morality", "integrity", "righteousness"], ["vice", "immorality", "corruption", "depravity"],
+     "Patience was a virtue her grandmother practised every single day.", "moral", False),
+    ("egalitarian", "egalitarian", "adj", "Believing that all people are equal and deserve equal rights and opportunities.", ["equal", "equitable", "fair", "democratic"], ["biased", "discriminatory", "unequal", "prejudiced"],
+     "The club ran on egalitarian lines, giving every member an equal vote regardless of rank.", "equality", True),
+    ("ebullient", "ebullient", "adj", "Full of energy, excitement and high spirits.", ["joyful", "exuberant", "elated", "buoyant"], ["gloomy", "dejected", "despondent", "downcast"],
+     "The ebullient crowd cheered every goal the home team scored.", "spirit", True),
 ]
 
 WORDS = [word(i, w, "word", m, pos=p, syn=s, ant=a, ex=e) for i, w, p, m, s, a, e, g, r in _W]
@@ -374,6 +383,31 @@ PYQS = [
         {"a": mistake("Honor is a synonym of venerate."), "c": mistake("Respect is a synonym of venerate."),
          "d": mistake("Admire is a synonym of venerate.")},
         lex=("ant", "venerate"), rules=["sa-r2"], tech=["opposite-trap"]),
+    _pq(77, "2026-10-10", "q-ant", "antonym", "Which word is most dissimilar in meaning to the given word?\nPristine", ["Primal", "Sullied", "Spacious", "Precious"], "b",
+        "Pristine means in its original, unspoiled condition; sullied means made dirty or corrupted, the reverse.",
+        {"a": mistake("Primal describes an earliest or original state, which is close to pristine's own sense of being untouched, not its opposite."),
+         "c": ruled_out("Spacious refers to roominess; it has nothing to do with being spoiled or kept clean."),
+         "d": ruled_out("Precious means highly valued; it is unrelated to whether something is unspoiled.")},
+        lex=("ant", "pristine"), rules=["sa-r2"], tech=["opposite-trap"]),
+    _pq(78, "2026-10-10", "q-ant", "antonym", "In the following question, choose the alternative opposite in meaning of the given word.\nVirtue", ["Vice", "Quality", "Wickedness", "Crime"], "a",
+        "Virtue means a good moral quality; vice means the reverse, a bad moral quality or failing.",
+        {"b": ruled_out("Quality is a neutral word for any characteristic, good or bad; it does not by itself reverse virtue's sense of a GOOD quality."),
+         "c": mistake("Wickedness is close in sense to vice and can look like the answer, but it names active evildoing rather than the plain moral opposite 'vice' gives."),
+         "d": ruled_out("Crime is one specific unlawful act, not a general word for the opposite of virtue.")},
+        lex=("ant", "virtue"), rules=["sa-r2"], tech=["opposite-trap"]),
+    _pq(92, "2026-10-10", "q-ant", "antonym", 'What is the antonym of "Egalitarian"?', ["Fair", "Biased", "Democratic", "Equitable"], "b",
+        "Egalitarian means believing all people are equal and deserve equal treatment; biased means favouring one side unfairly, the reverse.",
+        {"a": mistake("Fair is a synonym of egalitarian: treating everyone the same way."),
+         "c": mistake("Democratic is a synonym of egalitarian in this sense of equal rights for all."),
+         "d": mistake("Equitable is a synonym of egalitarian: giving everyone a fair, equal share.")},
+        lex=("ant", "egalitarian"), rare=True, rules=["sa-r2", "sa-r1"], tech=["tone", "opposite-trap"]),
+    _pq(98, "2026-10-10", "q-syn", "synonym", "Select the most appropriate synonym of the word: Ebullient", ["Depressed", "Joyful", "Melancholy", "Gloomy"], "b",
+        "Ebullient means full of energy, excitement and high spirits; joyful carries the same upbeat sense.",
+        {"a": mistake("Depressed means low in spirits, the opposite of the high spirits 'ebullient' describes."),
+         "c": mistake("Melancholy means sad and thoughtful, the opposite of ebullient's high spirits."),
+         "d": mistake("Gloomy means dark or without cheer, again the opposite of ebullient.")},
+        lex=("syn", "ebullient"), rare=True, rules=["sa-r1", "sa-r3"], tech=["tone", "opposite-trap", "root-prefix"],
+        trick="E- (out) + bullire (to boil): to boil over with high spirits, i.e. joyful."),
 ]
 
 

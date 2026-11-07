@@ -327,7 +327,26 @@ _PYQ4 = [
       rules=["ap-r10"], paper="2026-10-09", qno=88, tech=["eliminate-pair"],
       caution="Only the inner infinitive ('to be made' -> 'to make') is converted; the outer frame 'are (not) expected to' is left untouched because it was never the thing being made active."),
 ]
-PYQS = PYQS + _PYQ2 + _PYQ3 + _PYQ4
+_PYQ5 = [
+    q("q-ap-passive", "transform", _P + "The curator will have catalogued the entire bequest by June.",
+      ["The entire bequest will have been catalogued by the curator by June.", "The entire bequest would have been catalogued by the curator by June.",
+       "The entire bequest will be catalogued by the curator by June.", "The entire bequest has been catalogued by the curator by June."], "a",
+      "The active verb 'will have catalogued' is future perfect, so the passive keeps both the future and the perfect aspect: will have been + past participle.",
+      {"b": mistake("'Would' changes the modal from 'will' to a different one, shifting the tense."),
+       "c": mistake("'Will be catalogued' is the plain future, which drops the perfect aspect that 'by June' needs."),
+       "d": mistake("'Has been catalogued' is the present perfect, a different tense from the future perfect original.")},
+      rules=["ap-r1"], paper="2026-10-10", qno=76, tech=["eliminate-pair"], trick="will have + V3 -> will have been + V3."),
+    q("q-ap-passive", "transform", _P + "Who tampered with the records?",
+      ["Who were the records tampered with?", "By whom were the records tampered with?",
+       "By whom the records were tampered?", "Whom were the records tampered by?"], "b",
+      "'Who' is the agent being asked about in a simple past question, so it becomes 'by whom', and the phrasal verb 'tampered with' keeps its particle 'with' right after the past participle: 'By whom were the records tampered with?'",
+      {"a": mistake("'Who' is the subject form; once the sentence turns passive the unknown agent must be named 'by whom', not bare 'who'."),
+       "c": ruled_out("This keeps the statement word order 'the records were tampered' instead of the question order 'were the records tampered', and drops the particle 'with'."),
+       "d": mistake("'Tampered with' is a single phrasal verb; moving 'by' to where 'with' belongs changes the preposition the verb needs.")},
+      rules=["ap-r3", "ap-r9"], paper="2026-10-10", qno=82, tech=["eliminate-pair"],
+      trick="Who V (object)? -> By whom was/were (object) V-ed? Keep any phrasal particle right after the participle."),
+]
+PYQS = PYQS + _PYQ2 + _PYQ3 + _PYQ4 + _PYQ5
 
 
 def practice_items():
