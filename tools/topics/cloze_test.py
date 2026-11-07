@@ -62,6 +62,12 @@ _P2 = ("Weather forecasting improved more in the last forty years than in the fo
        "statement. The honest number is more useful than the confident one, __5__ it is harder to put on a television screen.")
 
 
+_P6 = ("Urban planners have long debated whether a city's transport network should be designed around private cars or public transit, but the "
+       "clearest lesson from the last two decades is that the two cannot expand together forever: road space is __1__, and every new lane added "
+       "for cars quickly fills with more traffic than it was built to carry. Cities that have instead invested in frequent, reliable buses and "
+       "trains have found that commuters switch readily once the alternative is actually __2__, rather than a timetable that exists only on paper.")
+
+
 def _c(uid, qtype, para, n, opts, key, why, wrong, rules, tech, rare=False):
     text = f"In the paragraph below, select the most appropriate option for blank {n}.\n\n" + para.replace(f"__{n}__", "[[___]]")
     for k in range(1, 6):
@@ -94,6 +100,16 @@ _P4 = ("After thirty years on the bench, Judge Ortiz had grown accustomed to the
        "entirely __4__ slip, a wrong date, a misremembered colour, ever read as harmless once suspicion had taken hold. What she still believed, "
        "after all those years, was that a patient, __5__ witness, one who corrected their own small errors rather than cover them, usually won a "
        "jury over in the end, however long it took.")
+
+
+_P5 = ("An arbitral tribunal, entrusted with resolving commercial disputes outside the ordinary courts, draws its authority not from any claim to "
+       "coercive power but from the confidence of the parties who submit to its award. Where a tribunal's reasoning is transparent and its procedure "
+       "evenly applied, an award commands voluntary compliance; where it is not, the promise of a binding decision risks becoming a __1__ formality, "
+       "honoured in name but ignored in practice. At the same time, a tribunal must resist the temptation to expand its own brief, lest its members "
+       "__2__ powers of review that the parties never conferred on them and that properly belong to a court of appeal. This tension between deference "
+       "and vigilance is compounded by a further difficulty: the sheer __3__ with which many tribunals move from filing to final award, a slowness "
+       "that leaves commercial relationships in limbo for years and erodes the very confidence the system depends on. Where delay is allowed to "
+       "become routine, the appearance of fairness can __4__ its substance altogether, however scrupulously the final award is reasoned.")
 
 
 def practice_items():
@@ -158,6 +174,18 @@ def practice_items():
             "c": ruled_out("'So that' gives a purpose, and being hard to show on a screen is not a purpose."),
             "d": ruled_out("'As if' introduces a comparison, which the sentence is not making.")},
            ["cz-r3"], ["connectors"]),
+        _c("cz-p11", "q-cz-sense", _P6, 1, ["finite", "abundant", "renewable", "cheap"], "a",
+           "Lanes added for cars 'quickly fill with more traffic than it was built to carry' only if the supply of road space cannot keep growing, so the blank needs 'finite', meaning limited in amount.",
+           {"b": mistake("'Abundant' says there is plenty of road space, the opposite of a space that fills up as fast as it is built."),
+            "c": ruled_out("'Renewable' describes a resource that replenishes itself, not one that is simply limited in amount."),
+            "d": ruled_out("'Cheap' is about cost, not about how much road space exists.")},
+           ["cz-r3", "cz-r4"], ["context-clue"]),
+        _c("cz-p12", "q-cz-sense", _P6, 2, ["credible", "theoretical", "optional", "expensive"], "a",
+           "The contrast with 'a timetable that exists only on paper' shows the blank needs a word for something commuters can actually believe in and rely on, which is 'credible'.",
+           {"b": mistake("'Theoretical' repeats the very idea the sentence is contrasting against ('exists only on paper'), rather than opposing it."),
+            "c": ruled_out("'Optional' is about choice, not about whether the service can be trusted to exist."),
+            "d": ruled_out("'Expensive' is about cost, which the sentence never raises.")},
+           ["cz-r3", "cz-r4"], ["context-clue"]),
     ]
 
 
@@ -222,4 +250,28 @@ PYQS = [
          "c": ruled_out("'Prolix' means tediously long-winded, unrelated to honesty."),
          "d": ruled_out("'Vituperative' means harshly abusive in language, unrelated to a witness correcting their own errors.")},
         ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-08", qno=80, rare=True),
+    _cq("cz-q89", "q-cz-sense", _P5, 1, ["nugatory", "inviolable", "sacrosanct", "immutable"], "a",
+        "A formality that is 'honoured in name but ignored in practice' has no real force, which is exactly 'nugatory': having no practical value or effect.",
+        {"b": ruled_out("'Inviolable' means never to be broken or dishonoured, the opposite of a promise that is ignored in practice."),
+         "c": ruled_out("'Sacrosanct' means too important to be interfered with, again the opposite of an ignored formality."),
+         "d": ruled_out("'Immutable' means unable to be changed, which says nothing about whether the promise is honoured or ignored.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-09", qno=89, rare=True),
+    _cq("cz-q90", "q-cz-sense", _P5, 2, ["usurp", "abrogate", "repudiate", "circumscribe"], "a",
+        "Tribunal members taking for themselves a power of review 'that the parties never conferred on them' are seizing an authority they have no right to, which is to 'usurp' it.",
+        {"b": mistake("'Abrogate' means to formally repeal or do away with a law or agreement, not to seize a power for oneself."),
+         "c": ruled_out("'Repudiate' means to reject or refuse to accept something, the opposite of seizing it."),
+         "d": ruled_out("'Circumscribe' means to restrict within limits, not to take a power for oneself.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-09", qno=90, rare=True),
+    _cq("cz-q91", "q-cz-sense", _P5, 3, ["obfuscation", "dilatoriness", "intransigence", "equivocation"], "b",
+        "The sentence itself glosses the word as 'a slowness that leaves commercial relationships in limbo for years', which is 'dilatoriness': a tendency to delay.",
+        {"a": ruled_out("'Obfuscation' means making something unclear or confusing, not moving slowly."),
+         "c": mistake("'Intransigence' means refusing to change one's position, not taking a long time to reach a decision."),
+         "d": ruled_out("'Equivocation' means using ambiguous language to avoid committing to a position, unrelated to slowness.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-09", qno=91, rare=True),
+    _cq("cz-q93", "q-cz-sense", _P5, 4, ["obviate", "vitiate", "vindicate", "ameliorate"], "b",
+        "Delay that erodes confidence can spoil the real fairness of the process even while the final award looks correct on paper, which is to 'vitiate' its substance: to impair or corrupt it.",
+        {"a": ruled_out("'Obviate' means to remove a need or difficulty in advance, which does not fit 'can ___ its substance'."),
+         "c": ruled_out("'Vindicate' means to clear of blame or show to be right, the opposite of spoiling something."),
+         "d": ruled_out("'Ameliorate' means to make better, again the opposite of what unchecked delay does to fairness.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-09", qno=93, rare=True),
 ]

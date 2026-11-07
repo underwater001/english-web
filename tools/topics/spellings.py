@@ -66,6 +66,8 @@ _S = [
     ("conscientious", "conscientious", ["consciencious", "conscientous", "conscienscious"], "Say every syllable: con-sci-en-tious, from 'conscience'.", "sp-r6", True, "A conscientious worker checks every report before submitting it."),
     ("indispensable", "indispensable", ["indispensible", "indispensibel", "indispensanble"], "Ends in -able, not -ible: in-dis-pens-a-ble.", "sp-r6", True, "Clean water is indispensable for good health."),
     ("entrepreneur", "entrepreneur", ["entreprenuer", "entrepeneur", "enterpreneur"], "Say every syllable: en-tre-pre-neur, borrowed whole from French.", "sp-r6", True, "The young entrepreneur started three companies before turning thirty."),
+    ("ameliorate", "ameliorate", ["ameliarate", "ameliorute", "amelliorate"], "From the Latin melior (better): a-me-lio-rate.", "sp-r6", True, "The new drainage scheme helped ameliorate the flooding every monsoon."),
+    ("magnanimity", "magnanimity", ["magnanimaty", "magnaminity", "magnanimety"], "From magnanimous: mag-na-nim-i-ty.", "sp-r6", True, "The king's magnanimity surprised even his former enemies."),
     ("euphemism-spell", "euphemism", ["euphamism", "eupheism", "euphemisim"], "Say every syllable: eu-phe-mism.", "sp-r6", True, "'Passed away' is a common euphemism for 'died'."),
     ("fractious", "fractious", ["fracteous", "fractous", "fractiuos"], "Say every syllable: frac-tious, from the same root as 'fraction'.", "sp-r6", True, "The fractious toddler refused to nap."),
     ("willful", "willful", ["wilfull", "willfull", "wifull"], "The American spelling doubles the l in 'will': will-ful. ('Wilful', with one l, is the British spelling and is also accepted.)", "sp-r6", True, "His willful disregard for the rules angered the committee."),
@@ -246,6 +248,7 @@ PYQ_TEXT = {
     (S3, 95): "Identify the correct spelling of the term for chromosomal 'three copies'.",
     ("2026-10-07", 87): "Choose the correctly spelt word.",
     ("2026-10-08", 96): "Choose the correctly spelt word from the given options.",
+    ("2026-10-09", 77): "Select the wrongly spelt word out of the four alternatives.",
 }
 
 PYQS = [
@@ -277,6 +280,8 @@ PYQS = [
     _pc(96, "2026-10-08", "playwright", ["Playright", "Playrite", "Playwrite", "Playwright"], "d",
         "The ending is '-wright' (one who makes something, as in 'wheelwright'), not '-write' or '-right'; 'playwright' is spelt with 'wright'.",
         trick="Play + wright, as in wheelwright: one who makes plays."),
+    _pm(77, "2026-10-09", "ameliorate", ["Perseverance", "Ameliarate", "Conscience", "Magnanimity"], "b",
+        "'Ameliarate' is wrong; the correct spelling is 'ameliorate', from the Latin melior (better): a-me-lio-rate.", trick="A-me-lio-rate: from melior, better."),
 ]
 
 

@@ -144,4 +144,13 @@ def practice_items():
     ]
 
 
-PYQS = []
+PYQS = [
+    q("q-qt-tag", "spot-error", "The following sentence has been split into four segments. Identify the segment that contains a grammatical error. If there is no error, select option d.\n"
+      "The board, despite reiterating its commitment to humane restructuring, / has not approved the proposed retrenchment pause, / do they, given the present credit-watch outlook?",
+      ["The board, despite reiterating its commitment to humane restructuring,", "has not approved the proposed retrenchment pause,", "do they, given the present credit-watch outlook?", "No error"], "c",
+      "'The board' is a collective noun acting as one body, so its tag pronoun must be singular ('it'), and the statement is negative ('has not approved'), so the tag must be positive: the correct tag is 'has it', not 'do they'.",
+      {"a": ruled_out("'The board, despite reiterating its commitment to humane restructuring,' is a correctly built opening clause."),
+       "b": ruled_out("'Has not approved the proposed retrenchment pause,' is a correct negative verb phrase."),
+       "d": mistake("This says there is no error, but the tag is wrong on two counts: it should be the positive, singular 'has it', not the negative, plural 'do they'.")},
+      rules=["qt-r1", "qt-r5"], paper="2026-10-09", qno=96, tech=["eliminate-pair"]),
+]

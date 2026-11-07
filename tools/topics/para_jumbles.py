@@ -277,7 +277,30 @@ _PYQ3 = [
        "d": mistake("This places D, recollecting the treasure-seeking, before A has shown him the two bags of gold that D's recollection explains.")},
       rules=["pj-r4"], paper="2026-10-08", qno=94, tech=["first-sentence", "pair-up"], rare=True),
 ]
-PYQS = PYQS + _PYQ2 + _PYQ3
+_PYQ4 = [
+    q("q-pj-fixed", "rearrange",
+      "The first and the last parts of the passage are numbered 1 and 6. The rest of the passage is split into four parts and named P, Q, R and S. Choose the correct order of these four parts:\n"
+      "1. The Employees' Provident Fund began as a wartime expedient.\n"
+      "P. That original purpose has long since been overtaken.\n"
+      "Q. Industrial workers were leaving their jobs in large numbers, and a compulsory saving was devised to hold them in place.\n"
+      "R. What was designed as an instrument of labour retention has become the principal vehicle of retirement security for the organised workforce.\n"
+      "S. Retention was therefore the object; old-age security was, at best, an incidental benefit.\n"
+      "6. Institutions, it seems, are frequently better remembered for what they became than for what they were meant to be.",
+      ["QSPR", "SQRP", "PQSR", "RSQP"], "a",
+      "Q explains why the Fund was set up (workers leaving jobs, so a compulsory saving was devised), S draws the consequence that retention, not old-age security, was the real object, P notes that this original purpose has since been overtaken, and R says what it has become instead, leading into sentence 6's point about institutions.",
+      {"b": mistake("This opens with S, 'retention was therefore the object', before Q has explained the compulsory saving that S's 'therefore' refers back to."),
+       "c": mistake("This places P, 'that original purpose has long since been overtaken', right after sentence 1, before Q and S have even said what the original purpose was."),
+       "d": ruled_out("This opens with R, what the Fund has become, before Q and S have established what it was originally meant to do.")},
+      rules=["pj-r4"], paper="2026-10-09", qno=84, tech=["first-sentence", "pair-up"], rare=True),
+    q("q-pj-para", "rearrange", _R2 + "P. A large-scale migration was triggered in 1848 by the discovery of gold in California.\nQ. Prospectors from all over the world were drawn to the promise of immediate fortune.\nR. Few of the \"Forty-Niners\" did become wealthy.\nS. Towns and communities in the American West proliferated as a result of this migration.",
+      ["SQRP", "PQSR", "QPRS", "RQPS"], "b",
+      "P introduces the gold discovery that triggered the migration, Q describes the prospectors it drew, S gives the resulting growth of towns, and R closes with the ironic twist that few of them actually struck it rich.",
+      {"a": mistake("This opens with S, the towns proliferating, before P has even introduced the gold discovery that caused the migration."),
+       "c": mistake("This opens with Q, the prospectors being drawn in, before P has introduced the gold discovery that is the reason they came."),
+       "d": ruled_out("This opens with R, few becoming wealthy, before P and Q have set up the migration and the prospectors it drew at all.")},
+      rules=["pj-r1", "pj-r2"], paper="2026-10-09", qno=94, tech=["first-sentence", "connectors"]),
+]
+PYQS = PYQS + _PYQ2 + _PYQ3 + _PYQ4
 
 
 def practice_items():

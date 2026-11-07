@@ -28,6 +28,8 @@ NODES = {
                     "summary": "'One of the' is always followed by a plural noun, even though the verb that goes with 'one' itself stays singular.", "links": []},
     "q-sva-unit": {"short": "One quantity", "label": "A number + a plural noun of amount as a single unit", "kind": "qtype", "parent": TOPIC, "order": 10,
                      "summary": "A number of money, distance, weight, time or height, treated as a single amount rather than separate items, takes a singular verb.", "links": []},
+    "q-sva-both": {"short": "Both...and", "label": "Both ... and always takes a plural verb", "kind": "qtype", "parent": TOPIC, "order": 11,
+                   "summary": "Two subjects joined by 'both ... and' always take a plural verb, with no exception for a nearer singular subject.", "links": []},
 }
 
 RULES = [
@@ -53,6 +55,8 @@ RULES = [
      "ok": "Mathematics is my favourite subject.", "bad": "Mathematics are my favourite subject."},
     {"id": "sva-r15", "node": "q-sva-ofthe", "text": "'One of the' is always followed by a plural noun (one of the students, one of the problems), never a singular one, because it picks a single member out of a group that must itself be named in the plural. The verb that follows 'one' later in the sentence still agrees with 'one' and stays singular.",
      "ok": "One of the biggest problems facing the committee is funding.", "bad": "One of the biggest problem facing the committee is funding."},
+    {"id": "sva-r16", "node": "q-sva-both", "text": "Two subjects joined by 'both ... and' always take a plural verb, with no exception for which subject sits nearer the verb (unlike either...or and neither...nor, which follow the nearer subject).",
+     "ok": "Both the manager and the clerk were present at the audit.", "bad": "Both the manager and the clerk was present at the audit."},
     {"id": "sva-r14", "node": "q-sva-unit", "text": "A plural noun of money, distance, weight, time or height, coming after a number, takes a singular verb when the whole phrase is treated as one single amount rather than a count of separate items.",
      "ok": "Ten kilometres is too far to walk every day.", "bad": "Ten kilometres are too far to walk every day."},
 ]
@@ -119,6 +123,12 @@ METHODS = {
                      "eliminate": "Drop the plural-verb option once the phrase is read as one amount rather than many separate units.",
                      "traps": ["The plural noun (kilometres, rupees, years) pulls the eye towards a plural verb even when the sentence means one total amount."],
                      "rules": ["sva-r14"], "tech": ["subject-first"]},
+    "q-sva-both": {"cue": "Two subjects joined by 'both ... and', with options differing in verb number (and sometimes tense).",
+                   "standard": "A 'both ... and' subject is always plural, whichever of the two nouns sits nearer the verb; rule out every singular option first, then choose between the plural options by tense.",
+                   "fast": "Both X and Y = always plural, no exceptions.",
+                   "eliminate": "Drop every singular-verb option at once; the choice is only ever among the plural ones.",
+                   "traps": ["Treating 'both ... and' like 'either ... or' and matching the nearer, sometimes singular, subject.", "A singular option that otherwise sounds natural because the nearer noun is singular."],
+                   "rules": ["sva-r16"], "tech": ["subject-first"]},
 }
 
 REFS = []
@@ -321,6 +331,15 @@ PYQS = PYQS + [
       "'One of the' must be followed by a plural noun, so 'problem' should be 'problems'; the verb 'is' later in the sentence correctly stays singular, agreeing with 'one'.",
       {"b": ruled_out("'That the organisation faces' is a correct relative clause."), "c": ruled_out("'Is the evasion of contribution' correctly keeps the singular verb for 'one'."), "d": ruled_out("'By small establishments' is a correct closing phrase.")},
       rules=["sva-r15"], paper="2026-10-07", qno=96, tech=["read-whole"]),
+]
+PYQS = PYQS + [
+    q("q-sva-both", "fill", "Choose the best option to fill in the blank below.\nBoth Amia and Kavitha ___ hard for their Bank PO exams scheduled next month.",
+      ["study", "have been studying", "has been studying", "is studying"], "b",
+      "'Both Amia and Kavitha' always takes a plural verb, which rules out the singular 'has been studying' and 'is studying'; between the two plural options, the ongoing preparation for an exam still ahead is best read as a present perfect continuous action still in progress, so 'have been studying' fits better than the plain habitual 'study'.",
+      {"a": mistake("'Study' is plural and grammatically possible, but it reads as a general habit rather than the ongoing preparation the sentence describes."),
+       "c": mistake("'Has been studying' is singular, pulled in by the nearer name 'Kavitha', but 'both ... and' always takes a plural verb regardless of which subject is nearer."),
+       "d": mistake("'Is studying' is singular for the same reason, and also drops the sense of an action that has been continuing, not just happening right now.")},
+      rules=["sva-r16"], paper="2026-10-09", qno=80),
 ]
 
 

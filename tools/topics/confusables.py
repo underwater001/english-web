@@ -12,6 +12,8 @@ NODES = {
                  "summary": "A sentence with a blank, and the pair it is usually confused with among the options.", "links": []},
     "q-cf-spot": {"short": "Spot it", "label": "The confused word inside a sentence", "kind": "qtype", "parent": TOPIC, "order": 2,
                   "summary": "One part of the sentence uses the partner word by mistake.", "links": []},
+    "q-cf-replace": {"short": "Fix or leave it", "label": "Replace the highlighted phrase, or say none is needed", "kind": "qtype", "parent": TOPIC, "order": 3,
+                     "summary": "A sentence highlights a phrase built on a confused word; pick the correct replacement, or 'No substitution required' if it is already correct.", "links": []},
 }
 
 RULES = [
@@ -23,6 +25,8 @@ RULES = [
      "ok": "An eminent judge warned of an imminent crisis.", "bad": "An imminent judge warned of an eminent crisis."},
     {"id": "cf-r4", "node": "q-cf-spot", "text": "Lie, rise and sit take no object; lay, raise and set take one. Lie-lay-lain is to rest; lay-laid-laid is to put something down.",
      "ok": "He lies down after lunch. He laid the book on the table.", "bad": "He lays down after lunch. He lied the book on the table."},
+    {"id": "cf-r5", "node": "q-cf-replace", "text": "First decide whether the highlighted phrase is already correct; if it is, the answer is 'No substitution required', not the closest-looking candidate. 'Comprise' already means 'consist of' or 'be made up of', so 'comprises of' is always wrong and must lose the 'of'.",
+     "ok": "The committee comprises nine members: this already needs no change.", "bad": "Changing an already-correct 'comprises' because the option list offers a near-miss."},
 ]
 
 METHODS = {
@@ -40,6 +44,12 @@ METHODS = {
                   "eliminate": "Parts with no word from a confused pair can be skipped.",
                   "traps": ["'Lay down' for 'lie down'.", "'Comprises of', where 'comprises' takes no 'of'."],
                   "rules": ["cf-r4", "cf-r1"], "tech": ["read-whole"]},
+    "q-cf-replace": {"cue": "A full sentence with one phrase highlighted, and a fourth option 'No substitution required'.",
+                     "standard": "Decide what the highlighted phrase should say, then compare it letter by letter with the sentence's own wording before looking at the options.",
+                     "fast": "If the highlighted phrase is already exactly right, stop and pick 'No substitution required'; do not second-guess a correct phrase.",
+                     "eliminate": "Drop every option that merely adds a different wrong preposition or form; what remains is either the one correct phrase or 'No substitution required'.",
+                     "traps": ["Assuming an error exists just because the question offers correction options.", "'Comprises of' and 'is comprised of', both of which keep an unwanted 'of'."],
+                     "rules": ["cf-r5"], "tech": ["read-whole"]},
 }
 
 REFS = []
@@ -228,7 +238,34 @@ def practice_items():
            "d": ruled_out("'Before the first of June' is a correct phrase of time.")},
           rules=["cf-r1"], uid="cf-p04", tech=["read-whole"]),
     ]
-    return hand + _gen()
+    rep = [
+        q("q-cf-replace", "improve", "Select the most appropriate option that can substitute the highlighted segment in the given sentence. If there is no need to substitute it, select 'No substitution required'.\n"
+          "The warden announced that the hostel [[comprises of]] four wings and a common dining hall, so new students should note their wing number.",
+          ["comprises", "is comprised of", "comprising of", "No substitution required"], "a",
+          "'Comprise' already means 'consist of', so it takes no 'of'; the highlighted phrase must lose the 'of' and become 'comprises'.",
+          {"b": mistake("'Is comprised of' is a common way to try to fix the error, but 'comprise' is active in sense and does not need the passive 'is ... of' either."),
+           "c": mistake("'Comprising of' keeps the same unwanted 'of' in a different form."),
+           "d": mistake("This says no change is needed, but 'comprises of' is wrong; the 'of' must be dropped.")},
+          rules=["cf-r5"], uid="cf-p05"),
+        q("q-cf-replace", "improve", "Select the most appropriate option that can substitute the highlighted segment in the given sentence. If there is no need to substitute it, select 'No substitution required'.\n"
+          "The final report confirms that the committee [[comprises]] seven elected members and two co-opted advisers.",
+          ["comprises of", "is comprised", "comprise", "No substitution required"], "d",
+          "The sentence already reads 'comprises' with no 'of', which is the correct form, so no substitution is required.",
+          {"a": ruled_out("'Comprises of' adds the unwanted 'of' that the sentence's own correct wording does not have."),
+           "b": ruled_out("'Is comprised' drops the object entirely and reads as incomplete."),
+           "c": mistake("'Comprise' (with no 's') does not agree with the singular subject 'the committee'.")},
+          rules=["cf-r5"], uid="cf-p06"),
+    ]
+    return hand + _gen() + rep
 
 
-PYQS = []
+PYQS = [
+    q("q-cf-replace", "improve", "Select the most appropriate option that can substitute the highlighted segment in the given sentence. If there is no need to substitute it, select 'No substitution required'.\n"
+      "During the briefing on the new city-bus timetable, the conductor explained that the route [[comprises of]] three major interchanges and two feeder loops, so commuters should keep extra time for transfers.",
+      ["comprises", "is comprised of", "comprising of", "No substitution required"], "a",
+      "'Comprise' already means 'consist of' or 'be made up of', so it takes no 'of'; the highlighted 'comprises of' must become plain 'comprises'.",
+      {"b": mistake("'Is comprised of' turns 'comprise' passive and keeps an 'of' it does not need; the active 'comprises' is the correct fix."),
+       "c": mistake("'Comprising of' keeps the same unwanted 'of' in a different grammatical form."),
+       "d": mistake("This says no change is needed, but 'comprises of' is a standard error; the 'of' must be dropped.")},
+      rules=["cf-r5"], paper="2026-10-09", qno=76, rare=True),
+]

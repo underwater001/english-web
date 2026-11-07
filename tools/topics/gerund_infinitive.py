@@ -24,7 +24,7 @@ RULES = [
      "ok": "He refused to sign the form.", "bad": "He refused signing the form."},
     {"id": "gi-r3", "node": "q-gi-verb", "text": "A few verbs take either form but change meaning: 'stop smoking' means give it up, 'stop to smoke' means pause in order to smoke; 'remember posting' is a memory, 'remember to post' is a duty.",
      "ok": "He stopped smoking last year. He stopped to smoke outside.", "bad": "Treating the two as the same sentence."},
-    {"id": "gi-r4", "node": "q-gi-prep", "text": "A preposition is always followed by -ing, never by a bare or to-form. This holds for phrases whose last word is 'to': look forward to, be used to, be accustomed to, object to, with a view to.",
+    {"id": "gi-r4", "node": "q-gi-prep", "text": "A preposition is always followed by -ing, never by a bare or to-form. This holds for phrases whose last word is 'to': look forward to, be used to, be accustomed to, object to, admit to, confess to, with a view to.",
      "ok": "I look forward to meeting you. She is used to working nights.", "bad": "I look forward to meet you. She is used to work nights."},
     {"id": "gi-r5", "node": "q-gi-bare", "text": "Make, let, see, hear, feel, watch and the phrases had better, would rather, rather than take the bare verb with no 'to'. In the passive, 'make' regains it: he was made to pay.",
      "ok": "They made him pay. You had better go now.", "bad": "They made him to pay. You had better to go now."},
@@ -158,4 +158,13 @@ def practice_items():
     ]
 
 
-PYQS = []
+PYQS = [
+    q("q-gi-prep", "spot-error", "Select the part of the sentence that contains a grammatical error.\n"
+      "She admitted to have disclosed fragments of the cipher (A)/ while insisting that her doing so (B)/ served merely as a decoy (C)/ for the auditors prowling the corridor. (D)",
+      ["She admitted to have disclosed fragments of the cipher", "while insisting that her doing so", "served merely as a decoy", "for the auditors prowling the corridor."], "a",
+      "'Admit to' ends in the preposition 'to', which must be followed by the -ing form, so it should be 'admitted to having disclosed', not 'admitted to have disclosed'.",
+      {"b": ruled_out("'While insisting that her doing so' correctly uses the possessive-gerund 'her doing' as the subject of the clause."),
+       "c": ruled_out("'Served merely as a decoy' is a correct verb phrase agreeing with 'her doing so'."),
+       "d": ruled_out("'For the auditors prowling the corridor' is a correct closing participle phrase.")},
+      rules=["gi-r4"], paper="2026-10-09", qno=83, tech=["read-whole"]),
+]

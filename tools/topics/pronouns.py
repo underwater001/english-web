@@ -204,4 +204,12 @@ def practice_items():
     ]
 
 
-PYQS = []
+PYQS = [
+    q("q-pn-relative", "fill", _F + "The scheme was meant to help small farmers, for ___ the new subsidy rules may prove difficult to understand.",
+      ["whom", "which", "whose", "whoever"], "a",
+      "The pronoun is the object of the preposition 'for' and refers to people (small farmers), so the object form 'whom' is used.",
+      {"b": ruled_out("'Which' is used for things, not for people."),
+       "c": ruled_out("'Whose' shows possession and would need a noun after it."),
+       "d": mistake("'Whoever' introduces its own clause as a subject; it cannot sit as the single object of 'for' referring back to 'small farmers'.")},
+      rules=["pn-r5"], paper="2026-10-09", qno=92, tech=["read-whole"]),
+]

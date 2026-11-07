@@ -150,6 +150,9 @@ _I = [
     ("red-letter-day", "a red letter day", "A memorable day because of some pleasant or important event.", "Her graduation was a red letter day for the whole family.", "memorable", ("memorable day",)),
     ("up-to-the-minute", "up to the minute", "To be as current or up to date as possible.", "The live blog keeps its headlines up to the minute.", "current", ("to be as current as is possible",)),
     ("with-bells-on", "with bells on", "Eagerly, with great enthusiasm, or ready to enjoy oneself.", "Tell them I will be there with bells on.", "eager", ()),
+    ("work-the-system", "work the system", "To take advantage of a set of rules, procedures, or structures to achieve a personal or institutional goal, often in a way that is clever, slightly dishonest, or exploits loopholes.",
+     "The contractor worked the system to win every tender without ever technically breaking a rule.", "exploit", ()),
+    ("bang-for-buck", "bang for your buck", "Greater value for the amount of money one is spending.", "Buying the family-size pack gives you a much bigger bang for your buck.", "value", ()),
 ]
 
 WORDS = [word(i, t, "idiom", m, ex=e, also=list(a)) for i, t, m, e, g, a in _I]
@@ -256,6 +259,20 @@ PYQS = [
        "b": ruled_out("'Passing bells' are the bells rung to mark a death, unrelated to eagerness or enthusiasm."),
        "d": mistake("'Sound as a bell' means perfectly healthy or in excellent condition, not eager or enthusiastic.")},
       lex=("fits", "with-bells-on"), rules=["id-r3"], paper="2026-10-08", qno=83, tech=["literal-trap"]),
+    _rev("id-q81", "work-the-system",
+         ["Buck the system", "Get something out of one's system", "Get something out of your system", "Work the system"], "d",
+         "'Work the system' is exactly to take advantage of a set of rules or procedures to achieve a personal or institutional goal, often by exploiting a loophole.",
+         {"a": ruled_out("'Buck the system' means to resist or go against established rules, the opposite of exploiting them."),
+          "b": mistake("'Get something out of one's system' means to stop feeling or thinking about something by expressing it, unrelated to rules or procedures."),
+          "c": mistake("'Get something out of your system' is the same idiom as (b) with a different pronoun, still unrelated to exploiting rules.")},
+         paper="2026-10-09", qno=81),
+    _pq(97, "2026-10-09", "bang-for-buck",
+        ["To begin to put forth more effort in some area", "To be very healthy",
+         "To make money quickly and/or without effort, often through dishonest, unscrupulous, or ethically dubious means", "Greater value for the amount of money one is spending"], "d",
+        "'A bigger bang for one's buck' means getting greater value for the money being spent.",
+        {"a": ruled_out("Putting forth more effort is unrelated to value for money."),
+         "b": ruled_out("Being very healthy has no connection to spending money."),
+         "c": mistake("Making money dishonestly or without effort describes a different idiom ('easy money'), not getting good value for what one spends.")}),
 ]
 
 

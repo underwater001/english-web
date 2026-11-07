@@ -11,6 +11,8 @@ NODES = {
                    "summary": "A sentence fixes one meaning of a word; choose the option where the word means something else.", "links": []},
     "q-hm-choose": {"short": "Correctly used homophone", "label": "Pick the correctly spelt homophone for its meaning", "kind": "qtype", "parent": TOPIC, "order": 2,
                     "summary": "Four sentences each use a different spelling of a group of same-sounding words (sometimes including a made-up non-word); pick the one whose spelling actually matches the sense it is used in.", "links": []},
+    "q-hm-fill": {"short": "Homophone in a blank", "label": "Fill the blank with the homophone that fits the sense", "kind": "qtype", "parent": TOPIC, "order": 3,
+                  "summary": "A single sentence has a blank; the four options are same-sounding spellings (sometimes including a made-up non-word), and only one carries the sense the blank needs.", "links": []},
 }
 
 RULES = [
@@ -20,6 +22,8 @@ RULES = [
      "ok": "'rose' the flower vs 'rose' the sun did.", "bad": "Treating 'rose' as the same word-sense in both."},
     {"id": "hm-r3", "node": "q-hm-choose", "text": "Homophones (words that sound alike but differ in spelling and meaning, such as flair/flare) are sometimes tested by giving one sentence per spelling. Decide what each sentence actually means, then pick the option whose spelling matches that meaning; a made-up spelling among the options (such as 'flaire') is never correct, however natural it looks.",
      "ok": "'She has a flair for baking' (flair = a natural talent) is correct.", "bad": "'He tied the flag to the flaire' uses a spelling that does not exist."},
+    {"id": "hm-r4", "node": "q-hm-fill", "text": "When a blank is filled from a set of same-sounding spellings, work out the sense the sentence needs first, then pick the one spelling that actually carries that sense; a made-up spelling among the options is never correct, however natural it looks.",
+     "ok": "'He had to bear the heavy load' (bear = to carry) fits the blank.", "bad": "'He had to bare the heavy load' confuses 'bare' (uncovered) with 'bear' (to carry)."},
 ]
 
 METHODS = {
@@ -38,6 +42,13 @@ METHODS = {
                     "traps": ["One option is often a spelling that does not exist at all (e.g. 'flaire'), not a real confusion.",
                                "The two real spellings are swapped between sentences, so both wrong meanings appear, just attached to the wrong word."],
                     "rules": ["hm-r3"], "tech": ["read-whole"]},
+    "q-hm-fill": {"cue": "A single sentence with a blank, and four same-sounding spellings as options.",
+                  "standard": "Work out the sense the blank needs, then check each spelling against that sense. Reject any spelling that is not a real word at all before comparing meanings.",
+                  "fast": "Say in your own words what verb or noun the blank wants, then match that to the one correct spelling.",
+                  "eliminate": "Cross out any option that is not a real spelling first, then cross out every option whose meaning does not fit the blank.",
+                  "traps": ["One option is often a spelling that does not exist at all, not a real confusion.",
+                            "The nearest-looking spelling to the right one is usually the wrong sense, placed there on purpose."],
+                  "rules": ["hm-r4"], "tech": ["read-whole"]},
 }
 
 REFS = []
@@ -82,11 +93,22 @@ PYQS = [
        "d": ruled_out("The felt-tipped writing pen is a 'flair' pen, not a 'flare' pen; this again swaps the two spellings.")},
       rules=["hm-r3"], paper="2026-10-07", qno=95,
       caution="All four options are grammatically fine sentences; the test is purely whether the spelling used matches the sense each sentence needs, with one option using a spelling that is not even a real word."),
+    q("q-hm-fill", "fill", "The soldiers had to ___ the heavy load up the hill.",
+      ["bare", "bear", "bier", "beer"], "b",
+      "The blank needs the verb meaning 'to carry', which is 'bear'. 'Bare' (uncovered), 'bier' (a stand for a coffin) and 'beer' (the drink) do not fit.",
+      {"a": mistake("'Bare' means uncovered or naked, not 'to carry'; this confuses the two same-sounding words."),
+       "c": ruled_out("A 'bier' is a stand on which a coffin is carried; it does not fit carrying a load up a hill."),
+       "d": ruled_out("'Beer' is the drink; it has no sense of carrying anything.")},
+      rules=["hm-r4"], paper="2026-10-09", qno=86),
 ]
 
 
 def _p(uid, stem, opts, key, why, wrong, rules=("hm-r1",), rare=False):
     return q("q-hm-sense", "homonym", _SEL + stem, opts, key, why, wrong, rules=list(rules), uid=uid, rare=rare)
+
+
+def _f(uid, stem, opts, key, why, wrong, rules=("hm-r4",), rare=False):
+    return q("q-hm-fill", "fill", stem, opts, key, why, wrong, rules=list(rules), uid=uid, rare=rare)
 
 
 def practice_items():
@@ -183,4 +205,20 @@ def practice_items():
            "c": ruled_out("Fabric that keeps out rain is 'canvas', the cloth spelling, not 'canvass'."),
            "d": ruled_out("Seeking out old voters is to 'canvass', the verb spelling, not 'canvas'.")},
           rules=["hm-r3"], rare=True, uid="hm-p16"),
+        _f("hm-p17", "The bus driver asked for the exact ___ before the journey began.",
+           ["fair", "fare", "fayre", "feir"], "b",
+           "The blank needs the noun for the cost of a journey, which is 'fare'. 'Fair' (a gathering, or just/even-handed) does not fit, and 'fayre' and 'feir' are not real spellings.",
+           {"a": mistake("'Fair' means just, or a gathering with stalls and rides; it is not the cost of a bus journey."),
+            "c": ruled_out("'Fayre' is not a standard English spelling."), "d": ruled_out("'Feir' is not a real word.")}),
+        _f("hm-p18", "After the long, noisy day, she wanted nothing but a moment of ___.",
+           ["piece", "peace", "peece", "peice"], "b",
+           "The blank needs the noun for calm and quiet, which is 'peace'. 'Piece' (a part of something) does not fit, and 'peece' and 'peice' are not real spellings.",
+           {"a": mistake("'Piece' means a part or portion of something, not calm or quiet."),
+            "c": ruled_out("'Peece' is not a real spelling."), "d": ruled_out("'Peice' is a common misspelling, not a real word.")}),
+        _f("hm-p19", "Honesty was the guiding ___ of her whole life.",
+           ["principal", "principle", "principel", "prinicple"], "b",
+           "The blank needs the noun for a fundamental belief that guides conduct, which is 'principle'. 'Principal' (the head of a school, or chief in importance) does not fit, and 'principel' and 'prinicple' are not real spellings.",
+           {"a": mistake("'Principal' means the head of an institution or the chief/main one, not a guiding belief."),
+            "c": ruled_out("'Principel' is not a real spelling."), "d": ruled_out("'Prinicple' is a misspelling, not a real word.")},
+           rare=True),
     ]

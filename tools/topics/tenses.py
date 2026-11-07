@@ -137,6 +137,13 @@ PYQS = [
        "c": mistake("'That me swallow' puts the object form 'me' where the subject 'I' is needed."),
        "d": ruled_out("'By me' is a passive-style ending that does not fit 'demanded'.")},
       rules=["tn-r2"], paper=S3, qno=90, tech=["eliminate-pair"], trick="demand + that + I + base verb."),
+    q("q-tn-subjunctive", "improve", _IMP + "She [[insisted me to take the medicine]].",
+      ["that I take the medicine", "me that I take medicine", "me taking the medicine", "to take medicine by me"], "a",
+      "'Insist' takes a that-clause with the base form, whatever the subject: 'insisted that I take the medicine'. It cannot be followed by 'me to'.",
+      {"b": ruled_out("'Insisted me that I take medicine' keeps the object form 'me' directly after 'insisted', which the verb does not take."),
+       "c": ruled_out("'Insisted me taking' is not a correct pattern; 'insist' does not take an object plus a gerund."),
+       "d": ruled_out("'To take medicine by me' is a passive-style ending that does not fit 'insisted'.")},
+      rules=["tn-r2"], paper="2026-10-09", qno=99, tech=["eliminate-pair"], trick="insist + that + I + base verb, same as demand."),
 ]
 
 

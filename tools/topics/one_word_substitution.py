@@ -550,7 +550,11 @@ _NEVER = {frozenset(p) for p in [("hypocrite", "sycophant"), ("pedant", "hypocri
                                   ("illegible", "inaudible"), ("lethargy", "desuetude"), ("miser", "egoist"), ("ascetic", "pacifist"), ("novice", "amateur"),
                                   ("amateur", "novice"), ("incorrigible", "indelible"), ("sceptic", "agnostic"), ("agnostic", "mystic"), ("ascetic", "mystic")]}
 
-_ALL = _O + _O2 + _O3
+_O4 = [
+    ("poignant", "poignant", "Evoking a keen sense of sadness or regret", "The poignant film reminded everyone of their childhood home.", "feel"),
+]
+
+_ALL = _O + _O2 + _O3 + _O4
 
 
 def _note(i):
@@ -820,6 +824,12 @@ PYQS = [
          "c": ruled_out("An autocracy is rule by one person with unlimited power, not rule by a wealthy class."),
          "d": ruled_out("'Plutonomy' is not a standard English word for a form of government.")},
         trick="Pluto- (wealth) + -cracy (rule): rule by the rich.", rare=True),
+    _pq(78, "2026-10-09", "poignant", ["Pungent", "Poignant", "Impactful", "Unaffecting"], "b",
+        "Something poignant evokes a keen, often bittersweet, sense of sadness or regret.",
+        {"a": mistake("Pungent describes a sharp smell or taste; it has nothing to do with a feeling of sadness or regret."),
+         "c": ruled_out("Impactful just means having a strong effect; it does not specify sadness or regret."),
+         "d": ruled_out("Unaffecting is the opposite: it means failing to stir any feeling at all.")},
+        trick="Poignant: a sharp, bittersweet pang of sadness or regret."),
 ]
 
 

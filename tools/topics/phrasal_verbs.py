@@ -95,6 +95,7 @@ _V = [
     ("let-down", "let down", "To disappoint someone by failing them.", "He promised to come and then let us down.", "disappoint"),
     ("hold-up", "hold up", "To delay something or someone.", "An accident held up the traffic for an hour.", "delay2"),
     ("fall-back-on", "fall back on", "To use something as a last resort when other plans fail.", "If the loan is refused we can fall back on our savings.", "resort"),
+    ("lay-out", "lay out", "To arrange or spread something out neatly and attractively.", "The staff lay out fresh linen on every bed each morning.", "arrange"),
 ]
 
 WORDS = [word(i, v, "phrasal", m, ex=e) for i, v, m, e, g in _V]
@@ -177,4 +178,12 @@ def practice_items():
     return items
 
 
-PYQS = []
+PYQS = [
+    q("q-ph-fit", "fill", "Select the most appropriate option to fill in the blank.\nThey ______ the table beautifully for their guests.",
+      ["laid in", "laid out", "laid by", "laid on"], "b",
+      "The sentence needs 'arranged attractively', which is what 'lay out' means: they laid out the table.",
+      {"a": mistake("'Laid in' means to store up a supply of something, not to arrange a table."),
+       "c": mistake("'Laid by' means to set something aside for later use, not to arrange a table."),
+       "d": mistake("'Laid on' means to arrange or provide a service or event, which is close but is not the phrase used for arranging a table setting itself.")},
+      rules=["ph-r3"], paper="2026-10-09", qno=79),
+]
