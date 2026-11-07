@@ -452,6 +452,7 @@ _O3 = [
     ("fantasy", "fantasy", "An imagined situation that is pleasant but unlikely to happen", "Owning the whole street was his private fantasy.", "mind3"),
     ("cynosure", "cynosure", "A person or thing that is the centre of attention", "The new bridge became the cynosure of the city.", "fame2"),
     ("absolute", "absolute", "Complete and not limited by anything", "The rule gives the chair absolute discretion.", "whole"),
+    ("pertinacious", "pertinacious", "Very determined and refusing to be defeated by problems", "The pertinacious lawyer refiled the case three times after it was dismissed.", "determined"),
 ]
 
 _FREQ = {"abdicate": (4, 139), "abduct": (3, 216), "abolish": (5, 81), "absolute": (3, 217), "accomplice": (5, 82), "acquit": (3, 218),
@@ -807,6 +808,12 @@ PYQS = [
          "b": mistake("Destitute means without money and basic necessities. It sounds like 'desuetude', but it describes poverty, not disuse."),
          "c": mistake("Lethargy is drowsy lack of energy in a person; desuetude is about a custom or law no longer being used.")},
         trick="Desuetude comes from the Latin for 'to become unaccustomed': a custom no longer used.", rare=True),
+    _pq(86, "2026-10-07", "pertinacious", ["Vociferous", "Impetuous", "Imprudent", "Pertinacious"], "d",
+        "Pertinacious describes someone who holds firmly to a purpose and refuses to be put off by obstacles.",
+        {"a": ruled_out("Vociferous means loud and forceful in speech, not stubborn persistence."),
+         "b": mistake("Impetuous means acting suddenly without thought, almost the opposite of someone who sticks doggedly to a plan."),
+         "c": ruled_out("Imprudent means unwise or careless, which does not match determination against problems.")},
+        trick="Pertinacious comes from the Latin for 'holding on firmly': refusing to let go of a purpose.", rare=True),
 ]
 
 

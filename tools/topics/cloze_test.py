@@ -1,10 +1,11 @@
-"""Cloze test: a short paragraph with numbered blanks, each blank a four-option question. Seed tier: the three papers analysed so far
-used a reading passage instead of a cloze, so this topic is built from the rules and drilled, not from a filed question.
+"""Cloze test: a short paragraph with numbered blanks, each blank a four-option question. Quiz tier: the 07-Oct-2026 paper is the first
+analysed paper that actually set a cloze (Q88-92, a 5-blank vocabulary passage on the Silk Road); its own passage is never copied here, so the
+5 PYQ items are built on an original lighthouse-keeper paragraph of our own that fills the same blank slots with the same target words.
 The paragraphs are written by us. Each question shows the paragraph with the blank in question marked."""
 from bank import mistake, ruled_out, q
 
 TOPIC = "cloze-test"
-TIER = "seed"
+TIER = "quiz"
 PREFIX = "cz"
 
 NODES = {
@@ -66,6 +67,23 @@ def _c(uid, qtype, para, n, opts, key, why, wrong, rules, tech, rare=False):
     for k in range(1, 6):
         text = text.replace(f"__{k}__", f"({k})")
     return q(qtype, "cloze", text, opts, key, why, wrong, rules=list(rules), tech=list(tech), uid=uid, rare=rare)
+
+
+def _cq(uid, qtype, para, n, opts, key, why, wrong, rules, tech, paper, qno, rare=False):
+    text = f"In the paragraph below, select the most appropriate option for blank {n}.\n\n" + para.replace(f"__{n}__", "[[___]]")
+    for k in range(1, 6):
+        text = text.replace(f"__{k}__", f"({k})")
+    return q(qtype, "cloze", text, opts, key, why, wrong, rules=list(rules), tech=list(tech), uid=uid, rare=rare, paper=paper, qno=qno)
+
+
+_P3 = ("Long before electric beacons made the work largely automatic, a lighthouse keeper's life was a test of endurance against an __1__ "
+       "coastline, where a single storm could strip away a jetty overnight. The bond between the keeper and the ships that passed was quietly "
+       "__2__: sailors trusted the beam to find safe water, and in turn every vessel that passed word ashore so that help could be sent if the "
+       "light ever failed to appear. The coast offered little mercy to the __3__ traveller who misjudged the tide, and more than one rescue began "
+       "only because a keeper's lamp had been left burning through a night when no ship was expected. For the families who grew up in these towers, "
+       "the sound of the foghorn left an __4__ impression, one that no later, quieter life could ever fully erase. Even today, as satellite "
+       "navigation has made the manned lighthouse all but obsolete, the keeper's solitary vigil still carries a strange __5__ for anyone who has "
+       "ever waited, alone, for a signal that might not come.")
 
 
 def practice_items():
@@ -133,4 +151,35 @@ def practice_items():
     ]
 
 
-PYQS = []
+PYQS = [
+    _cq("cz-q88", "q-cz-sense", _P3, 1, ["hospitable", "tranquil", "inhospitable", "fertile"], "c",
+        "A coastline that can 'strip away a jetty overnight' gives no comfort or shelter, so it is 'inhospitable', harsh and unwelcoming.",
+        {"a": mistake("'Hospitable' is the direct opposite of the harsh coast the sentence goes on to describe."),
+         "b": ruled_out("'Tranquil' says the coast is calm, but the sentence is about its power to destroy a jetty."),
+         "d": ruled_out("'Fertile' describes land good for growing things, not a dangerous coastline.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-07", qno=88),
+    _cq("cz-q89", "q-cz-sense", _P3, 2, ["unilateral", "reciprocal", "one-sided", "accidental"], "b",
+        "The sentence describes a two-way exchange — sailors trust the beam, and ships send word back — so the bond is 'reciprocal', given and returned by both sides.",
+        {"a": mistake("'Unilateral' means coming from one side only, which contradicts the 'and in turn' that follows."),
+         "c": ruled_out("'One-sided' again denies the two-way exchange the sentence describes."),
+         "d": ruled_out("'Accidental' says the bond happened by chance, not that it was returned on both sides.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-07", qno=89),
+    _cq("cz-q90", "q-cz-sense", _P3, 3, ["vigilant", "wary", "cautious", "unwary"], "d",
+        "A traveller who 'misjudged the tide' was not on guard against the danger, so the word needed is 'unwary', the one option meaning off guard; the other three all mean watchful, the opposite of what the sentence describes.",
+        {"a": mistake("'Vigilant' means watchful, the opposite of a traveller who misjudges the tide."),
+         "b": mistake("'Wary' also means on guard, which does not fit a traveller caught out by the tide."),
+         "c": ruled_out("'Cautious' again means careful, not careless, so it does not fit the misjudging traveller.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-07", qno=90),
+    _cq("cz-q91", "q-cz-sense", _P3, 4, ["fleeting", "indelible", "faint", "forgettable"], "b",
+        "An impression 'no later, quieter life could ever fully erase' is one that cannot be rubbed out, so it is 'indelible', permanent.",
+        {"a": mistake("'Fleeting' means brief, which contradicts an impression that can never be erased."),
+         "c": ruled_out("'Faint' says the impression was weak, not that it lasted forever."),
+         "d": ruled_out("'Forgettable' is the opposite sense: the sentence says the memory could never be erased.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-07", qno=91),
+    _cq("cz-q92", "q-cz-sense", _P3, 5, ["resonance", "irrelevance", "obsolescence", "ambiguity"], "a",
+        "Even though the lighthouse itself is 'all but obsolete', the image of a solitary vigil still strikes an emotional chord with the reader, which is its 'resonance', the lingering power to move someone.",
+        {"b": mistake("'Irrelevance' says the image no longer matters, the opposite of 'still carries' something."),
+         "c": ruled_out("'Obsolescence' repeats the earlier point about the lighthouse being outdated, not the feeling it still provokes."),
+         "d": ruled_out("'Ambiguity' means being unclear in meaning, not striking an emotional chord.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-07", qno=92, rare=True),
+]

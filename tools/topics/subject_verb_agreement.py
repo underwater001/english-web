@@ -24,7 +24,9 @@ NODES = {
                         "summary": "Two nouns or adjectives joined by 'and' take a singular verb when together they name one person, thing or idea, not two separate ones.", "links": []},
     "q-sva-fixedplural": {"short": "Looks plural, isn't", "label": "Diseases, games, countries, subjects ending in -s", "kind": "qtype", "parent": TOPIC, "order": 8,
                             "summary": "Some nouns that end in -s name one disease, game, country or field of study and take a singular verb: measles, billiards, the United States, Mathematics, Economics, Statistics.", "links": []},
-    "q-sva-unit": {"short": "One quantity", "label": "A number + a plural noun of amount as a single unit", "kind": "qtype", "parent": TOPIC, "order": 9,
+    "q-sva-ofthe": {"short": "One of the", "label": "'One of the' + plural noun + singular verb", "kind": "qtype", "parent": TOPIC, "order": 9,
+                    "summary": "'One of the' is always followed by a plural noun, even though the verb that goes with 'one' itself stays singular.", "links": []},
+    "q-sva-unit": {"short": "One quantity", "label": "A number + a plural noun of amount as a single unit", "kind": "qtype", "parent": TOPIC, "order": 10,
                      "summary": "A number of money, distance, weight, time or height, treated as a single amount rather than separate items, takes a singular verb.", "links": []},
 }
 
@@ -49,6 +51,8 @@ RULES = [
      "ok": "Slow and steady wins the race.", "bad": "Slow and steady win the race."},
     {"id": "sva-r13", "node": "q-sva-fixedplural", "text": "Some nouns that end in -s and look plural in fact name one disease (measles, mumps, rickets, shingles), one game (billiards, draughts, darts), one country (the United States, the Netherlands) or one field of study (Mathematics, Physics, Economics, Statistics, Politics, Linguistics), and take a singular verb. A few of these (statistics, economics, politics) switch to a plural verb only when they mean actual data, calculations or political activities rather than the subject of study.",
      "ok": "Mathematics is my favourite subject.", "bad": "Mathematics are my favourite subject."},
+    {"id": "sva-r15", "node": "q-sva-ofthe", "text": "'One of the' is always followed by a plural noun (one of the students, one of the problems), never a singular one, because it picks a single member out of a group that must itself be named in the plural. The verb that follows 'one' later in the sentence still agrees with 'one' and stays singular.",
+     "ok": "One of the biggest problems facing the committee is funding.", "bad": "One of the biggest problem facing the committee is funding."},
     {"id": "sva-r14", "node": "q-sva-unit", "text": "A plural noun of money, distance, weight, time or height, coming after a number, takes a singular verb when the whole phrase is treated as one single amount rather than a count of separate items.",
      "ok": "Ten kilometres is too far to walk every day.", "bad": "Ten kilometres are too far to walk every day."},
 ]
@@ -103,6 +107,12 @@ METHODS = {
                             "eliminate": "Drop every plural-verb option unless the noun is being used for actual data or activities, not the subject.",
                             "traps": ["The -s ending looks exactly like an ordinary plural noun.", "'Statistics shows a rise' (the subject) vs 'The statistics are inflated' (the actual figures) take different verbs."],
                             "rules": ["sva-r13"], "tech": ["subject-first"]},
+    "q-sva-ofthe": {"cue": "'One of the' directly followed by a noun, with the verb for that noun among the options.",
+                    "standard": "Make the noun right after 'the' plural; the verb that goes with 'one' itself, usually later in the sentence, still stays singular.",
+                    "fast": "One of the + always plural noun.",
+                    "eliminate": "Drop any option that keeps the noun right after 'one of the' singular.",
+                    "traps": ["The singular-sounding 'one' misleads many into keeping the following noun singular too.", "A long clause between 'one of the' and the main verb hides which noun the plural rule applies to."],
+                    "rules": ["sva-r15"], "tech": ["read-whole"]},
     "q-sva-unit": {"cue": "A number followed by a plural noun of money, distance, weight, time or height.",
                      "standard": "Check whether the sentence treats the amount as one single quantity (a distance, a sum, a stretch of time) rather than as that many separate items; if so, use the singular verb.",
                      "fast": "Ten kilometres/thousand rupees/five years + is/was, when read as 'that much altogether'.",
@@ -304,6 +314,13 @@ _EXTRA2 = [
           {"b": mistake("Plural verb chosen because 'kilograms' is plural; here the whole weight is one quantity of rice."),
            "c": mistake("Plural and past; the sentence is about tonight."),
            "d": mistake("'Have been' is plural, which does not fit a single quantity read as one amount.")}, "sva-r14", "sing"),
+]
+PYQS = PYQS + [
+    q("q-sva-ofthe", "spot-error", _SPOT + "One of the most difficult problem / that the organisation faces / is the evasion of contribution / by small establishments.",
+      ["One of the most difficult problem", "that the organisation faces", "is the evasion of contribution", "by small establishments."], "a",
+      "'One of the' must be followed by a plural noun, so 'problem' should be 'problems'; the verb 'is' later in the sentence correctly stays singular, agreeing with 'one'.",
+      {"b": ruled_out("'That the organisation faces' is a correct relative clause."), "c": ruled_out("'Is the evasion of contribution' correctly keeps the singular verb for 'one'."), "d": ruled_out("'By small establishments' is a correct closing phrase.")},
+      rules=["sva-r15"], paper="2026-10-07", qno=96, tech=["read-whole"]),
 ]
 
 

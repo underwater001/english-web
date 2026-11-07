@@ -264,6 +264,27 @@ _EXTRA2 = [
       rules=["ap-r8"], uid="ap-p21"),
 ]
 
+_PYQ2 = [
+    q("q-ap-passive", "transform", _P + "The chef has prepared a very sweet dish to serve the dignitaries in the reception.",
+      ["A very sweet dish to be served to the dignitaries in the reception has been prepared by the chef.",
+       "A very sweet dish to be serve to the dignitaries in the reception has been prepared by the chef.",
+       "A very sweet dish to served to the dignitaries in the reception has been prepared by the chef.",
+       "A very sweet dish to serve to the dignitaries in the reception is prepared by the chef."], "a",
+      "'Has prepared' (present perfect) becomes 'has been prepared'; the infinitive 'to serve' becomes the passive infinitive 'to be served', since it is the dish that is served, not the one doing the serving.",
+      {"b": mistake("'To be serve' is not a grammatical infinitive form; it should be 'to be served'."),
+       "c": mistake("'To served' drops the 'be' that the passive infinitive needs."), "d": mistake("'Is prepared' switches to the simple present, losing the present perfect of 'has prepared'.")},
+      rules=["ap-r1"], paper="2026-10-07", qno=79, tech=["eliminate-pair"]),
+    q("q-ap-active", "transform", _A + "His application had been looked over by a special committee for weeks.",
+      ["A special committee has looked over his application for weeks.", "A special committee was looking over his application for weeks.",
+       "A special committee had been looking over his application for weeks.", "His application was looked over by a special committee."], "c",
+      "'Had been looked over' (past perfect continuous passive) becomes 'had been looking over' in the active, with the agent 'a special committee' as the new subject.",
+      {"a": mistake("'Has looked over' switches to the present perfect, losing the past-perfect tense of the original."),
+       "b": mistake("'Was looking over' is only past continuous, which drops the perfect aspect 'had been' carries."),
+       "d": ruled_out("This keeps the sentence in the passive voice instead of converting it to active.")},
+      rules=["ap-r4"], paper="2026-10-07", qno=83, tech=["eliminate-pair"]),
+]
+PYQS = PYQS + _PYQ2
+
 
 def practice_items():
     return _base() + _EXTRA + _EXTRA2

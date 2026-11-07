@@ -120,6 +120,14 @@ PYQS = [
        "c": mistake("'Didn't feel' changes the continuous aspect to a simple past."),
        "d": ruled_out("The auxiliary 'was' is missing, so the sentence is ungrammatical.")},
       rules=["di-r1"], paper=S3, qno=98, tech=["eliminate-pair"], trick="am feeling -> was feeling."),
+    q("q-di-statement", "transform", _TO_D + "She said that they would have left the town and moved to Pune by the following week.",
+      ["She said, \"They will have left the town and moved to Pune by next week.\"", "She said, \"That they would leave the town and move to Pune by next week.\"",
+       "She said, \"They have left the town and moved to Pune by the following week.\"", "She said, \"They will leave the town and move to Pune by the following week.\""], "a",
+      "The reported future perfect 'would have left' goes back to the direct future perfect 'will have left', and the reversed time word 'the following week' becomes 'next week' again.",
+      {"b": mistake("This keeps 'would' instead of reversing it to 'will', and opens the quoted words with 'that', which direct speech never does."),
+       "c": ruled_out("This drops the future-perfect form 'will have left' down to the present perfect 'have left', and leaves 'the following week' unreversed."),
+       "d": mistake("This uses the simple future 'will leave' instead of the future perfect 'will have left', and also leaves the time word unreversed.")},
+      rules=["di-r1", "di-r2"], paper="2026-10-07", qno=100, tech=["eliminate-pair"], trick="would have left -> will have left; the following week -> next week."),
 ]
 
 

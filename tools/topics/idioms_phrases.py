@@ -135,6 +135,8 @@ _I = [
     ("cross-purposes", "at cross purposes", "Misunderstanding each other's aims.", "We talked at cross purposes because I meant the museum and he meant the market.", "misunderstand", ()),
     ("lose-heart", "lose heart", "To lose hope or confidence.", "Do not lose heart after one failure.", "discourage", ()),
     ("chip-on-shoulder", "have a chip on one's shoulder", "To feel angry or resentful about a past wrong.", "Do not have a chip on your shoulder about being passed over.", "resent", ()),
+    ("give-one-the-slip", "give one the slip", "To escape from someone, often by a trick.", "He managed to give his pursuers the slip near the station.", "escape", ("to escape from someone",)),
+    ("red-letter-day", "a red letter day", "A memorable day because of some pleasant or important event.", "Her graduation was a red letter day for the whole family.", "memorable", ("memorable day",)),
 ]
 
 WORDS = [word(i, t, "idiom", m, ex=e, also=list(a)) for i, t, m, e, g, a in _I]
@@ -213,6 +215,16 @@ PYQS = [
          "b": mistake("Vanishing suddenly takes 'blow' to mean 'disappear'; a blown fuse is an outburst, not a disappearance."),
          "d": ruled_out("Managing a situation smartly has nothing to do with losing control.")},
         trick="A blown fuse is an electrical outburst: sudden anger."),
+    _pq(80, "2026-10-07", "give-one-the-slip", ["to flatter others", "to neglect someone", "to give a notice", "to escape from someone"], "d",
+        "To give someone the slip means to escape or get away from them, often by a trick.",
+        {"a": ruled_out("Flattering someone is about praise, unrelated to escaping."), "b": mistake("Neglecting someone is about ignoring a duty, not getting away from a pursuer."),
+         "c": ruled_out("Giving a notice means a formal warning, which has nothing to do with escape.")},
+        trick="'Slip' suggests slipping away unnoticed: to escape."),
+    _pq(99, "2026-10-07", "red-letter-day", ["Memorable day", "Rose day", "Holiday", "Birthday"], "a",
+        "A red letter day is a memorable day because of some important or pleasant event, not necessarily a holiday or birthday.",
+        {"b": ruled_out("'Rose day' is not a recognised meaning of this idiom."), "c": mistake("A holiday is a day off work, but a red letter day is defined by being memorable, not by being a holiday."),
+         "d": mistake("A birthday is one kind of memorable day, but the idiom is broader and covers any important or pleasant occasion.")},
+        trick="Red letters once marked feast days and holy days on old calendars: a day worth remembering."),
 ]
 
 

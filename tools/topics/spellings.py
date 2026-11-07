@@ -50,6 +50,15 @@ REFS = []
 
 # (id, correct spelling, three misspellings, memory hint, rule, rare, own example sentence)
 _S = [
+    ("reconnaissance", "reconnaissance", ["reconnassance", "reconaissance", "reconnaisance"], "Two n and two s: re-con-nais-sance.", "sp-r1", True, "The scouts carried out a reconnaissance of the enemy camp."),
+    ("facsimile", "facsimile", ["facsmile", "facsimily", "facsimele"], "Say every syllable: fac-sim-i-le. No double letters.", "sp-r6", True, "The museum displayed a facsimile of the original manuscript."),
+    ("supplication", "supplication", ["supplecation", "suplication", "supplicasion"], "Two p: sup-pli-ca-tion, from 'supplicate'.", "sp-r1", True, "He fell to his knees in supplication before the king."),
+    ("conscientious", "conscientious", ["consciencious", "conscientous", "conscienscious"], "Say every syllable: con-sci-en-tious, from 'conscience'.", "sp-r6", True, "A conscientious worker checks every report before submitting it."),
+    ("indispensable", "indispensable", ["indispensible", "indispensibel", "indispensanble"], "Ends in -able, not -ible: in-dis-pens-a-ble.", "sp-r6", True, "Clean water is indispensable for good health."),
+    ("entrepreneur", "entrepreneur", ["entreprenuer", "entrepeneur", "enterpreneur"], "Say every syllable: en-tre-pre-neur, borrowed whole from French.", "sp-r6", True, "The young entrepreneur started three companies before turning thirty."),
+    ("euphemism-spell", "euphemism", ["euphamism", "eupheism", "euphemisim"], "Say every syllable: eu-phe-mism.", "sp-r6", True, "'Passed away' is a common euphemism for 'died'."),
+    ("fractious", "fractious", ["fracteous", "fractous", "fractiuos"], "Say every syllable: frac-tious, from the same root as 'fraction'.", "sp-r6", True, "The fractious toddler refused to nap."),
+    ("willful", "willful", ["wilfull", "willfull", "wifull"], "The American spelling doubles the l in 'will': will-ful. ('Wilful', with one l, is the British spelling and is also accepted.)", "sp-r6", True, "His willful disregard for the rules angered the committee."),
     ("accommodate", "accommodate", ["acommodate", "accomodate", "acomodate"], "Two c and two m: ac-com-mo-date.", "sp-r1", False, "The hotel can accommodate two hundred guests."),
     ("achievement", "achievement", ["acheivement", "achievment", "achivement"], "i before e, then keep the e before ment.", "sp-r2", False, "Passing the exam was her proudest achievement."),
     ("acknowledge", "acknowledge", ["acknowlege", "aknowledge", "acknowledege"], "ac + knowledge: keep the d.", "sp-r6", False, "He did not acknowledge the mistake."),
@@ -222,6 +231,7 @@ PYQ_TEXT = {
     (S1, 87): "Spot the correct spelling of a CSF-shunt procedure.",
     (S2, 89): "Spot the correct spelling of a drug-effect psychology field.",
     (S3, 95): "Identify the correct spelling of the term for chromosomal 'three copies'.",
+    ("2026-10-07", 87): "Choose the correctly spelt word.",
 }
 
 PYQS = [
@@ -235,6 +245,12 @@ PYQS = [
         "Privilege has one l and ends -ege; 'privillage' doubles the l and changes the ending.", trick="Privilege: one l, ends -ege."),
     _pc(95, S3, "trisomy", ["Trissomie", "Trissomy", "Trisomy", "Trisomie"], "c",
         "Trisomy is tri (three) + somy (body): one s, and it ends in -y like 'monosomy'.", trick="Tri + somy."),
+    _pm(81, "2026-10-07", "reconnaissance", ["Conscientious", "Indispensable", "Reconnassance", "Entrepreneur"], "c",
+        "'Reconnassance' drops a letter; the correct spelling is 'reconnaissance', with two n and two s.", trick="Re-con-nais-sance: two n, two s."),
+    _pc(87, "2026-10-07", "facsimile", ["Facsimile", "Facsmile", "Facsimily", "Facsimele"], "a",
+        "'Facsimile' is said in four even syllables, fac-sim-i-le, with no double letters.", trick="Fac + sim + i + le, said whole."),
+    _pm(93, "2026-10-07", "supplication", ["Euphemism", "Fractious", "Willful", "Supplecation"], "d",
+        "'Supplecation' is wrong; the correct spelling is 'supplication', with two p, from 'supplicate'.", trick="Sup-pli-ca-tion: two p."),
 ]
 
 

@@ -9,6 +9,8 @@ PREFIX = "hm"
 NODES = {
     "q-hm-sense": {"short": "Other sense", "label": "Sentence with a different sense of the word", "kind": "qtype", "parent": TOPIC, "order": 1,
                    "summary": "A sentence fixes one meaning of a word; choose the option where the word means something else.", "links": []},
+    "q-hm-choose": {"short": "Correctly used homophone", "label": "Pick the correctly spelt homophone for its meaning", "kind": "qtype", "parent": TOPIC, "order": 2,
+                    "summary": "Four sentences each use a different spelling of a group of same-sounding words (sometimes including a made-up non-word); pick the one whose spelling actually matches the sense it is used in.", "links": []},
 }
 
 RULES = [
@@ -16,6 +18,8 @@ RULES = [
      "ok": "'bank' of a river vs 'bank' that keeps money: different senses.", "bad": "Choosing another sentence that also means the riverside."},
     {"id": "hm-r2", "node": "q-hm-sense", "text": "Same spelling can change the part of speech: left (direction) vs left (past of leave), rose (flower) vs rose (past of rise), ring (jewel) vs ring (to sound). A change of part of speech means a change of sense.",
      "ok": "'rose' the flower vs 'rose' the sun did.", "bad": "Treating 'rose' as the same word-sense in both."},
+    {"id": "hm-r3", "node": "q-hm-choose", "text": "Homophones (words that sound alike but differ in spelling and meaning, such as flair/flare) are sometimes tested by giving one sentence per spelling. Decide what each sentence actually means, then pick the option whose spelling matches that meaning; a made-up spelling among the options (such as 'flaire') is never correct, however natural it looks.",
+     "ok": "'She has a flair for baking' (flair = a natural talent) is correct.", "bad": "'He tied the flag to the flaire' uses a spelling that does not exist."},
 ]
 
 METHODS = {
@@ -27,12 +31,20 @@ METHODS = {
                              "A change of part of speech (noun to verb) is a change of sense.",
                              "The word may sit in a proper noun (Bailey) in the odd sentence."],
                    "rules": ["hm-r1", "hm-r2"], "tech": ["read-whole"]},
+    "q-hm-choose": {"cue": "'Choose the sentence in which the homophone is correctly spelt and correctly used', with four full sentences built from one same-sounding word group.",
+                    "standard": "Work out the meaning each sentence needs, then check whether the spelling used actually carries that meaning. Reject any spelling that is not a real word at all before comparing meanings.",
+                    "fast": "The three wrong sentences usually swap the spellings of the same two-word pair (or invent a non-word); find the pairing and sort each sentence by the meaning it needs.",
+                    "eliminate": "Cross out any option that is not a real spelling first, then cross out every option whose spelling does not match its own sentence's meaning.",
+                    "traps": ["One option is often a spelling that does not exist at all (e.g. 'flaire'), not a real confusion.",
+                               "The two real spellings are swapped between sentences, so both wrong meanings appear, just attached to the wrong word."],
+                    "rules": ["hm-r3"], "tech": ["read-whole"]},
 }
 
 REFS = []
 WORDS = []
 S1, S2, S3 = "2025-09-12-S1", "2025-09-12-S2", "2025-09-12-S3"
 _SEL = "Select the sentence containing the homonym of the highlighted word:\n"
+_CH = "Choose the sentence in which the homophone is correctly spelt and correctly used for its meaning:"
 
 PYQS = [
     q("q-hm-sense", "homonym", _SEL + "The choir began the [[canon]] at the conductor's signal.",
@@ -62,6 +74,14 @@ PYQS = [
        "d": ruled_out("A palisade around the bailey is the castle courtyard again.")},
       rules=["hm-r1"], paper=S3, qno=81, rare=True,
       caution="The odd sentence is the one where the word is a capitalised surname, so the item tests proper noun against common noun more than two meanings of a word."),
+    q("q-hm-choose", "homonym", "Choose the sentence in which the homophone is correctly spelt and correctly used for its meaning:",
+      ["She has a flair for baking.", "He tied the flag to the flaire.", "They built a flair to signal help.", "She used a flare pen to write."], "a",
+      "'Flair' means a natural talent or stylish ability, which is exactly how (a) uses it ('a flair for baking'). 'Flaire' in (b) is not a real spelling at all. In (c) the sense needed is a bright signal light, which is 'flare', not 'flair'. In (d) the fine-tipped writing instrument is a 'flair' pen, not a 'flare' pen, so the two words are swapped there too.",
+      {"b": ruled_out("'Flaire' is not an English word under any spelling; the sentence cannot be correct however it is read."),
+       "c": ruled_out("A signal built to catch attention is a 'flare', not a 'flair'; this swaps the talent-word for the light-word."),
+       "d": ruled_out("The felt-tipped writing pen is a 'flair' pen, not a 'flare' pen; this again swaps the two spellings.")},
+      rules=["hm-r3"], paper="2026-10-07", qno=95,
+      caution="All four options are grammatically fine sentences; the test is purely whether the spelling used matches the sense each sentence needs, with one option using a spelling that is not even a real word."),
 ]
 
 
@@ -139,4 +159,28 @@ def practice_items():
             "b": mistake("A word that smells sweet can only be the flower, so it shares the stem's sense."),
             "d": ruled_out("A white rose given to her is the flower, the stem's sense.")},
            rules=("hm-r1", "hm-r2"), rare=True),
+        q("q-hm-choose", "homonym", _CH,
+          ["The car remained stationary at the red light.", "She bought new stationary for the office party.",
+           "The stationary store sold pens, envelopes and notebooks.", "He stood stationery during the national anthem."], "a",
+          "'Stationary' (with an a) means not moving, which is exactly how (a) uses it. 'Stationery' (with an e) is the word for paper, pens and other writing goods, which is the sense (b) and (c) both need; (d) needs the motionless sense again but spells it with an e.",
+          {"b": mistake("'Stationary' (motionless) is used where the office supplies sense, 'stationery', was needed."),
+           "c": ruled_out("A shop selling pens and envelopes is a 'stationery' store, the writing-goods spelling, not 'stationary'."),
+           "d": ruled_out("Standing still during the anthem needs 'stationary', the motionless spelling, not 'stationery'.")},
+          rules=["hm-r3"], uid="hm-p14"),
+        q("q-hm-choose", "homonym", _CH,
+          ["Her scarf perfectly complements the blue dress.", "He paid her a complement on her excellent speech.",
+           "The chef added fresh basil to compliment the tomato sauce.", "The staff received a glowing complement from the inspector."], "a",
+          "'Complement' (with an e) means to go well with or complete something, which is exactly how (a) uses it. 'Compliment' (with an i) is praise, the sense (b) and (d) both need; (c) needs the 'goes well with' sense again but spells it with an i.",
+          {"b": mistake("'Complement' (goes well with) is used where the praise sense, 'compliment', was needed."),
+           "c": ruled_out("Basil added to round off a sauce's flavour is a 'complement', the completing-spelling, not 'compliment'."),
+           "d": ruled_out("Praise from an inspector is a 'compliment', the praise-spelling, not 'complement'.")},
+          rules=["hm-r3"], uid="hm-p15"),
+        q("q-hm-choose", "homonym", _CH,
+          ["The artist stretched a blank canvas before starting the portrait.", "The volunteers plan to canvas every street before the election.",
+           "The tent was made of a thick canvass that kept out the rain.", "The two campaigns will canvass their rivals' old voters together."], "a",
+          "'Canvas' (noun, one s) is the heavy cloth used for painting or tents, which is exactly how (a) uses it. 'Canvass' (verb, two s's) means to go around seeking votes or opinions, the sense (b) and (d) both need; (c) needs the cloth sense again but spells it with two s's.",
+          {"b": mistake("'Canvas' (the cloth) is used where the vote-seeking verb, 'canvass', was needed."),
+           "c": ruled_out("Fabric that keeps out rain is 'canvas', the cloth spelling, not 'canvass'."),
+           "d": ruled_out("Seeking out old voters is to 'canvass', the verb spelling, not 'canvas'.")},
+          rules=["hm-r3"], rare=True, uid="hm-p16"),
     ]

@@ -3,7 +3,7 @@ analysed so far, so this topic is built from the rules and drilled, not from a f
 from bank import mistake, ruled_out, q
 
 TOPIC = "articles"
-TIER = "seed"
+TIER = "quiz"
 PREFIX = "ar"
 
 NODES = {
@@ -204,4 +204,11 @@ def practice_items():
     ]
 
 
-PYQS = []
+PYQS = [
+    q("q-ar-plural", "spot-error", "Find the part of the sentence that contains an error:\nNo sooner did the Commissioner enter the hall / than the members rose from their seats / and greeted him with a loud applause.",
+      ["No sooner did the Commissioner enter the hall", "than the members rose from their seats", "and greeted him with a loud applause", "No error"], "c",
+      "'Applause' is an uncountable noun and cannot take 'a'; the correct phrase is simply 'with loud applause'. The 'no sooner ... than' inversion in the first two parts is correctly formed.",
+      {"a": ruled_out("The inversion after 'no sooner' is correctly formed: did + subject + base verb."), "b": ruled_out("'Than the members rose' correctly completes the 'no sooner ... than' pair."),
+       "d": ruled_out("There is an error, in part (c).")},
+      rules=["ar-r7"], paper="2026-10-07", qno=97, tech=["read-whole"]),
+]
