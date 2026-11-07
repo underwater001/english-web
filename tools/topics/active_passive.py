@@ -283,7 +283,25 @@ _PYQ2 = [
        "d": ruled_out("This keeps the sentence in the passive voice instead of converting it to active.")},
       rules=["ap-r4"], paper="2026-10-07", qno=83, tech=["eliminate-pair"]),
 ]
-PYQS = PYQS + _PYQ2
+_PYQ3 = [
+    q("q-ap-active", "transform", _A + "The victims were provided food and shelter by the volunteers.",
+      ["The volunteers were providing food and shelter to the victims.", "The volunteers have provided food and shelter to the victims.",
+       "The volunteers provide food and shelter to the victims.", "The volunteers provided food and shelter to the victims."], "d",
+      "The passive 'were provided' is simple past, so the active form takes the simple past too: 'provided', with the agent 'the volunteers' as the subject and 'to' added before the receiver.",
+      {"a": mistake("'Were providing' is past continuous, a tense the simple past passive 'were provided' does not carry."),
+       "b": mistake("'Have provided' is present perfect, losing the simple past tense of 'were provided'."),
+       "c": mistake("'Provide' is simple present, losing the past tense entirely.")},
+      rules=["ap-r4"], paper="2026-10-08", qno=88, tech=["eliminate-pair"]),
+    q("q-ap-causative", "transform", _P + "The usher must have made the guests sit by the time the dinner was ready.",
+      ["The guests must have been made sit by the usher by the time the dinner was ready.", "The guests must have been made to sit by the usher by the time the dinner was ready.",
+       "The guests must have been made to sit by the usher by the time the dinner had been ready.", "The guests must have made to sit by the usher by the time the dinner had been ready."], "b",
+      "'Make' is a causative verb that takes a bare infinitive in the active ('made the guests sit') but 'to + V1' once passivised, so 'sit' becomes 'to sit'; the modal perfect 'must have made' becomes 'must have been made', and the untouched time clause 'by the time the dinner was ready' stays exactly as it is.",
+      {"a": mistake("'Must have been made sit' drops the 'to' that a passivised causative verb requires before the bare infinitive."),
+       "c": ruled_out("'Had been ready' needlessly shifts the untouched time clause into the past perfect; the original 'was ready' stays as it is."),
+       "d": ruled_out("'Must have made to sit' keeps the sentence in the active voice (no 'been') while also wrongly adding 'to', and changes the time clause too.")},
+      rules=["ap-r2", "ap-r8"], paper="2026-10-08", qno=91, tech=["eliminate-pair"], rare=True),
+]
+PYQS = PYQS + _PYQ2 + _PYQ3
 
 
 def practice_items():

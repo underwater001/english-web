@@ -11,6 +11,8 @@ NODES = {
                   "summary": "Four sentences with connectors (However, This, Consequently, In addition): find the opener, then follow the links.", "links": []},
     "q-pj-process": {"short": "Process order", "label": "Arrange steps of a process", "kind": "qtype", "parent": TOPIC, "order": 2,
                      "summary": "Short passive steps (gathered, examined, designed, applied): put them in the order a real process runs.", "links": []},
+    "q-pj-fixed": {"short": "Fixed ends", "label": "Arrange with the first and last sentence fixed", "kind": "qtype", "parent": TOPIC, "order": 3,
+                   "summary": "S1 and S2 are already given; arrange the four lettered sentences A-D that go between them.", "links": []},
 }
 
 RULES = [
@@ -20,6 +22,8 @@ RULES = [
      "ok": "One approach is moving to renewables. This transition lowers emissions.", "bad": "This transition lowers emissions. One approach is moving to renewables."},
     {"id": "pj-r3", "node": "q-pj-process", "text": "Order a process by what has to happen before what: gather data, then examine or monitor it, then classify it, then plan the action, then apply the findings. A step cannot use something that is made later.",
      "ok": "Information gathered -> feedback examined -> campaign designed -> findings applied.", "bad": "Campaign designed -> feedback examined (nothing to base it on)."},
+    {"id": "pj-r4", "node": "q-pj-fixed", "text": "With S1 and S2 already fixed, use them as anchors instead of hunting for an opener: find the lettered sentence that follows on naturally from S1's last idea, and the one that leads naturally into S2's first idea. The middle two then fall into place between them.",
+     "ok": "S1 ends with him falling asleep; the next sentence must describe him waking up, not the gold he later finds.", "bad": "Placing the sentence about the gold straight after S1, before anything explains how he noticed it."},
 ]
 
 METHODS = {
@@ -35,6 +39,12 @@ METHODS = {
                      "eliminate": "Drop options in which a step uses something not yet made.",
                      "traps": ["Two middle steps can look swappable; ask which depends on the other.", "Starting with the planning step."],
                      "rules": ["pj-r3"], "tech": ["first-sentence", "pair-up"]},
+    "q-pj-fixed": {"cue": "S1 and a final sentence (often S2) are printed already in place; only four lettered sentences A-D must be ordered between them.",
+                   "standard": "Read S1 and the fixed last sentence first. Find the lettered sentence that continues S1's idea directly, and the one that leads straight into the last sentence; place the remaining two between those two.",
+                   "fast": "Match pronouns across the gap: a 'he'/'it'/'this' in a lettered sentence must point back to something S1 or an earlier letter has already named.",
+                   "eliminate": "Drop any option whose first letter does not follow on from S1, and any whose last letter does not lead into the fixed closing sentence.",
+                   "traps": ["A dramatic detail (the gold, the treasure) placed too early, before the sentence that sets it up.", "Forgetting that the fixed last sentence is itself a clue to what the final letter must say."],
+                   "rules": ["pj-r4"], "tech": ["first-sentence", "pair-up"]},
 }
 
 REFS = []
@@ -188,6 +198,13 @@ _EXTRA = [
        "c": mistake("This places 'However, a hive needs...' (1) before the objection in 3 that it answers."),
        "d": ruled_out("This opens with the rooftop hives already operating (4), before the idea has even been introduced.")},
       rules=["pj-r1", "pj-r2"], uid="pj-p14", tech=["first-sentence", "connectors"]),
+    q("q-pj-para", "rearrange", _R2 + "1. Early zips jammed so often that tailors avoided them for years after their invention.\n2. A costume designer finally proved their worth by fastening a sailor's money belt shut on stage.\n3. The zip fastener was patented in 1893 but took decades to reach ordinary clothing.\n4. After that demonstration, manufacturers across the clothing industry began fitting zips as standard.",
+      ["3, 1, 2, 4", "1, 3, 2, 4", "3, 2, 1, 4", "2, 3, 1, 4"], "a",
+      "3 gives the zip's origin and slow start, 1 explains why tailors avoided it (jamming), 2 ('A costume designer') gives the turning-point demonstration, and 4 ('After that demonstration') gives the result.",
+      {"b": mistake("This opens with 1, the jamming problem, before 3 has even introduced the zip fastener itself."),
+       "c": ruled_out("This places 2, the stage demonstration, before 1 has explained why tailors were avoiding zips in the first place."),
+       "d": ruled_out("This opens with 2, the stage demonstration, before the zip fastener itself (3) has been introduced at all.")},
+      rules=["pj-r1", "pj-r2"], uid="pj-p15", tech=["first-sentence", "connectors"]),
 ]
 
 
@@ -223,7 +240,44 @@ _PYQ2 = [
        "d": ruled_out("This opens with 'It holds immense potential', before the discipline it refers to has been named.")},
       rules=["pj-r1", "pj-r2"], paper="2026-10-07", qno=98, tech=["first-sentence", "connectors"]),
 ]
-PYQS = PYQS + _PYQ2
+_PYQ3 = [
+    q("q-pj-para", "rearrange", _R2 + "1. In today's fast-paced world, it can be easy to feel disconnected from others.\n2. That's why it's important to make time for face-to-face interactions with friends and loved ones.\n3. Social media and technology have made it easier than ever to stay in touch, but they can also contribute to feelings of isolation.\n4. By prioritizing these connections, we can improve our mental health and overall well-being.",
+      ["1324", "1234", "3124", "1423"], "a",
+      "1 states the problem of feeling disconnected, 3 explains the double-edged cause (social media), 2 ('That's why') draws the conclusion that face-to-face time matters, and 4 gives the final benefit.",
+      {"b": mistake("This places 2 ('That's why') directly after 1, before 3 has given the reason that 'that's why' points back to."),
+       "c": ruled_out("This opens with 3, discussing social media, before the general disconnection problem in 1 has been introduced."),
+       "d": ruled_out("This places 4, the final benefit, directly after 1, skipping the reason (3) and the conclusion (2) that lead up to it.")},
+      rules=["pj-r1", "pj-r2"], paper="2026-10-08", qno=89, tech=["first-sentence", "connectors"]),
+    q("q-pj-para", "rearrange", _R2 + "A. One of the earliest known vacuum cleaners was so large that it had to be hauled from house to house.\nB. Its giant hoses were popped through the windows of customers.\nC. Vacuum cleaners were originally horse-drawn.\nD. A gas-powered motor generated the suction that pulled the dirt and debris into a glass container where onlookers could gawk at the volume of filth coming from their neighbours' homes.",
+      ["CBDA", "CDAB", "CABD", "CADB"], "c",
+      "C states the topic (horse-drawn vacuum cleaners), A describes the earliest machine, B follows with the hoses popped through windows, and D closes with how the suction worked and what onlookers saw.",
+      {"a": mistake("This places B, the hoses, before A has introduced the huge, hauled machine those hoses belong to."),
+       "b": mistake("This places D, the suction mechanism, before A has introduced the machine that produces it."),
+       "d": ruled_out("This places D, the suction and onlookers, before B's hoses through the windows, breaking the order in which the machine is described.")},
+      rules=["pj-r1", "pj-r2"], paper="2026-10-08", qno=90, tech=["first-sentence", "connectors"]),
+    q("q-pj-para", "rearrange", _R2 + "A. The Voynich Manuscript is a 240-page medieval tome written in an unknown language that has baffled scholars and code-breakers for years.\nB. All attempts to translate the book's text or identify the plants depicted in it have failed.\nC. The manuscript is believed to have originated sometime between 1404 and 1438.\nD. It is filled with enigmatic illustrations and diagrams that seem to depict everything from unusual plants to women with swollen bellies bathing in green pools.",
+      ["ACDB", "ADBC", "ABDC", "ACBD"], "a",
+      "A introduces the manuscript, C gives its date of origin, D describes its illustrations, and B closes with the failure to translate the text or identify what D has just described.",
+      {"b": mistake("This places B, the failed attempts, before C has given the manuscript's date and before D's illustrations are even described for B to refer back to."),
+       "c": ruled_out("This places B immediately after A, before the manuscript's date (C) or its illustrations (D) have been mentioned at all."),
+       "d": mistake("This places B, the failed attempts to identify the plants, before D has described the illustrations and plants that B refers back to.")},
+      rules=["pj-r1", "pj-r2"], paper="2026-10-08", qno=95, tech=["first-sentence", "connectors"]),
+    q("q-pj-fixed", "rearrange",
+      "The first and last sentences of a paragraph (S1 and S2) are fixed. Arrange A, B, C and D in the correct order between them:\n"
+      "S1 Two days and two nights did Peter sleep without once awakening.\n"
+      "A. He looked; there were two bags of gold.\n"
+      "B. When he came to himself, on the third day, he looked long at all the corners of his hut but in vain did he endeavour to recollect what had taken place; his memory was like a miser's pocket from which you cannot entice a quarter of a kopek.\n"
+      "C. Stretching himself, he heard something clash at his feet.\n"
+      "D. Then only, as if in a dream, he recollected that he had been seeking for treasure and that something had frightened him in the woods.\n"
+      "S2 But at what price he had obtained it, and how, he could by no means tell.",
+      ["CADB", "BCAD", "ACDB", "CDBA"], "b",
+      "B follows S1 directly: Peter wakes on the third day and cannot recall anything. C has him stretch and hear something at his feet. A shows what that something was: two bags of gold. D then has him recollect the treasure-seeking that explains the gold, which leads into S2's question of what price he paid for it.",
+      {"a": mistake("This opens with C, stretching and hearing the clash, before B has described Peter waking and failing to recall anything, which S1 leads into directly."),
+       "c": ruled_out("This opens with A, seeing the gold, before C has him even stretch and hear the clash that leads to finding it."),
+       "d": mistake("This places D, recollecting the treasure-seeking, before A has shown him the two bags of gold that D's recollection explains.")},
+      rules=["pj-r4"], paper="2026-10-08", qno=94, tech=["first-sentence", "pair-up"], rare=True),
+]
+PYQS = PYQS + _PYQ2 + _PYQ3
 
 
 def practice_items():

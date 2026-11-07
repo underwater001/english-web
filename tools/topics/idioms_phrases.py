@@ -10,6 +10,8 @@ PREFIX = "id"
 NODES = {
     "q-idiom-meaning": {"short": "Meaning", "label": "Meaning of an idiom", "kind": "qtype", "parent": TOPIC, "order": 1,
                         "summary": "An idiom in inverted commas; pick the option that gives its meaning.", "links": []},
+    "q-idiom-identify": {"short": "Identify idiom", "label": "Pick the idiom that has this meaning", "kind": "qtype", "parent": TOPIC, "order": 2,
+                        "summary": "A meaning is spelled out in full; pick the idiom (from four real idioms) that actually means that.", "links": []},
 }
 
 RULES = [
@@ -17,6 +19,8 @@ RULES = [
      "ok": "Spill the beans = reveal a secret.", "bad": "Spill the beans = drop some beans."},
     {"id": "id-r2", "node": "q-idiom-meaning", "text": "Idioms cluster by feeling: trouble, anger, secrecy, ease, effort, luck, haste. Decide the feeling from the sentence, then match the option with that feeling.",
      "ok": "'in hot water' and 'on thin ice' both say trouble or risk.", "bad": "Choosing an effort meaning for 'in hot water'."},
+    {"id": "id-r3", "node": "q-idiom-identify", "text": "When the meaning is given and the idiom itself is the answer, the three wrong options are usually other real idioms, often built from the same image or word (bell, blood, water). Match the feeling of the given meaning first, then confirm by recalling the exact idiom; do not pick an option merely because it shares a word with the meaning.",
+     "ok": "Meaning 'eagerly, with enthusiasm' -> 'with bells on'.", "bad": "Picking 'sound as a bell' because it also contains 'bell'."},
 ]
 
 METHODS = {
@@ -28,6 +32,13 @@ METHODS = {
         "traps": ["The literal meaning is nearly always listed as bait.", "The meaning of a similar-sounding idiom is the second common trap.",
                   "Do not pick an option only because it contains a word from the idiom."],
         "rules": ["id-r1", "id-r2"], "tech": ["literal-trap"]},
+    "q-idiom-identify": {
+        "cue": "The full meaning is spelled out in a sentence; the four options are themselves idioms, and you must name the one that carries that meaning.",
+        "standard": "Decide the feeling the given meaning carries (eager, secretive, angry, lucky), then pick the one option among the four idioms that matches that feeling exactly.",
+        "fast": "Recall the idiom as a fixed phrase first; do not reason from the individual words of the options.",
+        "eliminate": "Drop any option idiom whose stored meaning you know is different, even if it shares a word (bell, blood) with the given meaning.",
+        "traps": ["An option that shares a word with the meaning but is a different idiom entirely.", "Two idioms built on the same image (bell, water, moon) tested against each other."],
+        "rules": ["id-r3"], "tech": ["literal-trap"]},
 }
 
 REFS = []
@@ -137,6 +148,8 @@ _I = [
     ("chip-on-shoulder", "have a chip on one's shoulder", "To feel angry or resentful about a past wrong.", "Do not have a chip on your shoulder about being passed over.", "resent", ()),
     ("give-one-the-slip", "give one the slip", "To escape from someone, often by a trick.", "He managed to give his pursuers the slip near the station.", "escape", ("to escape from someone",)),
     ("red-letter-day", "a red letter day", "A memorable day because of some pleasant or important event.", "Her graduation was a red letter day for the whole family.", "memorable", ("memorable day",)),
+    ("up-to-the-minute", "up to the minute", "To be as current or up to date as possible.", "The live blog keeps its headlines up to the minute.", "current", ("to be as current as is possible",)),
+    ("with-bells-on", "with bells on", "Eagerly, with great enthusiasm, or ready to enjoy oneself.", "Tell them I will be there with bells on.", "eager", ()),
 ]
 
 WORDS = [word(i, t, "idiom", m, ex=e, also=list(a)) for i, t, m, e, g, a in _I]
@@ -194,6 +207,11 @@ def _pq(qno, paper, wid, options, key, why, wrong, **kw):
              options, key, why, wrong, lex=("meaning", wid), paper=paper, qno=qno, rules=["id-r1", "id-r2"], tech=["literal-trap"], **kw)
 
 
+def _rev(uid, wid, options, key, why, wrong, **kw):
+    return q("q-idiom-identify", "meaning", f"Which of the following idioms has the meaning: '{_M[wid]}'?",
+             options, key, why, wrong, lex=("fits", wid), uid=uid, rules=["id-r3"], tech=["literal-trap"], **kw)
+
+
 S1, S2, S3 = "2025-09-12-S1", "2025-09-12-S2", "2025-09-12-S3"
 
 PYQS = [
@@ -225,6 +243,19 @@ PYQS = [
         {"b": ruled_out("'Rose day' is not a recognised meaning of this idiom."), "c": mistake("A holiday is a day off work, but a red letter day is defined by being memorable, not by being a holiday."),
          "d": mistake("A birthday is one kind of memorable day, but the idiom is broader and covers any important or pleasant occasion.")},
         trick="Red letters once marked feast days and holy days on old calendars: a day worth remembering."),
+    _pq(82, "2026-10-08", "up-to-the-minute", ["At the last possible instant or opportunity", "To wait or pause", "To be as current as is possible", "At a very rapid pace"], "c",
+        "Up to the minute means as current or up to date as possible, so the sense is about currency of information, not speed or timing.",
+        {"a": ruled_out("'At the last possible instant' is about timing, confusing 'minute' as a point in time rather than up-to-dateness."),
+         "b": ruled_out("'To wait or pause' has no connection to being current."),
+         "d": mistake("'At a very rapid pace' again reads 'minute' as a unit of speed, not of how current the information is.")},
+        trick="'Minute' here means 'current moment', not 'fast' or 'brief'."),
+    q("q-idiom-identify", "meaning", "Which of the following idioms has the meaning: 'Eagerly, with great enthusiasm, or ready to enjoy oneself'?",
+      ["Bear the bell", "Passing bells", "With bells on", "Sound as a bell"], "c",
+      "'With bells on' means to come eagerly and enthusiastically, ready to enjoy oneself, exactly the meaning given.",
+      {"a": ruled_out("'Bear the bell' means to take the lead or be the best at something, not to arrive eagerly."),
+       "b": ruled_out("'Passing bells' are the bells rung to mark a death, unrelated to eagerness or enthusiasm."),
+       "d": mistake("'Sound as a bell' means perfectly healthy or in excellent condition, not eager or enthusiastic.")},
+      lex=("fits", "with-bells-on"), rules=["id-r3"], paper="2026-10-08", qno=83, tech=["literal-trap"]),
 ]
 
 
@@ -260,5 +291,20 @@ def practice_items():
               {"a": mistake("This reads the body parts literally; the idiom is about price."),
                "b": ruled_out("That is the meaning of 'break the ice'."),
                "c": ruled_out("That is the meaning of 'a blessing in disguise'.")}),
+        _rev("id-rev01", "spill-the-beans", ["Spill the beans", "Burn the midnight oil", "Once in a blue moon", "Lose heart"], "a",
+             "'Spill the beans' means to reveal a secret, matching the meaning given.",
+             {"b": ruled_out("'Burn the midnight oil' means to work or study late into the night, not to reveal a secret."),
+              "c": ruled_out("'Once in a blue moon' means very rarely, not to reveal a secret."),
+              "d": mistake("'Lose heart' means to lose hope or confidence, which can follow a setback but is not the same as revealing a secret.")}),
+        _rev("id-rev02", "burn-the-midnight-oil", ["At cross purposes", "Burn the midnight oil", "Once in a blue moon", "Spill the beans"], "b",
+             "'Burn the midnight oil' means to work or study late into the night, matching the meaning given.",
+             {"a": mistake("'At cross purposes' means misunderstanding each other's aims, not working late."),
+              "c": ruled_out("'Once in a blue moon' means very rarely, which says nothing about working late."),
+              "d": ruled_out("'Spill the beans' means to reveal a secret, unrelated to working late.")}),
+        _rev("id-rev03", "queer-the-pitch", ["At cross purposes", "Lose heart", "Queer the pitch", "Once in a blue moon"], "c",
+             "'Queer the pitch' means to spoil someone's plans or chances, matching the meaning given.",
+             {"a": mistake("'At cross purposes' means two people misunderstanding each other's aims, not one person spoiling another's chances."),
+              "b": ruled_out("'Lose heart' means to lose hope or confidence, not to spoil someone else's plan."),
+              "d": ruled_out("'Once in a blue moon' means very rarely, unrelated to spoiling a plan.")}, rare=True),
     ]
     return hand + _gen()

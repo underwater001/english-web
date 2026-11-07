@@ -814,6 +814,12 @@ PYQS = [
          "b": mistake("Impetuous means acting suddenly without thought, almost the opposite of someone who sticks doggedly to a plan."),
          "c": ruled_out("Imprudent means unwise or careless, which does not match determination against problems.")},
         trick="Pertinacious comes from the Latin for 'holding on firmly': refusing to let go of a purpose.", rare=True),
+    _pq(92, "2026-10-08", "plutocracy", ["Oligarchy", "Plutocracy", "Autocracy", "Plutonomy"], "b",
+        "A plutocracy is a government controlled by the wealthy, which is exactly a government run by monopolists.",
+        {"a": mistake("An oligarchy is rule by a small privileged group, which may or may not be defined by wealth specifically."),
+         "c": ruled_out("An autocracy is rule by one person with unlimited power, not rule by a wealthy class."),
+         "d": ruled_out("'Plutonomy' is not a standard English word for a form of government.")},
+        trick="Pluto- (wealth) + -cracy (rule): rule by the rich.", rare=True),
 ]
 
 

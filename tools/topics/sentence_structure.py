@@ -10,6 +10,8 @@ NODES = {
                       "summary": "Items joined by 'and', 'or', 'not ... but' must have the same grammatical form.", "links": []},
     "q-ss-order": {"short": "Word order", "label": "Word order in embedded questions", "kind": "qtype", "parent": TOPIC, "order": 2,
                    "summary": "Inside a sentence, a question word is followed by statement order: where he is staying, not where is he staying.", "links": []},
+    "q-ss-redundant": {"short": "Redundancy", "label": "Needless repetition of the same idea", "kind": "qtype", "parent": TOPIC, "order": 3,
+                       "summary": "Two phrases in one sentence say the same thing twice; the part that only repeats an earlier idea, with nothing new, is the error.", "links": []},
 }
 
 RULES = [
@@ -21,6 +23,8 @@ RULES = [
      "ok": "Prudence, propriety and avoidance of early disclosure.", "bad": "Prudence, propriety and avoiding of early disclosure."},
     {"id": "ss-r4", "node": "q-ss-order", "text": "A question word inside another sentence (know, tell, ask, wonder) is followed by statement order: subject then verb, with no do/does/did and no inversion.",
      "ok": "No one knows where he is staying.", "bad": "No one knows where is he staying."},
+    {"id": "ss-r5", "node": "q-ss-redundant", "text": "When two phrases or phrasal verbs in one sentence describe the same action (look into / look over, discuss about, return back), the second one that only repeats the first, with no new information, is the error.",
+     "ok": "The committee looked into the irregularities and submitted its findings.", "bad": "The committee looked into the irregularities and eventually looked them over carefully (both phrases mean the same thing)."},
 ]
 
 METHODS = {
@@ -36,6 +40,12 @@ METHODS = {
                    "eliminate": "Remove options with an extra word at the end (staying at) or a wrong tense.",
                    "traps": ["Keeping the question order from the direct question.", "Adding 'at' or 'to' where the verb needs none."],
                    "rules": ["ss-r4"], "tech": ["read-whole"]},
+    "q-ss-redundant": {"cue": "'Find the part of the sentence that contains an error' over a sentence where two verb phrases seem to describe the same action twice.",
+                       "standard": "Work out exactly what each part of the sentence adds. If a later part restates what an earlier part already said, with no new fact, that later part is the error.",
+                       "fast": "Look for a pair of near-synonymous phrasal verbs (look into / look over, discuss / discuss about) sitting in the same sentence.",
+                       "eliminate": "Keep the part that introduced the action first; the part that only repeats it is the one to mark.",
+                       "traps": ["Mistaking the repeated phrase for a harmless added detail.", "Marking the first occurrence instead of the repeating one."],
+                       "rules": ["ss-r5"], "tech": ["read-whole"]},
 }
 
 REFS = []
@@ -72,6 +82,13 @@ PYQS = [
        "b": ruled_out("'The more pressing became the need' is the second part of the pattern, inverted for effect and acceptable."),
        "c": ruled_out("This begins a list of nouns and is correct; the fault is in the last item.")},
       rules=["ss-r3", "ss-r1"], paper=S3, qno=92, tech=["eliminate-pair"], trick="Nouns in a list end with a noun: avoidance."),
+    q("q-ss-redundant", "spot-error", _SPOT + "The investigative committee / decided to look into / the irregularities and eventually / looked them over carefully.",
+      ["The investigative committee", "decided to look into", "the irregularities and eventually", "looked them over carefully."], "d",
+      "'Decided to look into the irregularities' already states that the committee investigated them; 'looked them over carefully' repeats the same action a second time with no new information, so this closing phrase is the redundant error.",
+      {"a": ruled_out("'The investigative committee' is a correct subject, with no error."),
+       "b": ruled_out("'Decided to look into' correctly states the committee's action."),
+       "c": ruled_out("'The irregularities and eventually' is a correct object and connector, with no error in itself.")},
+      rules=["ss-r5"], paper="2026-10-08", qno=93, tech=["read-whole"], rare=True),
 ]
 
 

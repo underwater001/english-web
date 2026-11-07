@@ -85,6 +85,16 @@ _P3 = ("Long before electric beacons made the work largely automatic, a lighthou
        "navigation has made the manned lighthouse all but obsolete, the keeper's solitary vigil still carries a strange __5__ for anyone who has "
        "ever waited, alone, for a signal that might not come.")
 
+_P4 = ("After thirty years on the bench, Judge Ortiz had grown accustomed to the small rituals of a trial: the opening statements, the parade of "
+       "exhibits, the occasional objection raised more as a __1__ than as a serious challenge to the evidence. What she found harder to grow "
+       "accustomed to was the way a jury's first impression of a witness, once formed, tended to resist every later correction. A witness who "
+       "seemed __2__ with the facts already established would be believed almost without question, while one whose account, however accurate, "
+       "failed to fit the story the jury had already assembled in its mind would struggle to be heard at all. Jurors did not set out to be unfair; "
+       "they simply became __3__ to detail that did not confirm what they had decided early on. The judge had come to doubt whether even an "
+       "entirely __4__ slip, a wrong date, a misremembered colour, ever read as harmless once suspicion had taken hold. What she still believed, "
+       "after all those years, was that a patient, __5__ witness, one who corrected their own small errors rather than cover them, usually won a "
+       "jury over in the end, however long it took.")
+
 
 def practice_items():
     return [
@@ -182,4 +192,34 @@ PYQS = [
          "c": ruled_out("'Obsolescence' repeats the earlier point about the lighthouse being outdated, not the feeling it still provokes."),
          "d": ruled_out("'Ambiguity' means being unclear in meaning, not striking an emotional chord.")},
         ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-07", qno=92, rare=True),
+    _cq("cz-q76", "q-cz-sense", _P4, 1, ["exculpation", "cavil", "imputation", "salience"], "b",
+        "An objection raised without being a serious challenge is a 'cavil', a trivial or petty objection, matching 'more as a ... than as a serious challenge'.",
+        {"a": ruled_out("'Exculpation' means clearing someone of blame, unrelated to raising an objection."),
+         "c": mistake("'Imputation' means an accusation or suggestion of wrongdoing, not a trivial objection to evidence."),
+         "d": ruled_out("'Salience' means being prominent or noticeable, which does not fit 'objection' at all.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-08", qno=76, rare=True),
+    _cq("cz-q77", "q-cz-sense", _P4, 2, ["congruous", "refractory", "pellucid", "censorious"], "a",
+        "A witness whose account matches what the jury already believes seems 'congruous' with it, meaning fitting or consistent.",
+        {"b": mistake("'Refractory' means stubbornly resistant to control, which does not describe a witness's account matching the facts."),
+         "c": ruled_out("'Pellucid' means extremely clear, describing how something is expressed, not whether it fits the established facts."),
+         "d": ruled_out("'Censorious' means harshly critical, unrelated to whether an account fits the facts.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-08", qno=77, rare=True),
+    _cq("cz-q78", "q-cz-sense", _P4, 3, ["inimical", "receptive", "obsequious", "impervious"], "d",
+        "Jurors who stop noticing facts that contradict their first impression have become 'impervious' to that detail, meaning unaffected by it, resistant to letting it in.",
+        {"a": mistake("'Inimical' means harmful or hostile, which overstates a juror's passive refusal to notice contrary detail."),
+         "b": ruled_out("'Receptive' means open to new information, the opposite of what the sentence describes."),
+         "c": ruled_out("'Obsequious' means excessively eager to please, unrelated to resisting information.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-08", qno=78, rare=True),
+    _cq("cz-q79", "q-cz-sense", _P4, 4, ["innocuous", "recondite", "pernicious", "desultory"], "a",
+        "A wrong date or misremembered colour is, in itself, a harmless slip, so the word needed is 'innocuous', meaning harmless, matching the sentence's own 'ever read as harmless'.",
+        {"b": ruled_out("'Recondite' means obscure or hard to understand, not harmless."),
+         "c": mistake("'Pernicious' means harmful in a gradual, damaging way, the opposite of the harmless slip the sentence describes."),
+         "d": ruled_out("'Desultory' means lacking a plan or purpose, unrelated to whether a slip is harmless.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-08", qno=79, rare=True),
+    _cq("cz-q80", "q-cz-sense", _P4, 5, ["verisimilar", "veracious", "prolix", "vituperative"], "b",
+        "A witness who corrects their own small errors rather than hide them is being truthful, so the word needed is 'veracious', meaning truthful or honest.",
+        {"a": mistake("'Verisimilar' means having the appearance of truth, which is not the same as actually being truthful."),
+         "c": ruled_out("'Prolix' means tediously long-winded, unrelated to honesty."),
+         "d": ruled_out("'Vituperative' means harshly abusive in language, unrelated to a witness correcting their own errors.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-08", qno=80, rare=True),
 ]

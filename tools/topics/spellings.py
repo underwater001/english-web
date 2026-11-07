@@ -12,6 +12,8 @@ NODES = {
                         "summary": "Four spellings of one word; only one is right.", "links": []},
     "q-spell-misspelt": {"short": "Misspelt word", "label": "Find the misspelt word", "kind": "qtype", "parent": TOPIC, "order": 2,
                          "summary": "Four different words; one of them is spelt wrongly.", "links": []},
+    "q-spell-replace": {"short": "Fix in context", "label": "Correct a highlighted word, or say none is needed", "kind": "qtype", "parent": TOPIC, "order": 3,
+                        "summary": "A sentence highlights one word; pick the spelling that should replace it, or 'No replacement required' if it is already correct.", "links": []},
 }
 
 RULES = [
@@ -29,6 +31,8 @@ RULES = [
      "ok": "February, library, government, Wednesday.", "bad": "Febuary, libary, goverment, Wensday."},
     {"id": "sp-r7", "node": "q-spell-misspelt", "text": "In a find-the-misspelt-word question, read each option letter by letter against the rules; the odd one out is usually wrong because of a double letter, an ie/ei swap, an a/e vowel, or a missing or extra syllable.",
      "ok": "Check doubles, then ie/ei, then vowels.", "bad": "Choosing the longest word without checking."},
+    {"id": "sp-r8", "node": "q-spell-replace", "text": "First decide whether the highlighted word is already spelt correctly; if it is, the answer is 'No replacement required', not the closest-looking candidate. Only when it is genuinely wrong does one of the other options give its correct spelling.",
+     "ok": "The sentence already reads 'conscientious', spelt correctly: No replacement required.", "bad": "Replacing an already-correct word with a near-miss spelling out of habit."},
 ]
 
 METHODS = {
@@ -44,6 +48,12 @@ METHODS = {
                          "eliminate": "Words you know cold go out first; spend your time on the unfamiliar one.",
                          "traps": ["Unusual but correct words (vicereine, defenestrate) look wrong and tempt you.", "The misspelt word is often the common-looking one."],
                          "rules": ["sp-r4", "sp-r5", "sp-r7"], "tech": ["read-whole"]},
+    "q-spell-replace": {"cue": "A full sentence with one word highlighted, and a fourth option 'No replacement required'.",
+                        "standard": "Spell the highlighted word out correctly in your head first, then compare it against the sentence's own spelling before looking at the options.",
+                        "fast": "If the sentence's own spelling already matches what you know to be correct, stop and pick 'No replacement required'; do not second-guess a correct spelling.",
+                        "eliminate": "Drop every option that is a near-miss misspelling of the target word; what remains is either the one correct spelling or 'No replacement required'.",
+                        "traps": ["Assuming an error exists just because the question offers correction options.", "Picking a plausible-looking near-miss instead of checking letter by letter."],
+                        "rules": ["sp-r8"], "tech": ["read-whole"]},
 }
 
 REFS = []
@@ -59,6 +69,9 @@ _S = [
     ("euphemism-spell", "euphemism", ["euphamism", "eupheism", "euphemisim"], "Say every syllable: eu-phe-mism.", "sp-r6", True, "'Passed away' is a common euphemism for 'died'."),
     ("fractious", "fractious", ["fracteous", "fractous", "fractiuos"], "Say every syllable: frac-tious, from the same root as 'fraction'.", "sp-r6", True, "The fractious toddler refused to nap."),
     ("willful", "willful", ["wilfull", "willfull", "wifull"], "The American spelling doubles the l in 'will': will-ful. ('Wilful', with one l, is the British spelling and is also accepted.)", "sp-r6", True, "His willful disregard for the rules angered the committee."),
+    ("anathema", "anathema", ["anathima", "anethema", "anathama"], "Say every syllable: a-nath-e-ma, from the Greek for a thing cursed or detested.", "sp-r6", True, "His behaviour was an anathema to the entire community."),
+    ("negligence", "negligence", ["negligance", "negligense", "neglegence"], "Ends in -ence, not -ance, and keeps 'negli-' in the first syllable.", "sp-r3", True, "The inspector's report blamed the fire on negligence."),
+    ("inconsistencies", "inconsistencies", ["inconsistancies", "inconsistencys", "inconsistenceis"], "Ends in -encies, not -ancies: the base word is 'consistency', spelt with an e.", "sp-r3", True, "The lawyer quickly spotted several inconsistencies in the testimony."),
     ("accommodate", "accommodate", ["acommodate", "accomodate", "acomodate"], "Two c and two m: ac-com-mo-date.", "sp-r1", False, "The hotel can accommodate two hundred guests."),
     ("achievement", "achievement", ["acheivement", "achievment", "achivement"], "i before e, then keep the e before ment.", "sp-r2", False, "Passing the exam was her proudest achievement."),
     ("acknowledge", "acknowledge", ["acknowlege", "aknowledge", "acknowledege"], "ac + knowledge: keep the d.", "sp-r6", False, "He did not acknowledge the mistake."),
@@ -128,7 +141,7 @@ _S = [
     ("perseverance", "perseverance", ["perseverence", "perserverance", "persaverance"], "From persevere, but ends -ance.", "sp-r3", False, "Perseverance brings results."),
     ("personnel", "personnel", ["personel", "personell", "personnal"], "Double n, single l.", "sp-r1", False, "All personnel must wear a badge."),
     ("phenomenon", "phenomenon", ["phenomenom", "phenomenan", "phenominon"], "Ends -non, like 'canon'.", "sp-r6", True, "Lightning is a natural phenomenon."),
-    ("playwright", "playwright", ["playright", "plaiwright", "playwrite"], "A wright is a maker, as in 'shipwright'.", "sp-r6", True, "The playwright took a bow."),
+    ("playwright", "playwright", ["playright", "playrite", "playwrite"], "A wright is a maker, as in 'shipwright'.", "sp-r6", True, "The playwright took a bow."),
     ("possession", "possession", ["posession", "possesion", "possestion"], "Double s twice.", "sp-r1", False, "Drugs in possession is a crime."),
     ("privilege", "privilege", ["privillage", "privelege", "priviledge"], "One l, and ends -ege.", "sp-r4", True, "It is a privilege to meet you."),
     ("pronunciation", "pronunciation", ["pronounciation", "pronuncation", "pronunciaton"], "Pronounce drops the o: pronunciation.", "sp-r6", False, "Your pronunciation is clear."),
@@ -232,6 +245,7 @@ PYQ_TEXT = {
     (S2, 89): "Spot the correct spelling of a drug-effect psychology field.",
     (S3, 95): "Identify the correct spelling of the term for chromosomal 'three copies'.",
     ("2026-10-07", 87): "Choose the correctly spelt word.",
+    ("2026-10-08", 96): "Choose the correctly spelt word from the given options.",
 }
 
 PYQS = [
@@ -251,8 +265,45 @@ PYQS = [
         "'Facsimile' is said in four even syllables, fac-sim-i-le, with no double letters.", trick="Fac + sim + i + le, said whole."),
     _pm(93, "2026-10-07", "supplication", ["Euphemism", "Fractious", "Willful", "Supplecation"], "d",
         "'Supplecation' is wrong; the correct spelling is 'supplication', with two p, from 'supplicate'.", trick="Sup-pli-ca-tion: two p."),
+    q("q-spell-replace", "spelling",
+      "Select the option with the correct spelling that can replace the highlighted word in the given sentence. If the spelling in the given sentence is already correct, choose Option \"No replacement required\".\n"
+      "His actions were considered an anathima to the entire community, leading to his exile.",
+      ["anethema", "anathama", "anathema", "No replacement required"], "c",
+      "The sentence's own spelling 'anathima' is wrong; the correct spelling is 'anathema', said a-nath-e-ma.",
+      {"a": ruled_out("'Anethema' wrongly spells the third syllable with an e instead of a."),
+       "b": ruled_out("'Anathama' wrongly spells the last syllable with an a instead of e."),
+       "d": mistake("This says no replacement is needed, but the sentence's own spelling, 'anathima', is not a correct spelling of 'anathema'.")},
+      rules=["sp-r8"], paper="2026-10-08", qno=87, rare=True),
+    _pc(96, "2026-10-08", "playwright", ["Playright", "Playrite", "Playwrite", "Playwright"], "d",
+        "The ending is '-wright' (one who makes something, as in 'wheelwright'), not '-write' or '-right'; 'playwright' is spelt with 'wright'.",
+        trick="Play + wright, as in wheelwright: one who makes plays."),
 ]
 
 
+def _rep(uid, sentence, options, key, why, wrong, rare=False):
+    return q("q-spell-replace", "spelling",
+             "Select the option with the correct spelling that can replace the highlighted word in the given sentence. If the spelling in the given sentence is already correct, choose Option \"No replacement required\".\n" + sentence,
+             options, key, why, wrong, rules=["sp-r8"], uid=uid, rare=rare)
+
+
 def practice_items():
-    return _gen()
+    return _gen() + [
+        _rep("sp-pr01", "Her conscientious attention to detail impressed the auditors.",
+             ["Consciencious", "Conscientous", "Conscienscious", "No replacement required"], "d",
+             "The highlighted word 'conscientious' is already spelt correctly, so the answer is 'No replacement required'; the other three options are common misspellings of it.",
+             {"a": ruled_out("'Consciencious' is a misspelling of the already-correct word 'conscientious'."),
+              "b": mistake("A test-taker might read 'conscientious' as needing fewer syllables and pick this near-miss, but the sentence's own spelling is already correct."),
+              "c": ruled_out("'Conscienscious' adds an extra syllable; the sentence's own spelling is already correct.")}),
+        _rep("sp-pr02", "The committee issued a stern reprimand to the officer for his negligance.",
+             ["Negligence", "Negligense", "Neglegence", "No replacement required"], "a",
+             "The sentence's own spelling 'negligance' is wrong; the correct spelling is 'negligence', ending in -ence.",
+             {"b": ruled_out("'Negligense' wrongly spells the ending with an s instead of a c."),
+              "c": ruled_out("'Neglegence' wrongly spells the first syllable 'negli-' as 'negle-'."),
+              "d": mistake("This says no replacement is needed, but the sentence's own spelling, 'negligance', is not a correct spelling of 'negligence'.")}),
+        _rep("sp-pr03", "His testimony contained several inconsistancies that the lawyer quickly noticed.",
+             ["Inconsistencies", "Inconsistencys", "Inconsistenceis", "No replacement required"], "a",
+             "The sentence's own spelling 'inconsistancies' is wrong; the correct spelling is 'inconsistencies', keeping the base word 'consistency' spelt with an e.",
+             {"b": ruled_out("'Inconsistencys' wrongly pluralises with -ys instead of changing y to i before -es."),
+              "c": ruled_out("'Inconsistenceis' misorders the letters at the ending."),
+              "d": mistake("This says no replacement is needed, but the sentence's own spelling, 'inconsistancies', is not a correct spelling.")}, rare=True),
+    ]
