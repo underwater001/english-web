@@ -22,8 +22,8 @@ Your record lives in this browser only. *Today → Your record* holds a copy you
 | | Now |
 |---|---|
 | Topics | 25, in three areas: Vocabulary, Grammar, Comprehension — all with questions |
-| Questions | 1,258 (75 from past papers, 1,183 practice) |
-| Word bank | 802 entries: words, idioms, one-word substitutions, phrasal verbs, spellings, confusable pairs |
+| Questions | 1,415 (75 from past papers, 1,340 practice) |
+| Word bank | 843 entries: words, idioms, one-word substitutions, phrasal verbs, spellings, confusable pairs |
 | Past papers filed | 3 (SSC CGL Tier-I similar papers, 12 Sep 2025, shifts 1–3) |
 | Daily drops | none yet — send an editorial and the first one is built from it |
 
@@ -40,7 +40,9 @@ Everything is measured against the papers on file. Those three shifts ask the sa
 
 So grammar, sentence structure and comprehension carry about 19 of the 25 marks. The build enforces this: **a format the papers ask for must hold at least five papers' worth of practice questions, or `tools/check.py` fails** and names what is missing. That is what keeps the bank from drifting back into easy vocabulary drill, which is the smaller half of the paper.
 
-Nine topics — articles, pronouns, cloze test, phrasal verbs, conditionals, question tags, gerund/infinitive, nouns, confusables — did not appear in these three shifts at all. They are built and drilled anyway (as seed-tier practice, honestly marked as not past-question-backed yet), because the real paper varies and the blueprint only knows what it has been shown. The last five came from auditing *Plinth to Paramount*'s own table of contents against this syllabus rather than waiting for a paper to surface the gap.
+Nine topics — articles, pronouns, cloze test, phrasal verbs, conditionals, question tags, gerund/infinitive, nouns, confusables — did not appear in these three shifts at all. They are built and drilled anyway (as seed-tier practice, honestly marked as not past-question-backed yet), because the real paper varies and the blueprint only knows what it has been shown.
+
+Every grammar chapter of *Plinth to Paramount* (verbs, tense, passive voice, narration, question tags, subject-verb agreement, conditionals, gerund/infinitive, nouns, pronouns, adjectives, conjunctions, articles, prepositions, adverbs, and the confused-words chapter) has now been read chapter by chapter — not just its table of contents — for rules the papers haven't surfaced yet, each one rewritten here in fresh wording with original examples. Grammar questions rest on a cited, named rule rather than a machine check; vocabulary and one-word-substitution questions are checked against the stored word bank. Reading comprehension still runs on five self-written passages, and the past-paper base is three shifts of one similar paper — both are the next things to widen, not yet done.
 
 ## Feeding it
 
