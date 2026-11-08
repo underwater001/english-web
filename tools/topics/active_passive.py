@@ -28,7 +28,7 @@ RULES = [
      "ok": "Why were the irregularities disregarded by the editor?", "bad": "Why are the irregularities being disregarded by the editor?"},
     {"id": "ap-r9", "node": "q-ap-passive", "text": "A phrasal verb (a verb plus a particle such as through, up, after, into) keeps its particle when it is made passive: only the main verb becomes be + past participle, and the particle stays right after it. 'Broke through the wall' becomes 'was broken through', never just 'was broken'.",
      "ok": "The current broke through the wall. -> The wall was broken through by the current.", "bad": "The current broke through the wall. -> The wall was broken by the current (the particle 'through' is lost, changing the meaning)."},
-    {"id": "ap-r4", "node": "q-ap-active", "text": "To go back to active, the agent after 'by' becomes the subject, and the verb takes the tense of the passive's 'be'. 'Was being reported' becomes 'were reporting'; 'is delivered' becomes 'delivers'. If there is no agent, use someone / people.",
+    {"id": "ap-r4", "node": "q-ap-active", "text": "To go back to active, the agent after 'by' becomes the subject, and the verb takes the tense of the passive's 'be'. 'Was being reported' becomes 'were reporting'; 'is delivered' becomes 'delivers'. If there is no agent, use someone / people. A reporting verb such as 'say', 'claim' or 'report' may appear either as 'It is said that X was V3-ed' or, with the same meaning, as the raising form 'X is said to have been V3-ed'; treat both the same way, turning the outer reporting verb into 'people/they say' and the inner clause into its active form.",
      "ok": "It was being reported by several sources -> Several sources were reporting.", "bad": "Several sources reported (the continuous aspect is lost)."},
     {"id": "ap-r5", "node": "q-ap-active", "text": "Do not choose a new subject from another noun in the sentence. The reception desk is where the parcel is delivered, not the doer; the unnamed doer becomes 'someone'.",
      "ok": "The parcel is delivered to the reception desk -> Someone delivers the parcel to the reception desk.", "bad": "The reception desk delivers the parcel."},
@@ -346,7 +346,33 @@ _PYQ5 = [
       rules=["ap-r3", "ap-r9"], paper="2026-10-10", qno=82, tech=["eliminate-pair"],
       trick="Who V (object)? -> By whom was/were (object) V-ed? Keep any phrasal particle right after the participle."),
 ]
-PYQS = PYQS + _PYQ2 + _PYQ3 + _PYQ4 + _PYQ5
+_PYQ6 = [
+    q("q-ap-active", "transform", _A + "The new theory is said to have been developed over decades.",
+      ["They say that researchers have developed the new theory over decades.", "They say that the new theory was developed over decades.",
+       "Someone is said to have developed the new theory over decades.", "The new theory developed over decades."], "a",
+      "'X is said to have been V3-ed' means the same as 'It is said that X has been V3-ed'; reversing both layers gives 'They say that researchers have developed the new theory over decades.'",
+      {"b": mistake("This correctly reverses 'is said' to 'they say' but leaves the inner clause passive ('was developed') instead of making an agent like 'researchers' the active subject, and drops the perfect aspect 'have been' carries."),
+       "c": ruled_out("This fixes only the inner infinitive, to the active 'to have developed', but leaves the outer frame 'is said' passive, when the whole sentence must become active."),
+       "d": mistake("This drops the reporting frame 'is said' entirely and wrongly makes 'the new theory' the one that did the developing, as if the theory developed itself.")},
+      rules=["ap-r4"], paper="2026-10-12", qno=93, tech=["eliminate-pair"], trick="X is said to have been V3-ed == It is said that X has been V3-ed."),
+    q("q-ap-active", "transform", _A + "It is said that the manuscript was smuggled out of the country.",
+      ["People say that someone smuggled the manuscript out of the country.", "People say that the manuscript smuggled out of the country.",
+       "People said that someone had smuggled the manuscript out of the country.", "Someone says the manuscript to be smuggled out of the country."], "a",
+      "'It is said' becomes 'People say', and the inner passive 'was smuggled' becomes active with 'someone' as the unnamed agent: 'someone smuggled the manuscript out of the country'.",
+      {"b": mistake("This drops 'someone' as the subject, as if the manuscript itself did the smuggling."),
+       "c": mistake("This shifts both verbs into the past ('said', 'had smuggled'), though the original reporting verb 'is said' is in the present."),
+       "d": ruled_out("This invents a different, ungrammatical raising structure ('says the manuscript to be smuggled') that neither matches the original frame nor correctly converts the passive clause.")},
+      rules=["ap-r4"], paper="2026-10-12", qno=95, tech=["eliminate-pair"]),
+    q("q-ap-passive", "transform", _P + "The cheetah chased the wild boar with lightning speed.",
+      ["The wild boar has been chased with lightning speed by the cheetah.", "The wild boar was chased with lightning speed by the cheetah.",
+       "The wild boar had been chased with lightning speed by the cheetah.", "The wild boar was being chased with lightning speed by the cheetah."], "b",
+      "'Chased' is simple past, so the passive keeps the same tense: 'was chased'.",
+      {"a": mistake("'Has been chased' is present perfect, a different tense from the simple past 'chased'."),
+       "c": mistake("'Had been chased' is past perfect, a tense the original simple past does not have."),
+       "d": mistake("'Was being chased' adds a continuous aspect that the simple past 'chased', a completed action, does not carry.")},
+      rules=["ap-r1"], paper="2026-10-12", qno=96, tech=["eliminate-pair"]),
+]
+PYQS = PYQS + _PYQ2 + _PYQ3 + _PYQ4 + _PYQ5 + _PYQ6
 
 
 def practice_items():

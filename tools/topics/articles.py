@@ -21,6 +21,8 @@ NODES = {
                        "summary": "Heaven, Hell, God and Parliament sound one-of-a-kind but take no article, and a monument named after a person or place drops 'the' too.", "links": []},
     "q-ar-manysuch": {"short": "many a / such a", "label": "'A/an' after many, such, quite, rather", "kind": "qtype", "parent": TOPIC, "order": 7,
                       "summary": "Many a, such a, quite a and rather a all take a singular noun even though 'many' and 'such' usually signal a plural idea.", "links": []},
+    "q-ar-multi": {"short": "Several blanks", "label": "One sentence, several article blanks", "kind": "qtype", "parent": TOPIC, "order": 8,
+                   "summary": "A single sentence can carry two or three blanks, each decided by a different rule (sound, superlative, already-known noun); solve each one on its own before matching the combination to an option.", "links": []},
 }
 
 RULES = [
@@ -42,6 +44,9 @@ RULES = [
      "ok": "God resides in heaven. The Bill was passed in Parliament. He landed at Indira Gandhi Airport.", "bad": "The God resides in the heaven. He landed at the Indira Gandhi Airport."},
     {"id": "ar-r9", "node": "q-ar-manysuch", "text": "'Many a', 'such a', 'quite a' and 'rather a' are all followed by a singular noun, not a plural one, even though 'many' and 'such' on their own suggest more than one. The same distributive 'a' also means 'per' after a rate or price: ten rupees a kilo, sixty kilometres an hour.",
      "ok": "Many a student has failed this test. This car runs fifteen kilometres a litre.", "bad": "Many a students have failed this test."},
+    {"id": "ar-r10", "node": "q-ar-multi", "text": "A single sentence may test several article rules at once, one per blank: decide each blank on its own cue (a noun already known from the situation takes 'the'; a vowel SOUND takes 'an'; a superlative always takes 'the') and only then match the whole combination against the options. Getting two of the blanks right does not save a wrong choice on the third.",
+     "ok": "The days ... and the nights (already known) / an incredibly beautiful landscape (vowel sound) / one of the largest lakes (superlative).",
+     "bad": "A incredibly beautiful landscape ignores the vowel sound after 'a' and breaks the combination even if the other two blanks are right."},
 ]
 
 METHODS = {
@@ -88,6 +93,12 @@ METHODS = {
                        "eliminate": "Drop any option that pluralises the noun after 'many a' or 'such a'.",
                        "traps": ["'Many a student' takes a singular verb too: 'has', not 'have'.", "'Rather a pity' and 'quite an impossible task' keep the indefinite article even though 'quite' and 'rather' are adverbs of degree."],
                        "rules": ["ar-r9"], "tech": ["read-whole"]},
+    "q-ar-multi": {"cue": "One sentence with two or three separate blanks, each with its own set of options or combined into one four-way choice of word-combinations.",
+                    "standard": "Solve each blank on its own, citing the rule that governs it (sound, superlative, already-known noun, abstract noun), then read the options as whole combinations and pick the one that matches every blank.",
+                    "fast": "Score each blank 'the' / 'a' / 'an' / 'none' first, then scan the options for the one combination that matches all of them.",
+                    "eliminate": "Drop any option that gets even one blank wrong; a combination is only right if every one of its words is right.",
+                    "traps": ["Getting two of the three blanks right and picking an option that only matches those two.", "Letting the first blank's answer bias the reading of the later ones, when each is independent."],
+                    "rules": ["ar-r10", "ar-r1", "ar-r2", "ar-r3"], "tech": ["read-whole"]},
 }
 
 REFS = []
@@ -211,4 +222,11 @@ PYQS = [
       {"a": ruled_out("The inversion after 'no sooner' is correctly formed: did + subject + base verb."), "b": ruled_out("'Than the members rose' correctly completes the 'no sooner ... than' pair."),
        "d": ruled_out("There is an error, in part (c).")},
       rules=["ar-r7"], paper="2026-10-07", qno=97, tech=["read-whole"]),
+    q("q-ar-multi", "fill", "Choose the correct option to fill in the blanks.\nThe days seemed endless and _____ nights were even longer. We travelled through _____ incredibly beautiful landscape and came to one of _____ largest lakes, Nam Tso.",
+      ["the, an, the", "the, a, a", "a, an, the", "the a, an"], "a",
+      "Three separate rules apply, one per blank: 'the days ... the nights' are the specific pair already in view, so blank 1 is 'the'; 'incredibly' starts with a vowel sound, so blank 2 is 'an'; and 'largest' is a superlative, which always takes 'the', so blank 3 is 'the'. Together: the, an, the.",
+      {"b": mistake("This gets the first blank right but uses 'a' before the vowel sound of 'incredibly' and drops 'the' before the superlative 'largest', getting the other two wrong."),
+       "c": mistake("This gets the second and third blanks right but uses 'a' for the first blank, missing that 'the nights' refers to the specific night already in view, just like 'the days'."),
+       "d": ruled_out("This option does not even give three separate words for the three blanks, and the words it gives are in the wrong order for this sentence.")},
+      rules=["ar-r1", "ar-r2", "ar-r3", "ar-r10"], paper="2026-10-12", qno=91, tech=["read-whole"]),
 ]

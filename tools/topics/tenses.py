@@ -144,6 +144,13 @@ PYQS = [
        "c": ruled_out("'Insisted me taking' is not a correct pattern; 'insist' does not take an object plus a gerund."),
        "d": ruled_out("'To take medicine by me' is a passive-style ending that does not fit 'insisted'.")},
       rules=["tn-r2"], paper="2026-10-09", qno=99, tech=["eliminate-pair"], trick="insist + that + I + base verb, same as demand."),
+    q("q-tn-subjunctive", "spot-error", "Identify the part containing a GRAMMATICAL ERROR.\nThe professor insisted / that each student submits / the dissertation / before the stipulated deadline.",
+      ["The professor insisted", "that each student submits", "the dissertation", "before the stipulated deadline."], "b",
+      "'Insisted that' takes the base verb whatever the subject, so 'submits' must be 'submit': 'that each student submit'.",
+      {"a": ruled_out("'The professor insisted' is a correct reporting clause; the fault lies in what follows it."),
+       "c": ruled_out("'The dissertation' is a correct noun phrase, the object of the verb once it is corrected."),
+       "d": ruled_out("'Before the stipulated deadline' is a correct phrase of time.")},
+      rules=["tn-r2"], paper="2026-10-12", qno=88, tech=["eliminate-pair"], trick="insist/demand/suggest + that + base verb, no -s."),
 ]
 
 

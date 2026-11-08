@@ -12,6 +12,8 @@ NODES = {
                         "summary": "An idiom in inverted commas; pick the option that gives its meaning.", "links": []},
     "q-idiom-identify": {"short": "Identify idiom", "label": "Pick the idiom that has this meaning", "kind": "qtype", "parent": TOPIC, "order": 2,
                         "summary": "A meaning is spelled out in full; pick the idiom (from four real idioms) that actually means that.", "links": []},
+    "q-idiom-correct": {"short": "Correct idiom", "label": "Restore a garbled idiom", "kind": "qtype", "parent": TOPIC, "order": 3,
+                        "summary": "A highlighted idiom has been reordered or had a word swapped; pick the option that restores its fixed wording.", "links": []},
 }
 
 RULES = [
@@ -21,6 +23,8 @@ RULES = [
      "ok": "'in hot water' and 'on thin ice' both say trouble or risk.", "bad": "Choosing an effort meaning for 'in hot water'."},
     {"id": "id-r3", "node": "q-idiom-identify", "text": "When the meaning is given and the idiom itself is the answer, the three wrong options are usually other real idioms, often built from the same image or word (bell, blood, water). Match the feeling of the given meaning first, then confirm by recalling the exact idiom; do not pick an option merely because it shares a word with the meaning.",
      "ok": "Meaning 'eagerly, with enthusiasm' -> 'with bells on'.", "bad": "Picking 'sound as a bell' because it also contains 'bell'."},
+    {"id": "id-r4", "node": "q-idiom-correct", "text": "Some idioms pair two images in a fixed order (hare/hounds, cart/horse, pot/kettle). The exam may swap that order, or replace one half with a word from a different idiom. Recall the idiom as one fixed phrase, not word by word, and restore its exact order rather than checking only that the right words appear somewhere.",
+     "ok": "'run with the hare and hunt with the hounds' keeps 'run' with 'hare' and 'hunt' with 'hounds'.", "bad": "'run with the hounds and hunt with the hare' swaps the two pairings and is not a real idiom."},
 ]
 
 METHODS = {
@@ -39,6 +43,13 @@ METHODS = {
         "eliminate": "Drop any option idiom whose stored meaning you know is different, even if it shares a word (bell, blood) with the given meaning.",
         "traps": ["An option that shares a word with the meaning but is a different idiom entirely.", "Two idioms built on the same image (bell, water, moon) tested against each other."],
         "rules": ["id-r3"], "tech": ["literal-trap"]},
+    "q-idiom-correct": {
+        "cue": "A sentence with a highlighted idiom that has been garbled — its two halves reordered, or one word swapped for a wrong one; pick the option that restores the correct idiom, or 'No improvement required' if it is already correct.",
+        "standard": "Recall the idiom as one whole fixed phrase. Check which word is paired with which half, and whether any word has been swapped in from a different idiom.",
+        "fast": "If the highlighted phrase sounds almost right but 'off', the two halves have likely been swapped; try reversing just the two key words first.",
+        "eliminate": "Drop any option that changes only one word to another wrong word, or that keeps the swapped order.",
+        "traps": ["Swapping the two halves of a paired idiom.", "Replacing one half with a word from a different, similarly-themed idiom.", "Choosing 'No improvement required' when the idiom is in fact garbled."],
+        "rules": ["id-r4"], "tech": ["literal-trap"]},
 }
 
 REFS = []
@@ -158,6 +169,16 @@ _I = [
      ("To be harmed or ruined by the very scheme one devised against another",)),
     ("horses-mouth", "straight from the horse's mouth", "Directly from the original or most reliable source.",
      "I didn't believe the rumour until I heard it straight from the horse's mouth.", "source", ("From a reliable source",)),
+    ("run-with-hare-hunt-hounds", "run with the hare and hunt with the hounds", "To try to support or please both sides of a dispute at once, often by misleading each about the other.",
+     "The negotiator was accused of running with the hare and hunting with the hounds, promising concessions to the strikers while privately assuring management nothing would change.", "twoface", ()),
+    ("squeaky-wheel-grease", "the squeaky wheel gets the grease", "The most noticeable problem, or the loudest complaint, is the one that receives attention and is addressed first.",
+     "After weeks of quiet waiting produced nothing, she learned that the squeaky wheel gets the grease and started emailing the manager every day.", "complain", ()),
+    ("cart-before-horse", "put the cart before the horse", "To do things in the wrong order, reversing a cause and what should follow from it.",
+     "Announcing the sequel before the first film's script was even finished, the studio put the cart before the horse.", "order", ()),
+    ("pot-calling-kettle-black", "the pot calling the kettle black", "Accusing someone of a fault that one has oneself.",
+     "Criticising him for arriving late is the pot calling the kettle black, since she is never on time either.", "hypocrite", ()),
+    ("rob-peter-pay-paul", "rob Peter to pay Paul", "To solve one debt or problem by creating another, taking from one place to cover another.",
+     "Cutting the library's budget to fund the new stadium is really just robbing Peter to pay Paul.", "debt", ()),
 ]
 
 WORDS = [word(i, t, "idiom", m, ex=e, also=list(a)) for i, t, m, e, g, a in _I]
@@ -218,6 +239,13 @@ def _pq(qno, paper, wid, options, key, why, wrong, **kw):
 def _rev(uid, wid, options, key, why, wrong, **kw):
     return q("q-idiom-identify", "meaning", f"Which of the following idioms has the meaning: '{_M[wid]}'?",
              options, key, why, wrong, lex=("fits", wid), uid=uid, rules=["id-r3"], tech=["literal-trap"], **kw)
+
+
+def _fix(text, options, key, why, wrong, **kw):
+    return q("q-idiom-correct", "improve",
+             "A part of the following sentence is highlighted. Choose the option that can replace the highlighted part to improve the sentence. "
+             "If you feel the other options do not improve the sentence, choose 'No improvement required'.\n" + text,
+             options, key, why, wrong, rules=["id-r4"], tech=["literal-trap"], **kw)
 
 
 S1, S2, S3 = "2025-09-12-S1", "2025-09-12-S2", "2025-09-12-S3"
@@ -293,6 +321,20 @@ PYQS = [
          "b": mistake("Hearing it from someone else suggests it passed through an intermediary, exactly what 'straight from the horse's mouth' rules out."),
          "c": ruled_out("Reading it from a book is one possible source but not what the idiom names; the idiom is about directness, not books specifically.")},
         trick="'Straight from' signals no middleman: the information comes directly from the one who would know best."),
+    _fix("The cunning minister is a master at the art of [[running with the hounds and hunting with the hare]].",
+         ["dancing with the hare and hunting with the hounds", "dining with the hare and running with the hounds", "running with the hare and hunting with the hounds", "No improvement required"], "c",
+         "The idiom pairs 'run' with 'hare' and 'hunt' with 'hounds'; the sentence has swapped the two pairings, so the fix restores 'running with the hare and hunting with the hounds'.",
+         {"a": mistake("'Dancing with the hare' replaces 'running' with a verb from no idiom at all, even though 'hunting with the hounds' is left correct."),
+          "b": mistake("'Dining with the hare and running with the hounds' swaps in two wrong verbs, neither of which belongs to this idiom."),
+          "d": mistake("This says no change is needed, but the sentence has swapped the idiom's two halves ('hounds' with 'run', 'hare' with 'hunt'), so it is not the correct idiom as it stands.")},
+         paper="2026-10-12", qno=85),
+    _rev("id-q90-sq", "squeaky-wheel-grease",
+         ["Stew in one's own grease", "Grease the skids", "The squeaky wheel gets the grease", "Grease the wheels"], "c",
+         "'The squeaky wheel gets the grease' means the most noticeable problem or the loudest complaint is the one that gets attention and is addressed first, exactly the meaning given.",
+         {"a": ruled_out("'Stew in one's own grease' means to suffer the consequences of one's own actions without help, not to draw attention by complaining."),
+          "b": mistake("'Grease the skids' means to make a process move along quickly and smoothly, not to be the complaint that gets noticed first."),
+          "d": mistake("'Grease the wheels' means to make something run more smoothly, often with a small inducement; close in image but not the same as getting attention by being the loudest.")},
+         paper="2026-10-12", qno=90),
 ]
 
 
@@ -343,5 +385,26 @@ def practice_items():
              {"a": mistake("'At cross purposes' means two people misunderstanding each other's aims, not one person spoiling another's chances."),
               "b": ruled_out("'Lose heart' means to lose hope or confidence, not to spoil someone else's plan."),
               "d": ruled_out("'Once in a blue moon' means very rarely, unrelated to spoiling a plan.")}, rare=True),
+        _fix("By advertising the sequel before finishing the first film's script, the studio [[put the horse before the cart]].",
+             ["put the cart before the donkey", "put the cart before the horse", "put the horse behind the cart", "No improvement required"], "b",
+             "The idiom fixes the order as 'the cart before the horse' (doing things in the wrong order); the sentence has reversed this to 'horse before the cart', so the fix restores 'put the cart before the horse'.",
+             {"a": mistake("This swaps 'horse' for 'donkey', which is not the idiom's wording at all."),
+              "c": mistake("This keeps the wrong order ('horse' first) and merely changes 'before' to 'behind', still not the fixed idiom."),
+              "d": mistake("This says no change is needed, but the sentence has reversed the idiom's fixed order ('horse before the cart' instead of 'cart before the horse').")},
+             uid="id-p07"),
+        _fix("Accusing his colleague of being late, when he himself arrives after ten every day, is simply [[the kettle calling the pot black]].",
+             ["the kettle calling the pot white", "the pot calling the kettle white", "the pot calling the kettle black", "No improvement required"], "c",
+             "The idiom is fixed as 'the pot calling the kettle black' (accusing someone of a fault one shares); the sentence has swapped 'pot' and 'kettle', so the fix restores 'the pot calling the kettle black'.",
+             {"a": mistake("This keeps the swapped order ('kettle' calling 'pot') and also changes 'black' to 'white', neither of which restores the idiom."),
+              "b": mistake("This restores the correct order ('pot' calling 'kettle') but changes 'black' to 'white', which is not the idiom's fixed wording."),
+              "d": mistake("This says no change is needed, but the sentence has swapped 'pot' and 'kettle', which is not the idiom as fixed.")},
+             uid="id-p08", rare=True),
+        _fix("Cutting the library's budget to fund the new stadium is really just [[robbing Paul to pay Peter]].",
+             ["robbing Peter to pay John", "paying Peter to rob Paul", "robbing Peter to pay Paul", "No improvement required"], "c",
+             "The idiom fixes the names as 'robbing Peter to pay Paul' (solving one debt by creating another); the sentence has swapped the two names, so the fix restores 'robbing Peter to pay Paul'.",
+             {"a": mistake("This replaces 'Paul' with 'John', a name that is not part of this fixed idiom at all."),
+              "b": mistake("This reverses the verbs as well as the names ('paying' and 'robbing' swapped), which is not the idiom's fixed wording."),
+              "d": mistake("This says no change is needed, but the sentence has swapped the two names, which is not the idiom as fixed.")},
+             uid="id-p09"),
     ]
     return hand + _gen()

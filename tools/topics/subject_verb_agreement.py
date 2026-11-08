@@ -53,7 +53,7 @@ RULES = [
      "ok": "Slow and steady wins the race.", "bad": "Slow and steady win the race."},
     {"id": "sva-r13", "node": "q-sva-fixedplural", "text": "Some nouns that end in -s and look plural in fact name one disease (measles, mumps, rickets, shingles), one game (billiards, draughts, darts), one country (the United States, the Netherlands) or one field of study (Mathematics, Physics, Economics, Statistics, Politics, Linguistics), and take a singular verb. A few of these (statistics, economics, politics) switch to a plural verb only when they mean actual data, calculations or political activities rather than the subject of study.",
      "ok": "Mathematics is my favourite subject.", "bad": "Mathematics are my favourite subject."},
-    {"id": "sva-r15", "node": "q-sva-ofthe", "text": "'One of the' is always followed by a plural noun (one of the students, one of the problems), never a singular one, because it picks a single member out of a group that must itself be named in the plural. The verb that follows 'one' later in the sentence still agrees with 'one' and stays singular.",
+    {"id": "sva-r15", "node": "q-sva-ofthe", "text": "'One of the' and 'each of the' are always followed by a plural noun (one of the students, each of the students), never a singular one, because each picks a single member out of a group that must itself be named in the plural. The verb that follows 'one'/'each' later in the sentence still agrees with 'one'/'each' and stays singular.",
      "ok": "One of the biggest problems facing the committee is funding.", "bad": "One of the biggest problem facing the committee is funding."},
     {"id": "sva-r16", "node": "q-sva-both", "text": "Two subjects joined by 'both ... and' always take a plural verb, with no exception for which subject sits nearer the verb (unlike either...or and neither...nor, which follow the nearer subject).",
      "ok": "Both the manager and the clerk were present at the audit.", "bad": "Both the manager and the clerk was present at the audit."},
@@ -356,6 +356,16 @@ PYQS = PYQS + [
        "d": ruled_out("'Sharon has six brothers.' is a correctly formed sentence with a singular subject and 'has'.")},
       rules=["sva-r1"], paper="2026-10-10", qno=99, tech=["subject-first"],
       trick="Either/neither/each/every + of + a plural noun still takes a singular verb."),
+]
+PYQS = PYQS + [
+    q("q-sva-ofthe", "spot-error", "Find the part of the given sentence that has an error in it. If there is no error, choose 'No error'.\nEach of the student must bring their own lunch.",
+      ["Each of the student", "No error", "must bring", "their own lunch."], "a",
+      "'Each of the' is always followed by a plural noun, so 'the student' must be 'the students'; the verb 'must bring' is unaffected since 'each' itself stays singular.",
+      {"b": mistake("Choosing 'No error' misses the singular noun after 'each of the', which must be plural."),
+       "c": ruled_out("'Must bring' is a correct modal plus bare verb; the fault lies earlier, in the noun's number."),
+       "d": ruled_out("'Their own lunch' is a correct object phrase, using the common gender-neutral 'their' for 'each'.")},
+      rules=["sva-r15", "sva-r1"], paper="2026-10-12", qno=89, tech=["read-whole"],
+      trick="Each of the + plural noun, just like one of the."),
 ]
 
 

@@ -185,6 +185,12 @@ _S = [
     ("ventriculoatrial", "ventriculoatrial", ["ventriculoartial", "ventriculoatriall", "ventriculoateriel"], "ventricle + atrial: ventriculo + atrial.", "sp-r6", True, "A ventriculoatrial shunt drains fluid from the brain."),
     ("psychopharmacology", "psychopharmacology", ["psychopharmacolgy", "psychopharmocology", "psychopharmecology"], "psycho + pharmaco + logy.", "sp-r6", True, "Psychopharmacology studies how drugs affect the mind."),
     ("trisomy", "trisomy", ["trissomie", "trissomy", "trisomie"], "tri (three) + somy (body): one s, ends -y.", "sp-r6", True, "Trisomy means three copies of a chromosome."),
+    ("anthropomorphism", "anthropomorphism", ["anthropormorphism", "anthropomorphisim", "anthropomorphsm"],
+     "anthropo (human) + morph (form) + ism, said in five even syllables: an-thro-po-mor-phism, with no extra r after 'morph'.", "sp-r6", True,
+     "Giving the ship a face and a temper is a simple anthropomorphism."),
+    ("porphyroblastic", "porphyroblastic", ["prophyroblastic", "porfyrblastic", "porphyroblastik"],
+     "porphyro- (a mottled rock texture) + blast (a crystal) + -ic: por-phy-ro-blas-tic, keep the 'ph' and the 'r' right after it, and end in '-ic', not '-ik'.", "sp-r6", True,
+     "The porphyroblastic texture comes from large garnet crystals growing within the finer metamorphic matrix."),
 ]
 
 WORDS = [word(i, c, "spelling", f"The correct spelling is '{c}'.", ex=e, misspell=m, note=h) for i, c, m, h, r, ra, e in _S]
@@ -249,6 +255,8 @@ PYQ_TEXT = {
     ("2026-10-07", 87): "Choose the correctly spelt word.",
     ("2026-10-08", 96): "Choose the correctly spelt word from the given options.",
     ("2026-10-09", 77): "Select the wrongly spelt word out of the four alternatives.",
+    ("2026-10-12", 99): "Select the correctly spelt word.",
+    ("2026-10-12", 100): "Spot the correct spelling of an REE-bearing metamorphic texture word.",
 }
 
 PYQS = [
@@ -282,6 +290,12 @@ PYQS = [
         trick="Play + wright, as in wheelwright: one who makes plays."),
     _pm(77, "2026-10-09", "ameliorate", ["Perseverance", "Ameliarate", "Conscience", "Magnanimity"], "b",
         "'Ameliarate' is wrong; the correct spelling is 'ameliorate', from the Latin melior (better): a-me-lio-rate.", trick="A-me-lio-rate: from melior, better."),
+    _pc(99, "2026-10-12", "anthropomorphism", ["anthropormorphism", "anthropomorphisim", "anthropomorphism", "anthropomorphsm"], "c",
+        "The word is anthropo (human) + morph (form) + ism, said in five even syllables: an-thro-po-mor-phism, with no extra r after 'morph'.",
+        trick="An-thro-po-mor-phism: no double r."),
+    _pc(100, "2026-10-12", "porphyroblastic", ["Prophyroblastic", "Porphyroblastic", "Porfyrblastic", "Porphyroblastik"], "b",
+        "The word is porphyro- (mottled texture) + blast (crystal) + -ic: por-phy-ro-blas-tic, keeping the 'ph' and the 'r' right after it and ending in '-ic'.",
+        trick="Por-phy-ro-blas-tic: watch the 'ph' + 'r', and the '-ic' ending."),
 ]
 
 

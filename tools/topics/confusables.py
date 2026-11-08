@@ -31,6 +31,8 @@ RULES = [
      "ok": "The committee comprises nine members: this already needs no change.", "bad": "Changing an already-correct 'comprises' because the option list offers a near-miss."},
     {"id": "cf-r6", "node": "q-cf-dual", "text": "When two blanks in one sentence are both filled from the same confused pair, work out what each blank needs on its own. The right option gives the correct member of the pair for the first blank AND the correct member for the second, in that order; a pair with the right two words in the wrong order is still wrong.",
      "ok": "The drug did not ___ (affect) her blood pressure, so its ___ (effect) was called negligible.", "bad": "The drug did not ___ (effect) her blood pressure, so its ___ (affect) was called negligible."},
+    {"id": "cf-r7", "node": "q-cf-spot", "text": "'Take place' is the fixed phrase for an event happening; 'give place to' is a separate fixed phrase meaning to be replaced by something else. The two are not interchangeable: an annual event 'takes place', it does not 'give place' on a schedule.",
+     "ok": "The annual cultural programme takes place in the open-air theatre every monsoon season.", "bad": "The annual cultural programme gives place in the open-air theatre every monsoon season."},
 ]
 
 METHODS = {
@@ -46,8 +48,8 @@ METHODS = {
                   "standard": "Read each part and test any word you know to have a twin. Replace it with its partner and see which reading makes sense.",
                   "fast": "Scan for the known pairs first: lie/lay, affect/effect, principal/principle.",
                   "eliminate": "Parts with no word from a confused pair can be skipped.",
-                  "traps": ["'Lay down' for 'lie down'.", "'Comprises of', where 'comprises' takes no 'of'."],
-                  "rules": ["cf-r4", "cf-r1"], "tech": ["read-whole"]},
+                  "traps": ["'Lay down' for 'lie down'.", "'Comprises of', where 'comprises' takes no 'of'.", "'Gives place' used where the fixed phrase 'takes place' is needed."],
+                  "rules": ["cf-r4", "cf-r1", "cf-r7"], "tech": ["read-whole"]},
     "q-cf-replace": {"cue": "A full sentence with one phrase highlighted, and a fourth option 'No substitution required'.",
                      "standard": "Decide what the highlighted phrase should say, then compare it letter by letter with the sentence's own wording before looking at the options.",
                      "fast": "If the highlighted phrase is already exactly right, stop and pick 'No substitution required'; do not second-guess a correct phrase.",
@@ -302,4 +304,11 @@ PYQS = [
        "c": mistake("This has the right pair of words but in the wrong order: the first blank needs the verb 'affect', and the second needs the noun 'effect', not the reverse.")},
       rules=["cf-r1", "cf-r6"], paper="2026-10-10", qno=83, tech=["back-substitute"],
       trick="Blank 1 is a verb (affect); blank 2 is a noun after 'overall' (effect)."),
+    q("q-cf-spot", "spot-error", "Select the alternative which contains that part of the sentence which has an error.\nShe mentioned that the annual cultural programme gives place in the open-air theatre every monsoon season without fail.",
+      ["She mentioned that the annual", "cultural programme gives place", "in the open-air theatre every", "monsoon season without fail."], "b",
+      "'Takes place' is the fixed phrase for an event happening; 'gives place' means something else entirely (to be replaced by), so 'gives place' must be 'takes place'.",
+      {"a": ruled_out("'She mentioned that the annual' is a correct opening clause."),
+       "c": ruled_out("'In the open-air theatre every' is a correct prepositional phrase."),
+       "d": ruled_out("'Monsoon season without fail' is a correct closing phrase.")},
+      rules=["cf-r7"], paper="2026-10-12", qno=94, tech=["read-whole"], trick="An event takes place; it does not give place."),
 ]

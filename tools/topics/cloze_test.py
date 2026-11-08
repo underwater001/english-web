@@ -2,7 +2,7 @@
 analysed paper that actually set a cloze (Q88-92, a 5-blank vocabulary passage on the Silk Road); its own passage is never copied here, so the
 5 PYQ items are built on an original lighthouse-keeper paragraph of our own that fills the same blank slots with the same target words.
 The paragraphs are written by us. Each question shows the paragraph with the blank in question marked."""
-from bank import mistake, ruled_out, q
+from bank import mistake, ruled_out, q, word
 
 TOPIC = "cloze-test"
 TIER = "quiz"
@@ -13,6 +13,8 @@ NODES = {
                      "summary": "A preposition, article, conjunction or verb form that the sentence around it forces.", "links": []},
     "q-cz-sense": {"short": "Meaning blank", "label": "A blank the meaning decides", "kind": "qtype", "parent": TOPIC, "order": 2,
                    "summary": "Four possible words; the sense of the paragraph picks one.", "links": ["contextual-vocabulary"]},
+    "q-cz-meaning": {"short": "Word meaning", "label": "Meaning of a highlighted word in the passage", "kind": "qtype", "parent": TOPIC, "order": 3,
+                     "summary": "A word already sitting in the passage is highlighted; pick the option that gives its meaning as used here, not a stray dictionary definition.", "links": ["contextual-vocabulary"]},
 }
 
 RULES = [
@@ -24,6 +26,8 @@ RULES = [
      "ok": "The scheme was generous; in practice, however, it reached very few.", "bad": "The scheme was generous; in practice, however, it reached many."},
     {"id": "cz-r4", "node": "q-cz-sense", "text": "Put each option back in and read the whole sentence aloud. Keep the one that fits both the meaning and the words it has to combine with, since many English words take only one partner (take a decision, make a mistake, pay attention).",
      "ok": "The committee took a decision.", "bad": "The committee did a decision."},
+    {"id": "cz-r5", "node": "q-cz-meaning", "text": "A highlighted word's meaning is answered from the passage itself, not from memory alone: reread the sentence the word sits in and choose the option that could replace the word there without changing the sentence's sense. Reject an option that only sounds like a dictionary definition of a different, unrelated idea.",
+     "ok": "Tracing a rule's provenance means tracing where it first came from.", "bad": "Picking the definition of a similar-sounding word instead of the word actually highlighted."},
 ]
 
 METHODS = {
@@ -40,10 +44,21 @@ METHODS = {
                    "eliminate": "Drop words whose tone is wrong for the paragraph, then drop any that do not combine with the noun or verb beside them.",
                    "traps": ["Two options with nearly the same meaning: one of them will not fit the words around it.", "Choosing the hardest-looking word instead of the one that fits."],
                    "rules": ["cz-r3", "cz-r4"], "tech": ["context-clue", "back-substitute"]},
+    "q-cz-meaning": {"cue": "A paragraph with one word highlighted; the options are four possible meanings of that word.",
+                     "standard": "Reread the sentence the highlighted word sits in and decide what it means there, then match that sense to one option.",
+                     "fast": "Substitute each option back into the sentence; the one that keeps the sentence's sense is the answer.",
+                     "eliminate": "Drop options that describe an unrelated idea entirely, then drop any that only loosely resemble the real sense.",
+                     "traps": ["An option that reads like a formal dictionary definition of a different word.", "An option built from a word that merely looks or sounds similar to the highlighted one."],
+                     "rules": ["cz-r5"], "tech": ["context-clue", "read-whole"]},
 }
 
 REFS = []
-WORDS = []
+WORDS = [
+    word("cz-provenance", "provenance", "word", "The historical origin or source from which something is derived.", pos="noun",
+         syn=["origin", "source"], ex="Scholars traced the manuscript's provenance back to a monastery in the twelfth century."),
+    word("cz-obfuscation", "obfuscation", "word", "The deliberate act of making something unclear, confusing or difficult to understand.", pos="noun",
+         syn=["confusion", "obscurity"], ex="His reply was pure obfuscation, burying a simple refusal in three paragraphs of jargon."),
+]
 
 _P1 = ("For most of the last century the bicycle was treated in Indian cities as a vehicle for those who could afford __1__ else. "
        "Road width went to cars, and the cyclist was pushed to the broken edge of the carriageway. That assumption is now being "
@@ -80,6 +95,14 @@ def _cq(uid, qtype, para, n, opts, key, why, wrong, rules, tech, paper, qno, rar
     for k in range(1, 6):
         text = text.replace(f"__{k}__", f"({k})")
     return q(qtype, "cloze", text, opts, key, why, wrong, rules=list(rules), tech=list(tech), uid=uid, rare=rare, paper=paper, qno=qno)
+
+
+def _cm(uid, wid, word_disp, para, opts, key, why, wrong, paper=None, qno=None, rare=False):
+    text = f"Select the most appropriate meaning of the highlighted word “{word_disp}” as used in the passage.\n\n" + para
+    for k in range(1, 6):
+        text = text.replace(f"__{k}__", f"({k})")
+    return q("q-cz-meaning", "meaning", text, opts, key, why, wrong, rules=["cz-r5"], tech=["context-clue"],
+             lex=("meaning", wid), uid=uid, paper=paper, qno=qno, rare=rare)
 
 
 _P3 = ("Long before electric beacons made the work largely automatic, a lighthouse keeper's life was a test of endurance against an __1__ "
@@ -130,6 +153,16 @@ _P8 = ("City planners have begun to treat noise as seriously as they treat air q
        "__1__ linked to raised blood pressure and disturbed sleep. A few cities have experimented with porous road surfaces that absorb "
        "engine noise rather than reflecting it, and early results suggest the change is __2__ enough to notice within a single afternoon "
        "of walking the affected street.")
+
+
+_P9 = ("Long-serving institutions often claim a stability that, on closer inspection, proves __1__: the committees, charters and "
+       "procedures that seem permanent are frequently improvised arrangements that outlived the crisis that produced them. An "
+       "investigator tracing the provenance of a rule, where it first came from and why, usually finds a decision taken in haste, "
+       "later treated as settled wisdom simply because nobody thought to revisit it. Left unexamined, such a rule can __2__ into "
+       "something closer to doctrine than to policy, resistant to the very evidence that first justified it. Officials defending an "
+       "outdated procedure rarely admit this directly; instead they favour a studied obfuscation, burying the question in technical "
+       "language until objection seems more trouble than it is worth. The practical effect is that responsibility for a decision is "
+       "quietly __3__ from the people who actually hold it to a form or a precedent that holds nobody at all.")
 
 
 def practice_items():
@@ -336,4 +369,42 @@ PYQS = [
          "c": ruled_out("'Instigated' means stirred up or caused to happen, unrelated to being kept apart from a buyer."),
          "d": ruled_out("'Inculcated' means instilled an idea into someone over time, unrelated to being kept apart from a buyer.")},
         ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-10", qno=97, rare=True),
+    _cq("cz-q79b", "q-cz-sense", _P9, 1, ["inchoate", "illusory", "intransigent", "invidious"], "b",
+        "A stability that 'proves' to be something other than it seemed, despite looking permanent, is one that is not real but only appears so: 'illusory', meaning deceptive or unreal.",
+        {"a": ruled_out("'Inchoate' means just begun and not yet fully formed, not deceptively unreal."),
+         "c": ruled_out("'Intransigent' means stubbornly unwilling to change, which describes an attitude, not a stability that turns out to be false."),
+         "d": ruled_out("'Invidious' means unpleasant or likely to provoke ill will, unrelated to whether a stability is real or merely apparent.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-12", qno=79, rare=True),
+    _cq("cz-q80b", "q-cz-sense", _P9, 2, ["attenuate", "vacillate", "ossify", "ameliorate"], "c",
+        "A rule left unexamined, growing 'closer to doctrine than to policy' and resistant to evidence, has hardened in place: 'ossify', meaning to become rigid and fixed.",
+        {"a": mistake("'Attenuate' means to weaken or thin out, the opposite of a rule becoming more rigid and entrenched."),
+         "b": ruled_out("'Vacillate' means to waver indecisively between options, not to harden into fixed doctrine."),
+         "d": mistake("'Ameliorate' means to improve a situation, the opposite of a rule hardening into something resistant to evidence.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-12", qno=80, rare=True),
+    _cq("cz-q81b", "q-cz-sense", _P9, 3, ["exonerated", "obviated", "circumscribed", "displaced"], "d",
+        "Responsibility is moved away from the people who actually hold it onto a form or a precedent, which is to be 'displaced', meaning shifted elsewhere.",
+        {"a": ruled_out("'Exonerated' means cleared of blame, not moved from one place to another."),
+         "b": ruled_out("'Obviated' means made unnecessary, which does not describe responsibility being shifted onto something else."),
+         "c": mistake("'Circumscribed' means restricted within limits, not transferred away from the people who hold it.")},
+        ["cz-r3", "cz-r4"], ["context-clue"], paper="2026-10-12", qno=81, rare=True),
+    _cm("cz-q82", "cz-provenance", "provenance", _P9,
+        ["The degree to which a statement corresponds with objective reality.",
+         "The historical origin or source from which something is derived.",
+         "The predominance of one interpretation over competing explanations.",
+         "The process through which an argument is rendered logically indefensible."], "b",
+        "The passage uses 'provenance' for where a rule first came from and why, which is its historical origin or source.",
+        {"a": ruled_out("This defines accuracy or truth, not where something originated from."),
+         "c": ruled_out("This describes one view outweighing others, unrelated to a thing's origin."),
+         "d": ruled_out("This describes an argument being refuted, unrelated to tracing a rule's origin.")},
+        paper="2026-10-12", qno=82, rare=True),
+    _cm("cz-q83", "cz-obfuscation", "obfuscation", _P9,
+        ["The deliberate act of making something unclear, confusing or difficult to understand.",
+         "The act of establishing the authenticity of a disputed assertion through independent evidence.",
+         "The formal withdrawal of an accusation after sufficient evidence establishes innocence.",
+         "The unwillingness to abandon a rigid opinion despite compelling contradictory evidence."], "a",
+        "The passage describes officials 'burying the question in technical language', which is exactly obfuscation: deliberately making something unclear.",
+        {"b": ruled_out("This describes verifying something as genuine, the opposite of deliberately clouding it."),
+         "c": ruled_out("This describes clearing someone of an accusation, unrelated to making something confusing."),
+         "d": ruled_out("This describes stubbornness in holding an opinion, not the act of obscuring an explanation.")},
+        paper="2026-10-12", qno=83, rare=True),
 ]

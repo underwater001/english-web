@@ -198,6 +198,9 @@ _W = [
      "The club ran on egalitarian lines, giving every member an equal vote regardless of rank.", "equality", True),
     ("ebullient", "ebullient", "adj", "Full of energy, excitement and high spirits.", ["joyful", "exuberant", "elated", "buoyant"], ["gloomy", "dejected", "despondent", "downcast"],
      "The ebullient crowd cheered every goal the home team scored.", "spirit", True),
+    # words from the 12 Oct 2026 paper
+    ("endeavour", "endeavour", "verb", "To try hard to do something.", ["attempt", "attempted", "try", "strive", "aim"], ["abandon", "neglect", "forgo", "desist"],
+     "He endeavoured to repair the roof before the rains came.", "work", False),
 ]
 
 WORDS = [word(i, w, "word", m, pos=p, syn=s, ant=a, ex=e) for i, w, p, m, s, a, e, g, r in _W]
@@ -408,6 +411,15 @@ PYQS = [
          "d": mistake("Gloomy means dark or without cheer, again the opposite of ebullient.")},
         lex=("syn", "ebullient"), rare=True, rules=["sa-r1", "sa-r3"], tech=["tone", "opposite-trap", "root-prefix"],
         trick="E- (out) + bullire (to boil): to boil over with high spirits, i.e. joyful."),
+    _pq(78, "2026-10-12", "q-syn", "synonym",
+        "Which word is nearest in meaning to the highlighted word, as used in the sentence below?\n"
+        "\"Framton Nuttel endeavoured to say the correct something which should duly flatter the niece.\"\nENDEAVOURED",
+        ["Avoided", "Attempted", "Refused", "Ignored"], "b",
+        "Endeavoured means tried hard, or attempted; 'attempted' carries the same sense here.",
+        {"a": mistake("'Avoided' means stayed away from doing something, the opposite of making an effort to do it."),
+         "c": ruled_out("'Refused' means declined to do something, which contradicts making an actual effort, as 'endeavoured' describes."),
+         "d": ruled_out("'Ignored' means paid no attention to something, unrelated to making an effort.")},
+        lex=("syn", "endeavour"), rules=["sa-r1"], tech=["opposite-trap"]),
 ]
 
 

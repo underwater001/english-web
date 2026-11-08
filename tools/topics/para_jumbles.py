@@ -13,6 +13,8 @@ NODES = {
                      "summary": "Short passive steps (gathered, examined, designed, applied): put them in the order a real process runs.", "links": []},
     "q-pj-fixed": {"short": "Fixed ends", "label": "Arrange with the first and last sentence fixed", "kind": "qtype", "parent": TOPIC, "order": 3,
                    "summary": "S1 and S2 are already given; arrange the four lettered sentences A-D that go between them.", "links": []},
+    "q-pj-phrase": {"short": "Sentence parts", "label": "Arrange jumbled fragments of one sentence", "kind": "qtype", "parent": TOPIC, "order": 4,
+                    "summary": "Four fragments, not full sentences, that combine into a single grammatical sentence: find the subject, then follow ordinary word order.", "links": []},
 }
 
 RULES = [
@@ -24,6 +26,9 @@ RULES = [
      "ok": "Information gathered -> feedback examined -> campaign designed -> findings applied.", "bad": "Campaign designed -> feedback examined (nothing to base it on)."},
     {"id": "pj-r4", "node": "q-pj-fixed", "text": "With S1 and S2 already fixed, use them as anchors instead of hunting for an opener: find the lettered sentence that follows on naturally from S1's last idea, and the one that leads naturally into S2's first idea. The middle two then fall into place between them.",
      "ok": "S1 ends with him falling asleep; the next sentence must describe him waking up, not the gold he later finds.", "bad": "Placing the sentence about the gold straight after S1, before anything explains how he noticed it."},
+    {"id": "pj-r5", "node": "q-pj-phrase", "text": "These are fragments of a single sentence, not independent sentences. Find the fragment that can act as the subject, then follow ordinary English word order: subject, then verb, then complement, then any purpose or prepositional phrase it needs. A fragment that ends mid-phrase (a dangling preposition, an unfinished 'not to say' or 'though' clause) must be followed immediately by the fragment that completes it.",
+     "ok": "'The neighbourhood park' (subject) + 'is a quiet and ideal place' (verb) + 'for a picnic on' (purpose) + 'sunny weekends' (its object).",
+     "bad": "'Sunny weekends' + 'is a quiet and ideal place' + 'the neighbourhood park' + 'for a picnic on' puts the object before the subject and leaves the purpose phrase dangling at the end."},
 ]
 
 METHODS = {
@@ -45,6 +50,12 @@ METHODS = {
                    "eliminate": "Drop any option whose first letter does not follow on from S1, and any whose last letter does not lead into the fixed closing sentence.",
                    "traps": ["A dramatic detail (the gold, the treasure) placed too early, before the sentence that sets it up.", "Forgetting that the fixed last sentence is itself a clue to what the final letter must say."],
                    "rules": ["pj-r4"], "tech": ["first-sentence", "pair-up"]},
+    "q-pj-phrase": {"cue": "Four lettered fragments (not full sentences) that together form ONE sentence; the options give full four-letter orderings.",
+                    "standard": "Find the fragment that reads as the subject, then follow ordinary word order: subject, verb, complement, then any purpose or prepositional phrase. A fragment ending mid-phrase must be followed at once by the fragment that finishes it.",
+                    "fast": "Read each option's first letter against the fragment that most plausibly opens a sentence (usually a noun phrase, not a verb or a preposition).",
+                    "eliminate": "Drop any order that opens with a verb, a preposition ('for', 'on', 'to') or a subordinator ('though', 'not') before the subject it depends on.",
+                    "traps": ["A fragment that looks like a complete clause on its own but is really the sentence's middle.", "Splitting a fixed phrase such as 'not to say X' across the wrong fragments.", "A dangling preposition fragment placed too early or too late."],
+                    "rules": ["pj-r5"], "tech": ["first-sentence", "pair-up"]},
 }
 
 REFS = []
@@ -212,6 +223,13 @@ _EXTRA = [
        "c": mistake("This places 3, the Penny Black's fix, before 2 has explained the problem with the old system that the fix was solving."),
        "d": ruled_out("This opens with 3, the Penny Black, before 1 has even described the older system it replaced.")},
       rules=["pj-r1", "pj-r2"], uid="pj-p16", tech=["first-sentence", "connectors"]),
+    q("q-pj-para", "rearrange", _R2 + "1. Many offices now place separate bins for paper, plastic and food waste.\n2. Even so, almost a third of what ends up in the paper bin is not paper at all.\n3. This simple mistake adds hours of extra labour to every single week.\n4. Workers must sort it all over again before it reaches the recycling plant.",
+      ["1, 2, 4, 3", "2, 1, 4, 3", "1, 2, 3, 4", "4, 1, 2, 3"], "a",
+      "1 states the practice of separate bins, 2 ('Even so') raises the problem of wrong items in the paper bin, 4 explains the resulting extra sorting work, and 3 ('This simple mistake') closes with the cost of that work.",
+      {"b": ruled_out("This opens with 'Even so' (2), which needs the practice in 1 stated first for it to contrast with."),
+       "c": mistake("This places 3 ('this simple mistake') directly after 2, before 4 has described the sorting work that 'this simple mistake' is referring to."),
+       "d": ruled_out("This opens with 4, workers sorting waste, before 1 has even introduced the bins they are sorting.")},
+      rules=["pj-r1", "pj-r2"], uid="pj-p17", tech=["first-sentence", "connectors"]),
 ]
 
 
@@ -365,7 +383,51 @@ _PYQ5 = [
        "d": mistake("This places B, the cultural implication, directly after A, before C's mechanism and D's consequence have given anything for the implication to refer to.")},
       rules=["pj-r1", "pj-r2"], paper="2026-10-10", qno=100, tech=["first-sentence", "connectors"]),
 ]
-PYQS = PYQS + _PYQ2 + _PYQ3 + _PYQ4 + _PYQ5
+_PYQ6 = [
+    q("q-pj-fixed", "rearrange",
+      "The first and last sentences of a paragraph (S1 and S2) are fixed. Arrange A, B, C and D in the correct order between them:\n"
+      "S1 Then, one day, she was up, playing; Isabel was in the kitchen fixing lunch for the two boys when they'd come in from school, and she heard Grace fall down in the living room.\n"
+      "A. And she ran to the living room and there was little Grace on the floor, all twisted up, and the reason she hadn't screamed was that she couldn't get her breath.\n"
+      "B. When you have a lot of children you don't always start running when one of them falls, unless they start screaming or something.\n"
+      "C. Yet, Isabel says that when she heard that thump and then that silence, something happened in her to make her afraid.\n"
+      "D. And, this time, Grace was quiet.\n"
+      "S2 And when she did scream, it was the worst sound, Isabel says, that she'd ever heard in all her life, and she still hears it sometimes in her dreams.",
+      ["ADBC", "DCBA", "BDCA", "DCAB"], "c",
+      "B explains why Isabel did not react the instant Grace fell. D notes that, unlike other falls, this time there was no scream, just quiet. C has the silence frighten her. A shows her running in and finding Grace unable to breathe, leading into S2's scream.",
+      {"a": mistake("This opens with A, Isabel already running to Grace, before B has given the reason she did not react at once and before D and C explain why this fall felt different."),
+       "b": mistake("This places B, the general reason for not running at every fall, after D and C instead of right after S1, where it explains her first reaction."),
+       "d": ruled_out("This ends with B, the general reason for not running, after Isabel has already reached Grace in A, putting the explanation after the action it explains.")},
+      rules=["pj-r4"], paper="2026-10-12", qno=76, tech=["first-sentence", "pair-up"]),
+    q("q-pj-para", "rearrange", _R2 + "A. Scientists warn that urgent action is needed to reduce greenhouse gas emissions.\nB. Governments and organizations are investing in renewable energy and sustainable practices.\nC. Rising global temperatures have led to extreme weather events worldwide.\nD. Without these measures, climate change could have catastrophic consequences for ecosystems and humans.",
+      ["D – B – A – C", "B – A – D – C", "A – D – B – C", "C – A – B – D"], "d",
+      "C states the problem (rising temperatures causing extreme weather), A reports the warning that action is needed, B describes the response already under way (investing in renewables), and D ('without these measures') warns what happens if that response in B fails.",
+      {"a": ruled_out("This opens with D's 'without these measures', which has no measures named yet for 'these' to point to."),
+       "b": mistake("This places B's investment response before A's warning that action is needed, and before C has even stated the problem the warning responds to."),
+       "c": mistake("This places A's warning first, before C has stated the problem it warns about, and puts D's 'these measures' before B has named what those measures are.")},
+      rules=["pj-r1", "pj-r2"], paper="2026-10-12", qno=77, tech=["first-sentence", "connectors"]),
+    q("q-pj-phrase", "rearrange", "Arrange the following sentences in the correct order to form a logically sound and coherent paragraph. The parts are:\nA. joke and endeavoured to smile appropriately, though\nB. to say shock, remained detectable in my expression.\nC. I suspect some residue of my bewilderment, not\nD. Then I realized he was making some sort of",
+      ["DCBA", "DBCA", "DABC", "DACB"], "d",
+      "D opens with the main clause's subject and verb ('Then I realized he was making some sort of'); A supplies its object and the concessive clause ('joke and endeavoured to smile appropriately, though'); C begins the result clause ('I suspect some residue of my bewilderment, not'); B completes the fixed phrase 'not to say shock' that spans C and B, finishing with 'remained detectable in my expression.'",
+      {"a": ruled_out("This follows D's 'making some sort of' directly with C's 'I suspect...', when 'of' needs the noun object that A supplies ('joke'); that object is pushed to the end, leaving A's 'though' clause dangling."),
+       "b": ruled_out("This also follows 'making some sort of' directly with B's 'to say shock', leaving 'joke', the noun 'of' needs, until the very end, after the aside meant to interrupt it."),
+       "c": mistake("This follows A's 'though' directly with B's 'to say shock', skipping C's 'I suspect some residue of my bewilderment, not' that the fixed phrase 'not to say' needs, and ends on C's dangling 'not'.")},
+      rules=["pj-r5"], paper="2026-10-12", qno=84, tech=["first-sentence", "pair-up"]),
+    q("q-pj-phrase", "rearrange", "Given below are four jumbled parts of a sentence. Select the option that gives their correct order and forms a meaningful sentence.\nA. is a quiet and ideal place\nB. sunny weekends\nC. the neighbourhood park\nD. for a picnic on",
+      ["CBDA", "DCAB", "CADB", "ACDB"], "c",
+      "C supplies the subject ('the neighbourhood park'), A gives the verb and complement ('is a quiet and ideal place'), D adds the purpose phrase ('for a picnic on'), and B completes it with the object of 'on' ('sunny weekends').",
+      {"a": ruled_out("This puts B ('sunny weekends') and D ('for a picnic on') between the subject (C) and its verb (A), leaving the sentence without a verb until the very end."),
+       "b": mistake("This opens with D's 'for a picnic on', as if the sentence began with the purpose, before the subject (C) and verb (A) that the purpose phrase is meant to follow."),
+       "d": mistake("This opens with A's verb 'is a quiet and ideal place' before C has supplied the subject 'the neighbourhood park' for it to describe.")},
+      rules=["pj-r5"], paper="2026-10-12", qno=92, tech=["first-sentence", "pair-up"]),
+    q("q-pj-process", "rearrange", _R1 + "P. He crafted his thoughts into a careful message, his fingers flying across the keys.\nQ. He swiftly entered a lengthy string of characters and numbers that was the recipient's email address.\nR. A simple subject line summarizes the entire point of the message.\nS. He breathed a last sigh of relief as he hit the send button and saw the email disappear.",
+      ["Q, R, P, S", "P, Q, S, R", "S, Q, P, R", "Q, S, R, P"], "a",
+      "Composing an email follows the order its fields are filled: the recipient's address (Q) is entered first, then the subject line (R) is written, then the message body (P) is composed, and finally the email is sent (S).",
+      {"b": mistake("This writes the message body (P) before the recipient's address (Q) has even been entered, and sends the email (S) before the subject line (R) is written."),
+       "c": ruled_out("This opens with sending the email (S), before the address, subject or message have been written at all."),
+       "d": mistake("This sends the email (S) right after entering the address (Q), before the subject line (R) or the message itself (P) have been written.")},
+      rules=["pj-r3"], paper="2026-10-12", qno=97, tech=["first-sentence", "pair-up"], trick="Address, then subject, then body, then send."),
+]
+PYQS = PYQS + _PYQ2 + _PYQ3 + _PYQ4 + _PYQ5 + _PYQ6
 
 
 def practice_items():
