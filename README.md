@@ -22,30 +22,30 @@ Your record lives in this browser only. *Today → Your record* holds a copy you
 | | Now |
 |---|---|
 | Topics | 25, in three areas: Vocabulary, Grammar, Comprehension — all with questions |
-| Questions | 1,607 (175 from past papers, 1,432 practice) |
-| Word bank | 878 entries: words, idioms, one-word substitutions, phrasal verbs, spellings, confusable pairs |
-| Past papers filed | 7 (3 SSC CGL Tier-I similar-paper shifts, 12 Sep 2025; 4 Exam-Day-Based memory papers, 07–10 Oct 2026) |
+| Questions | 1,647 (200 from past papers, 1,447 practice) |
+| Word bank | 888 entries: words, idioms, one-word substitutions, phrasal verbs, spellings, confusable pairs |
+| Past papers filed | 8 (3 SSC CGL Tier-I similar-paper shifts, 12 Sep 2025; 5 Exam-Day-Based memory papers, 07–10 & 12 Oct 2026) |
 | Daily drops | none yet — send an editorial and the first one is built from it |
 
 ## The blueprint, and why the bank is shaped the way it is
 
-Everything is measured against the papers on file. Seven papers' worth of English sections ask this mix, per 25-question paper (share of the 25 marks, averaged across all 7):
+Everything is measured against the papers on file. Eight papers' worth of English sections ask this mix, per 25-question paper (share of the 25 marks, averaged across all 8):
 
 | Question type | Per paper | Question type | Per paper |
 |---|---|---|---|
-| Active/passive, direct/indirect | 4.57 | Idiom / phrase / word meaning | 1.57 |
-| Sentence / para jumble | 3.14 | Spelling | 1.57 |
-| Cloze test | 2.71 | Sentence improvement | 1.14 |
-| Reading comprehension | 2.14 | Synonym | 1.14 |
-| Fill in the blank | 2.0 | One-word substitution | 0.86 |
-| Spot the error | 2.0 | Homonym | 0.57 |
-| Antonym | 1.57 | | |
+| Active/passive, direct/indirect | 4.75 | Spelling | 1.62 |
+| Sentence / para jumble | 3.38 | Antonym | 1.38 |
+| Cloze test | 2.75 | Sentence improvement | 1.12 |
+| Spot the error | 2.12 | Synonym | 1.12 |
+| Fill in the blank | 1.88 | One-word substitution | 0.75 |
+| Reading comprehension | 1.88 | Homonym | 0.5 |
+| Idiom / phrase / word meaning | 1.75 | | |
 
 So grammar, sentence structure and comprehension still carry the larger half of the paper. The build enforces this: **a format the papers ask for must hold at least five papers' worth of practice questions, or `tools/check.py` fails** and names what is missing. That is what keeps the bank from drifting back into easy vocabulary drill, which is the smaller half of the paper.
 
-Two topics — conditionals, nouns — have not appeared in any of the 7 papers filed so far. They are built and drilled anyway (as seed-tier practice, honestly marked as not past-question-backed yet), because the real paper varies and the blueprint only knows what it has been shown. Five more — articles, gerund/infinitive, phrasal verbs, pronouns, question tags — have so far surfaced only once each; everything else has turned up repeatedly enough to be marked Medium or High likelihood.
+Two topics — conditionals, nouns — have not appeared in any of the 8 papers filed so far. They are built and drilled anyway (as seed-tier practice, honestly marked as not past-question-backed yet), because the real paper varies and the blueprint only knows what it has been shown. Four more — gerund/infinitive, phrasal verbs, pronouns, question tags — have so far surfaced only once each; everything else has turned up repeatedly enough to be marked Medium or High likelihood.
 
-Every grammar chapter of *Plinth to Paramount* (verbs, tense, passive voice, narration, question tags, subject-verb agreement, conditionals, gerund/infinitive, nouns, pronouns, adjectives, conjunctions, articles, prepositions, adverbs, and the confused-words chapter) has been read chapter by chapter — not just its table of contents — for rules the papers haven't surfaced yet, each one rewritten here in fresh wording with original examples. Grammar questions rest on a cited, named rule rather than a machine check; vocabulary and one-word-substitution questions are checked against the stored word bank. Reading comprehension still runs on five self-written passages, and the past-paper base is three shifts of one similar paper plus four Exam-Day-Based memory papers — still the next thing to widen as more real papers come in.
+Every grammar chapter of *Plinth to Paramount* (verbs, tense, passive voice, narration, question tags, subject-verb agreement, conditionals, gerund/infinitive, nouns, pronouns, adjectives, conjunctions, articles, prepositions, adverbs, and the confused-words chapter) has been read chapter by chapter — not just its table of contents — for rules the papers haven't surfaced yet, each one rewritten here in fresh wording with original examples. Grammar questions rest on a cited, named rule rather than a machine check; vocabulary and one-word-substitution questions are checked against the stored word bank. Reading comprehension still runs on five self-written passages, and the past-paper base is three shifts of one similar paper plus five Exam-Day-Based memory papers — still the next thing to widen as more real papers come in.
 
 ## Feeding it
 
